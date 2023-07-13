@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javafx_project.HelloApplication">
+
+
+
+    <VBox spacing="10" xmlns:fx="http://javafx.com/fxml">
+        <TableView fx:id="tableCustomers" prefHeight="400.0" prefWidth="622.0">
+            <columns>
+                <TableColumn fx:id="customerNameColumn" text="Name" />
+                <TableColumn fx:id="addressColumn" text="Address" />
+                <TableColumn fx:id="postalCodeColumn" text="Postal Code" />
+                <TableColumn fx:id="phoneNumberColumn" text="Phone Number" />
+                <TableColumn fx:id="divisionColumn" text="Division" />
+                <TableColumn fx:id="countryColumn" text="Country" />
+            </columns>
+        </TableView>
+        <TextField fx:id="customerName" promptText="Customer Name" />
+        <TextField fx:id="addressField" promptText="Address" />
+        <TextField fx:id="postalCodeField" promptText="Postal Code" />
+        <TextField fx:id="phoneNumberField" promptText="Phone Number" />
+        <ComboBox fx:id="divisionBox" promptText="Division" />
+        <ComboBox fx:id="countryBox" promptText="Country" />
+        <HBox spacing="10">
+            <Button fx:id="addButton" text="Add Customer" />
+            <Button fx:id="updateButton" text="Update Customer" />
+            <Button fx:id="deleteButton" text="Delete Customer" />
+        </HBox>
+    </VBox>
+
+
+</AnchorPane>
