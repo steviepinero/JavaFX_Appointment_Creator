@@ -1,13 +1,14 @@
-package com.javafx_project;
+package com.javafx_project.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import com.javafx_project.dao.*;
+import com.javafx_project.models.Appointment;
+import com.javafx_project.models.Contact;
+import com.javafx_project.models.Customer;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 public class AppointmentController {
 
@@ -21,16 +22,19 @@ public class AppointmentController {
     private Button addAppointmentButton;
 
     @FXML
-    private TableColumn<?, ?> appointment_ID_Column;
+    private TableView<Appointment> appointmentTable;
 
     @FXML
-    private ComboBox<?> contactBox;
+    private TableColumn<Appointment, Integer> appointment_ID_Column;
+
+    @FXML
+    private ComboBox<Contact> contactBox;
 
     @FXML
     private TableColumn<?, ?> contactColumn;
 
     @FXML
-    private ComboBox<?> customerBox;
+    private ComboBox<Customer> customerBox;
 
     @FXML
     private TableColumn<?, ?> customer_ID_Column;
@@ -86,8 +90,43 @@ public class AppointmentController {
     @FXML
     private TableColumn<?, ?> user_ID_Column;
 
+    private AppointmentDAO appointmentDAO;
+    private ContactDAO contactDAO;
+    private CountryDAO countryDAO;
+    private CustomerDAO customerDAO;
+    private FirstLevelDivisionDAO firstLevelDivisionDAO;
+    private UserDAO userdao;
+    private ComboBox<Appointment> typeBox;
+
+
+    public AppointmentController(TableColumn appointmentIdColumn) {
+        appointment_ID_Column = appointmentIdColumn;
+    }
+
     @FXML
     void initialize() {
+        //initialize DAOs
+        appointmentDAO = new AppointmentDAO();
+        contactDAO = new ContactDAO();
+        countryDAO = new CountryDAO();
+        customerDAO = new CustomerDAO();
+        firstLevelDivisionDAO = new FirstLevelDivisionDAO();
+        userdao = new UserDAO();
+
+        //Load data from database
+        appointmentTable.getItems().addAll(appointmentDAO.getAllAppointments());
+        typeBox.getItems().addAll(appointmentDAO.getAllTypes());
+        contactBox.getItems().addAll(contactDAO.getAllContacts());
+        customerBox.getItems().addAll(customerDAO.getAllCustomers());
+
+        // Set up event handlers for buttons
+        addAppointmentButton.setOnAction(e -> addAppointment());
+        updateAppointmentButton.setOnAction(e -> updateAppointment());
+        deleteAppointmentButton.setOnAction(e -> deleteAppointment());
+
+
+
+        //fxml tests
         assert addAppointmentButton != null : "fx:id=\"addAppointmentButton\" was not injected: check your FXML file 'appointmentView.fxml'.";
         assert appointment_ID_Column != null : "fx:id=\"appointment_ID_Column\" was not injected: check your FXML file 'appointmentView.fxml'.";
         assert contactBox != null : "fx:id=\"contactBox\" was not injected: check your FXML file 'appointmentView.fxml'.";
@@ -112,6 +151,62 @@ public class AppointmentController {
         assert updateAppointmentButton != null : "fx:id=\"updateAppointmentButton\" was not injected: check your FXML file 'appointmentView.fxml'.";
         assert user_ID_Column != null : "fx:id=\"user_ID_Column\" was not injected: check your FXML file 'appointmentView.fxml'.";
 
+
+
+    }
+
+    private void deleteAppointment() {
+        // Get selected appointment
+        Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
+
+        // Delete from database
+        appointmentDAO.deleteAppointment(appointment.getAppointmentId());
+
+        // Delete from table
+        appointmentTable.getItems().remove(appointment);
+
+        // Show dialog
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Appointment Deleted");
+        alert.setHeaderText(null);
+        alert.setContentText("Appointment " + appointment.getAppointmentId() + " has been deleted.");
+        alert.showAndWait();
+
+    }
+
+    private void updateAppointment() {
+        // Get selected appointment
+        Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
+
+        // Update properties
+        appointment.setTitle(titleField.getText());
+        appointment.setDescription(descriptionField.getText());
+        // other setters...
+
+        // Update in database
+        appointmentDAO.updateAppointment(appointment);
+
+        // Refresh table
+        appointmentTable.refresh();
+    }
+
+    private void addAppointment() {
+        // Get data from UI elements
+        String title = titleField.getText();
+        String description = descriptionField.getText();
+        // other data...
+
+        // Create new Appointment object
+        Appointment appointment = new Appointment();
+        appointment.setTitle(title);
+        appointment.setDescription(description);
+        // other setters...
+
+        // Add to database
+        appointmentDAO.addAppointment(appointment);
+
+        // Add to table
+        appointmentTable.getItems().add(appointment);
     }
 
 }
