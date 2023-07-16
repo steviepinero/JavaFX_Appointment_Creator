@@ -3,6 +3,8 @@ module com.javafx_project {
     requires javafx.fxml;
 
     requires org.controlsfx.controls;
+    requires java.sql;
+    requires java.security.jgss;
 
     opens com.javafx_project to javafx.fxml;
     exports com.javafx_project;
