@@ -16,8 +16,8 @@ public class UserDAO {
 
         if (rs.next()) {
             User user = new User();
-            user.setUserName(rs.getString("username"));
-            user.setPassword(rs.getString("password"));
+            user.setUserName(rs.getString("User_Name"));
+            user.setPassword(rs.getString("Password"));
             // set other fields if it becomes necessary
             return user;
         } else {

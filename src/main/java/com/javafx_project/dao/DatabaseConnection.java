@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     public static Connection connection;
 
-    public static Connection getConnection() {
-        if (connection == null) {
+    public static Connection establishConnection() {
+
             try {
                 String url = "jdbc:mysql://localhost:3306/appointments";
                 String username = "admin";
@@ -18,7 +18,11 @@ public class DatabaseConnection {
                 // Handle any errors
                 e.printStackTrace();
             }
-        }
         return connection;
+    }
+
+    public static Connection getConnection() {
+        return connection;
+
     }
 }
