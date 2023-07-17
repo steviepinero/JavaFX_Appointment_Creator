@@ -1,6 +1,7 @@
 package com.javafx_project.controllers;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 import com.javafx_project.dao.*;
@@ -155,6 +156,8 @@ public class AppointmentController {
 
     }
 
+
+
     private void deleteAppointment() {
         // Get selected appointment
         Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
@@ -181,7 +184,14 @@ public class AppointmentController {
         // Update properties
         appointment.setTitle(titleField.getText());
         appointment.setDescription(descriptionField.getText());
-        // other setters...
+        appointment.setLocation(postalCodeField.getText());
+        appointment.setContactId(Integer.parseInt(contactBox.getId()));
+        appointment.setType(String.valueOf(typeBox.getValue()));
+        appointment.setStart(LocalDateTime.parse(String.valueOf(startTimeField.getText())));
+        appointment.setEnd(LocalDateTime.parse(String.valueOf(endTimeField.getText())));
+        appointment.setCustomerId(Integer.parseInt(customerBox.getId()));
+        appointment.setUserId(Integer.parseInt(user_ID_Column.getId()));
+        // TODO verify functionality
 
         // Update in database
         appointmentDAO.updateAppointment(appointment);
@@ -194,13 +204,26 @@ public class AppointmentController {
         // Get data from UI elements
         String title = titleField.getText();
         String description = descriptionField.getText();
-        // other data...
+        String location = postalCodeField.getText();
+        String contact = String.valueOf(contactBox.getValue());
+        String type = String.valueOf(typeBox.getValue());
+        LocalDateTime startDate = LocalDateTime.parse(String.valueOf(startTimeField));
+        LocalDateTime endDate = LocalDateTime.parse(String.valueOf(endTimeField));
+        int customerId = Integer.parseInt(customerBox.getId());
+        int userId = Integer.parseInt(user_ID_Column.getId());
+
 
         // Create new Appointment object
         Appointment appointment = new Appointment();
         appointment.setTitle(title);
         appointment.setDescription(description);
-        // other setters...
+        appointment.setLocation(location);
+        appointment.setContactId(Integer.parseInt(contact));
+        appointment.setType(type);
+        appointment.setStart(startDate);
+        appointment.setEnd(endDate);
+        appointment.setCustomerId(customerId);
+        appointment.setUserId(userId);
 
         // Add to database
         appointmentDAO.addAppointment(appointment);
@@ -208,5 +231,6 @@ public class AppointmentController {
         // Add to table
         appointmentTable.getItems().add(appointment);
     }
+
 
 }
