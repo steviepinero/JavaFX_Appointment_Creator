@@ -62,9 +62,9 @@ public class LoginController extends Pane {
 
         if (user != null && user.getPassword().equals(enteredPassword)) {
             // login successful
-            // navigate to the next scene, etc.
+            // navigate to the next scene.
             try {
-                FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/appointmentView.fxml"));
+                FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
                 Parent root = loader.load();
 
                 // Get the current stage
@@ -78,7 +78,7 @@ public class LoginController extends Pane {
             }
         } else {
             // login failed
-            // show an error message, etc.
+            // show an error message.
             showLoginError();
         }
     }
