@@ -14,6 +14,10 @@ public class User {
 
     private String lastUpdatedBy;
 
+    public User() {
+
+    }
+
     // getters and setters
 
     public int getUserId() {

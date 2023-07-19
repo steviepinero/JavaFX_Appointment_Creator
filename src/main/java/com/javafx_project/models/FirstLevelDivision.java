@@ -16,6 +16,10 @@ public class FirstLevelDivision {
 
     private String countryID;
 
+    public FirstLevelDivision() {
+
+    }
+
     public int getDivisionID() {
         return divisionID;
     }

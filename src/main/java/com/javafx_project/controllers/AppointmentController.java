@@ -32,13 +32,13 @@ public class AppointmentController {
     private ComboBox<Contact> contactBox;
 
     @FXML
-    private TableColumn<?, ?> contactColumn;
+    private TableColumn<Appointment, String> contactColumn;
 
     @FXML
     private ComboBox<Customer> customerBox;
 
     @FXML
-    private TableColumn<?, ?> customer_ID_Column;
+    private TableColumn<Appointment, Integer> customer_ID_Column;
 
     @FXML
     private Button deleteAppointmentButton;
@@ -97,11 +97,15 @@ public class AppointmentController {
     private CustomerDAO customerDAO;
     private FirstLevelDivisionDAO firstLevelDivisionDAO;
     private UserDAO userdao;
+    @FXML
     private ComboBox<Appointment> typeBox;
 
 
     public AppointmentController(TableColumn appointmentIdColumn) {
         appointment_ID_Column = appointmentIdColumn;
+    }
+
+    public AppointmentController() {
     }
 
     @FXML
@@ -158,6 +162,7 @@ public class AppointmentController {
 
 
 
+    @FXML
     private void deleteAppointment() {
         // Get selected appointment
         Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
@@ -177,6 +182,7 @@ public class AppointmentController {
 
     }
 
+    @FXML
     private void updateAppointment() {
         // Get selected appointment
         Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
@@ -200,6 +206,7 @@ public class AppointmentController {
         appointmentTable.refresh();
     }
 
+    @FXML
     private void addAppointment() {
         // Get data from UI elements
         String title = titleField.getText();

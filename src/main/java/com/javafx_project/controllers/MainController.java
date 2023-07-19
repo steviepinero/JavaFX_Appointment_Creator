@@ -32,8 +32,8 @@ public class MainController {
     }
 
     @FXML
-    protected void appointmentButtonClick() throws IOException {
-        FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/appointmentView.fxml"));
+    private void appointmentButtonClick() throws IOException {
+        FXMLLoader loader = new FXMLLoader(MainController.class.getResource("/com/javafx_project/appointmentView.fxml"));
         Parent root = loader.load();
 
         // Get the current stage

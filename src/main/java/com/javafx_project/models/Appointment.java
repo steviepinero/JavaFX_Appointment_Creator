@@ -19,6 +19,10 @@ public class Appointment {
     private int userId;
     private int contactId;
 
+    public Appointment() {
+
+    }
+
     // getters and setters
 
 

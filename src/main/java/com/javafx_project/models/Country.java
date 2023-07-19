@@ -13,6 +13,10 @@ public class Country {
 
     private String lasteUpdatedBy;
 
+    public Country() {
+
+    };
+
     public int getCountryID() {
         return countryID;
     }
