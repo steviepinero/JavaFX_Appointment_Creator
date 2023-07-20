@@ -1,6 +1,8 @@
 package com.javafx_project.controllers;
 
 import java.net.URL;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
@@ -10,6 +12,8 @@ import com.javafx_project.models.Contact;
 import com.javafx_project.models.Customer;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import static java.util.logging.Level.parse;
 
 public class AppointmentController {
 
@@ -44,19 +48,13 @@ public class AppointmentController {
     private Button deleteAppointmentButton;
 
     @FXML
-    private TableColumn<?, ?> descriptionColumn;
+    private TableColumn<Appointment, String> descriptionColumn;
 
     @FXML
     private TextField descriptionField;
 
     @FXML
-    private TableColumn<?, ?> endDateTimeColumn;
-
-    @FXML
-    private TableColumn<?, ?> endDateTimeColumn1;
-
-    @FXML
-    private TextField endTimeField;
+    private TableColumn<Appointment, Date> endDateColumn;
 
     @FXML
     private TextField phoneNumberField;
@@ -65,31 +63,31 @@ public class AppointmentController {
     private TextField postalCodeField;
 
     @FXML
-    private TableColumn<?, ?> startDateTimeColumn;
+    private DatePicker startDatePicker;
 
     @FXML
-    private TableColumn<?, ?> startDateTimeColumn1;
+    private DatePicker endDatePicker;
 
     @FXML
-    private TextField startTimeField;
+    private TableColumn<Appointment, Date> startDateColumn;
 
     @FXML
-    private TableView<?> table;
+    private TableView<Appointment> table;
 
     @FXML
-    private TableColumn<?, ?> titleColumn;
+    private TableColumn<Appointment, String> titleColumn;
 
     @FXML
     private TextField titleField;
 
     @FXML
-    private TableColumn<?, ?> typeColumn;
+    private TableColumn<Appointment, String> typeColumn;
 
     @FXML
     private Button updateAppointmentButton;
 
     @FXML
-    private TableColumn<?, ?> user_ID_Column;
+    private TableColumn<Appointment, Integer> user_ID_Column;
 
     private AppointmentDAO appointmentDAO;
     private ContactDAO contactDAO;
@@ -120,7 +118,7 @@ public class AppointmentController {
 
         //Load data from database
         appointmentTable.getItems().addAll(appointmentDAO.getAllAppointments());
-        typeBox.getItems().addAll(appointmentDAO.getAllTypes());
+        typeBox.getItems().addAll((Appointment) appointmentDAO.getAllTypes());
         contactBox.getItems().addAll(contactDAO.getAllContacts());
         customerBox.getItems().addAll(customerDAO.getAllCustomers());
 
@@ -128,33 +126,6 @@ public class AppointmentController {
         addAppointmentButton.setOnAction(e -> addAppointment());
         updateAppointmentButton.setOnAction(e -> updateAppointment());
         deleteAppointmentButton.setOnAction(e -> deleteAppointment());
-
-
-
-        //fxml tests
-        assert addAppointmentButton != null : "fx:id=\"addAppointmentButton\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert appointment_ID_Column != null : "fx:id=\"appointment_ID_Column\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert contactBox != null : "fx:id=\"contactBox\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert contactColumn != null : "fx:id=\"contactColumn\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert customerBox != null : "fx:id=\"customerBox\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert customer_ID_Column != null : "fx:id=\"customer_ID_Column\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert deleteAppointmentButton != null : "fx:id=\"deleteAppointmentButton\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert descriptionColumn != null : "fx:id=\"descriptionColumn\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert descriptionField != null : "fx:id=\"descriptionField\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert endDateTimeColumn != null : "fx:id=\"endDateTimeColumn\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert endDateTimeColumn1 != null : "fx:id=\"endDateTimeColumn1\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert endTimeField != null : "fx:id=\"endTimeField\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert phoneNumberField != null : "fx:id=\"phoneNumberField\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert postalCodeField != null : "fx:id=\"postalCodeField\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert startDateTimeColumn != null : "fx:id=\"startDateTimeColumn\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert startDateTimeColumn1 != null : "fx:id=\"startDateTimeColumn1\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert startTimeField != null : "fx:id=\"startTimeField\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert table != null : "fx:id=\"table\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert titleColumn != null : "fx:id=\"titleColumn\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert titleField != null : "fx:id=\"titleField\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert typeColumn != null : "fx:id=\"typeColumn\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert updateAppointmentButton != null : "fx:id=\"updateAppointmentButton\" was not injected: check your FXML file 'appointmentView.fxml'.";
-        assert user_ID_Column != null : "fx:id=\"user_ID_Column\" was not injected: check your FXML file 'appointmentView.fxml'.";
 
 
 
@@ -193,11 +164,12 @@ public class AppointmentController {
         appointment.setLocation(postalCodeField.getText());
         appointment.setContactId(Integer.parseInt(contactBox.getId()));
         appointment.setType(String.valueOf(typeBox.getValue()));
-        appointment.setStart(LocalDateTime.parse(String.valueOf(startTimeField.getText())));
-        appointment.setEnd(LocalDateTime.parse(String.valueOf(endTimeField.getText())));
+        appointment.setStart(startDatePicker.getValue());
+        appointment.setEnd(endDatePicker.getValue());
         appointment.setCustomerId(Integer.parseInt(customerBox.getId()));
         appointment.setUserId(Integer.parseInt(user_ID_Column.getId()));
         // TODO verify functionality
+
 
         // Update in database
         appointmentDAO.updateAppointment(appointment);
@@ -214,8 +186,8 @@ public class AppointmentController {
         String location = postalCodeField.getText();
         String contact = String.valueOf(contactBox.getValue());
         String type = String.valueOf(typeBox.getValue());
-        LocalDateTime startDate = LocalDateTime.parse(String.valueOf(startTimeField));
-        LocalDateTime endDate = LocalDateTime.parse(String.valueOf(endTimeField));
+        LocalDate startDate = startDatePicker.getValue();
+        LocalDate endDate = endDatePicker.getValue();
         int customerId = Integer.parseInt(customerBox.getId());
         int userId = Integer.parseInt(user_ID_Column.getId());
 

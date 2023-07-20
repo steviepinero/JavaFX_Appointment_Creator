@@ -1,7 +1,7 @@
 package com.javafx_project.models;
 
-import java.security.Timestamp;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Date;
 
 public class Appointment {
     private int appointmentId;
@@ -9,11 +9,11 @@ public class Appointment {
     private String description;
     private String location;
     private String type;
-    private LocalDateTime start;
-    private LocalDateTime end;
-    private LocalDateTime createDate;
+    private LocalDate start;
+    private LocalDate end;
+    private LocalDate createDate;
     private String createdBy;
-    private Timestamp lastUpdate;
+    private LocalDate lastUpdate;
     private String lastUpdatedBy;
     private int customerId;
     private int userId;
@@ -21,6 +21,23 @@ public class Appointment {
 
     public Appointment() {
 
+    }
+
+    public Appointment(int appointmentId, String title, String description, String location, String type, LocalDate start, LocalDate end, LocalDate createDate, String createdBy, LocalDate lastUpdate, String lastUpdatedBy, int customerId, int userId, int contactId) {
+        this.appointmentId = appointmentId;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.start = start;
+        this.end = end;
+        this.createDate = createDate;
+        this.createdBy = createdBy;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdatedBy = lastUpdatedBy;
+        this.customerId = customerId;
+        this.userId = userId;
+        this.contactId = contactId;
     }
 
     // getters and setters
@@ -66,27 +83,27 @@ public class Appointment {
         this.type = type;
     }
 
-    public LocalDateTime getStart() {
+    public LocalDate getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(LocalDate start) {
         this.start = start;
     }
 
-    public LocalDateTime getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(LocalDate end) {
         this.end = end;
     }
 
-    public LocalDateTime getCreateDate() {
+    public LocalDate getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(LocalDate createDate) {
         this.createDate = createDate;
     }
 
@@ -98,11 +115,11 @@ public class Appointment {
         this.createdBy = createdBy;
     }
 
-    public Timestamp getLastUpdate() {
+    public LocalDate getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(Timestamp lastUpdate) {
+    public void setLastUpdate(LocalDate lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
