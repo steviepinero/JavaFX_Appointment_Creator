@@ -1,17 +1,26 @@
 package com.javafx_project.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.javafx_project.dao.*;
 import com.javafx_project.models.Appointment;
 import com.javafx_project.models.Contact;
 import com.javafx_project.models.Customer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import static java.util.logging.Level.parse;
 
@@ -108,6 +117,12 @@ public class AppointmentController {
 
     @FXML
     void initialize() {
+
+        AppointmentDAO appointmentDAO = new AppointmentDAO();
+        List<Appointment> appointments = appointmentDAO.getAllAppointments();
+
+        ObservableList<Appointment> data = FXCollections.observableArrayList(appointments);
+        appointmentTable.setItems(data);
         //initialize DAOs
         appointmentDAO = new AppointmentDAO();
         contactDAO = new ContactDAO();
@@ -118,7 +133,8 @@ public class AppointmentController {
 
         //Load data from database
         appointmentTable.getItems().addAll(appointmentDAO.getAllAppointments());
-        typeBox.getItems().addAll((Appointment) appointmentDAO.getAllTypes());
+        typeBox = new ComboBox<>();
+        typeBox.getItems();
         contactBox.getItems().addAll(contactDAO.getAllContacts());
         customerBox.getItems().addAll(customerDAO.getAllCustomers());
 
@@ -212,4 +228,17 @@ public class AppointmentController {
     }
 
 
+    public void backButtonAction(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
+        Parent root = loader.load();
+
+        // Get the current stage
+        Button backButton;
+        backButton = (Button) actionEvent.getSource();
+        Stage stage = (Stage) backButton.getScene().getWindow();
+
+        // Create new scene and set it on the stage
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+    }
 }

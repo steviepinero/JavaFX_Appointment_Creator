@@ -1,6 +1,7 @@
 package com.javafx_project.dao;
 
 import com.javafx_project.models.Appointment;
+import javafx.scene.control.ComboBox;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -29,7 +30,8 @@ public class AppointmentDAO {
                 appointment.setEnd(rs.getDate("end").toLocalDate());
                 appointment.setCustomerId(rs.getInt("customer_id"));
                 appointment.setUserId(rs.getInt("user_id"));
-                appointments.add(appointment);
+                appointments.add(new Appointment(appointment.getAppointmentId(), appointment.getTitle(), appointment.getDescription(), appointment.getLocation(), appointment.getContactId(), appointment.getType(), appointment.getStart(), appointment.getEnd(), appointment.getCustomerId(), appointment.getUserId()));
+                getAllTypes();
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -37,17 +39,20 @@ public class AppointmentDAO {
         return appointments;
     }
 
-    public List<String> getAllTypes() {
+    public ComboBox<String> getAllTypes() {
         // get all values from the type column in the appointments table
         String sql = "SELECT DISTINCT type FROM appointments";
-        List<String> types = new ArrayList<>();
+        ComboBox<String> types = new ComboBox<>();
+/*
+        ArrayList<String> types = new ArrayList<>();
+*/
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                types.add(rs.getString("type"));
+                types.getItems();
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

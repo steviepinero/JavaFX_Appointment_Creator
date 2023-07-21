@@ -23,7 +23,7 @@ public class Appointment {
 
     }
 
-    public Appointment(int appointmentId, String title, String description, String location, String type, LocalDate start, LocalDate end, LocalDate createDate, String createdBy, LocalDate lastUpdate, String lastUpdatedBy, int customerId, int userId, int contactId) {
+    public Appointment(int appointmentId, String title, String description, String type, String location, LocalDate start, LocalDate end, LocalDate createDate, String createdBy, LocalDate lastUpdate, String lastUpdatedBy, int customerId, int userId, int contactId) {
         this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
@@ -38,6 +38,9 @@ public class Appointment {
         this.customerId = customerId;
         this.userId = userId;
         this.contactId = contactId;
+    }
+
+    public Appointment(int appointmentId, String title, String description, String location, int contactId, String type, LocalDate start, LocalDate end, int customerId, int userId) {
     }
 
     // getters and setters

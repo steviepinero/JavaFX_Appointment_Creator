@@ -70,6 +70,8 @@
             <Button fx:id="addAppointmentButton" onAction="#addAppointment" text="Add Appointment" />
             <Button fx:id="updateAppointmentButton" onAction="#updateAppointment" text="Update Appointment" />
             <Button fx:id="deleteAppointmentButton" onAction="#deleteAppointment" text="Delete Appointment" />
+            //TODO: Add a button to go back to the main screen
+            <Button fx:id="backButton" onAction="#backButtonAction" text="Back" />
         </HBox>
     </VBox>
 
