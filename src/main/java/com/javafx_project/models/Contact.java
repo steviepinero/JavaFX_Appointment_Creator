@@ -9,6 +9,17 @@ public class Contact {
 
     }
 
+    public Contact(int contactId, String contactName, String email) {
+        this.contactId = contactId;
+        this.contactName = contactName;
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return this.contactName;
+    }
+
     // getters and setters
 
 

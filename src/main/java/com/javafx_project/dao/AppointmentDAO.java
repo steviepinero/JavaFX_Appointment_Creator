@@ -7,6 +7,7 @@ import javafx.scene.control.ComboBox;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AppointmentDAO {
@@ -37,7 +38,6 @@ public class AppointmentDAO {
                 appointment.setLastUpdate(rs.getDate("last_update").toLocalDate());
                 appointment.setLastUpdatedBy(rs.getString("last_updated_by"));
                 appointments.add(new Appointment(appointment.getAppointmentId(), appointment.getTitle(), appointment.getDescription(), appointment.getLocation(), appointment.getContactId(), appointment.getType(), appointment.getStart(), appointment.getEnd(), appointment.getCustomerId(), appointment.getUserId(), appointment.getCreateDate(), appointment.getCreatedBy(), appointment.getLastUpdate(), appointment.getLastUpdatedBy()));
-                getAllTypes();
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -45,21 +45,11 @@ public class AppointmentDAO {
         return appointments;
     }
 
-    public ComboBox<String> getAllTypes() {
-        // get all values from the type column in the appointments table
-        String sql = "SELECT DISTINCT type FROM appointments";
-        ComboBox<String> types = new ComboBox<>();
+    public List<String> getAllTypes() {
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                types.getItems().add(rs.getString("type"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        List<String> types = Arrays.asList("Planning Session", "De-Briefing", "Scrum", "Presentation", "Consultation", "Interview", "Training", "Other");
+        ComboBox<Object> typeBox = new ComboBox<>();
+        typeBox.getItems().addAll(types);
         return types;
     }
 

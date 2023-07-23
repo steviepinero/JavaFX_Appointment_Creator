@@ -1,6 +1,6 @@
 package com.javafx_project.models;
 
-import java.security.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Customer {
@@ -12,12 +12,34 @@ public class Customer {
     private String division;
     private String country;
 
+    public Customer(int customerId, String customerName, String address, String postalCode, String phoneNumber, LocalDateTime createDate, String createdBy, LocalDate lastUpdate, String lastUpdatedBy, String division) {
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+        this.createDate = createDate;
+        this.createdBy = createdBy;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdatedBy = lastUpdatedBy;
+        this.division = division;
+    }
+
+    public Customer() {
+
+    }
+
+    @Override
+    public String toString() {
+        return this.customerName;
+    }
+
     public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate.atStartOfDay();
     }
 
     public String getCreatedBy() {
@@ -28,11 +50,11 @@ public class Customer {
         this.createdBy = createdBy;
     }
 
-    public Timestamp getLastUpdate() {
+    public LocalDate getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(Timestamp lastUpdate) {
+    public void setLastUpdate(LocalDate lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
@@ -46,7 +68,7 @@ public class Customer {
 
     private LocalDateTime createDate;
     private String createdBy;
-    private Timestamp lastUpdate;
+    private LocalDate lastUpdate;
     private String lastUpdatedBy;
 
     // getters and setters

@@ -41,7 +41,7 @@
                 <TableColumn fx:id="descriptionColumn" prefWidth="173.5" text="Description" />
                 <TableColumn fx:id="contactColumn" minWidth="0.0" prefWidth="88.5" text="Contact" />
                 <TableColumn fx:id="typeColumn" prefWidth="102.5" text="Type" />
-                <TableColumn fx:id="locationColumn" prefWidth="102.5" text="Type" />
+                <TableColumn fx:id="locationColumn" prefWidth="102.5" text="Location" />
                 <TableColumn fx:id="startDateColumn" prefWidth="81.5" text="Start Date" />
                 <TableColumn fx:id="endDateColumn" text="End Date" />
                 <TableColumn fx:id="customer_ID_Column" prefWidth="89.0" text="Customer ID" />
@@ -54,24 +54,24 @@
         </TableView>
         <TextField fx:id="titleField" promptText="Title" />
         <TextField fx:id="descriptionField" promptText="Brief Description" />
-      <HBox fx:id="datePickerBox" prefHeight="40.0" prefWidth="974.0">
+      <HBox fx:id="datePickerBox" alignment="CENTER" prefHeight="40.0" prefWidth="974.0">
          <children>
             <DatePicker fx:id="startDatePicker" promptText="Start Date" />
             <Separator orientation="VERTICAL" prefHeight="40.0" prefWidth="86.0" />
             <DatePicker fx:id="endDatePicker" layoutX="10.0" layoutY="10.0" promptText="End Date" />
             <Separator prefWidth="200.0" />
             <Separator layoutX="184.0" layoutY="10.0" orientation="VERTICAL" prefHeight="40.0" prefWidth="0.0" />
-            <TextField fx:id="postalCodeField" promptText="Postal Code" />
+            <TextField fx:id="locationField" promptText="Postal Code" />
          </children>
       </HBox>
-      <HBox fx:id="comboBoxHbox">
+      <HBox fx:id="comboBoxHbox" alignment="CENTER">
          <children>
               <ComboBox fx:id="contactBox" promptText="Contact" />
               <ComboBox fx:id="customerBox" promptText="Customer" />
             <ComboBox fx:id="typeBox" editable="true" layoutX="94.0" layoutY="10.0" promptText="Type" />
          </children>
       </HBox>
-        <HBox fx:id="buttonBox" spacing="10">
+        <HBox fx:id="buttonBox" alignment="CENTER" spacing="10">
             <Button fx:id="addAppointmentButton" onAction="#addAppointment" text="Add Appointment" />
             <Button fx:id="updateAppointmentButton" onAction="#updateAppointment" text="Update Appointment" />
             <Button fx:id="deleteAppointmentButton" onAction="#deleteAppointment" text="Delete Appointment" />
