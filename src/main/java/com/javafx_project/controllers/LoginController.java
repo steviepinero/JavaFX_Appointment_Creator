@@ -40,10 +40,7 @@ public class LoginController extends Pane {
 
     @FXML
     public void initialize() {
-        //TODO move button action to fxml file
-/*
-        loginButton.setOnAction(e -> login());
-*/
+
     }
 
     @FXML

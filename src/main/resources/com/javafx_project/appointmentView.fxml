@@ -41,10 +41,15 @@
                 <TableColumn fx:id="descriptionColumn" prefWidth="173.5" text="Description" />
                 <TableColumn fx:id="contactColumn" minWidth="0.0" prefWidth="88.5" text="Contact" />
                 <TableColumn fx:id="typeColumn" prefWidth="102.5" text="Type" />
+                <TableColumn fx:id="locationColumn" prefWidth="102.5" text="Type" />
                 <TableColumn fx:id="startDateColumn" prefWidth="81.5" text="Start Date" />
                 <TableColumn fx:id="endDateColumn" text="End Date" />
                 <TableColumn fx:id="customer_ID_Column" prefWidth="89.0" text="Customer ID" />
                 <TableColumn fx:id="user_ID_Column" prefWidth="54.0" text="User ID" />
+                <TableColumn fx:id="createdByColumn" prefWidth="54.0" text="Created By" />
+                <TableColumn fx:id="createDateColumn" prefWidth="54.0" text="Create Date" />
+                <TableColumn fx:id="lastUpdatedByColumn" prefWidth="54.0" text="Last Updated By" />
+                <TableColumn fx:id="lastUpdateColumn" prefWidth="54.0" text="Last Update" />
             </columns>
         </TableView>
         <TextField fx:id="titleField" promptText="Title" />
@@ -70,7 +75,6 @@
             <Button fx:id="addAppointmentButton" onAction="#addAppointment" text="Add Appointment" />
             <Button fx:id="updateAppointmentButton" onAction="#updateAppointment" text="Update Appointment" />
             <Button fx:id="deleteAppointmentButton" onAction="#deleteAppointment" text="Delete Appointment" />
-            //TODO: Add a button to go back to the main screen
             <Button fx:id="backButton" onAction="#backButtonAction" text="Back" />
         </HBox>
     </VBox>

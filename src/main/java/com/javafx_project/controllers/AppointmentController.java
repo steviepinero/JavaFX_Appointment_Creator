@@ -2,9 +2,7 @@ package com.javafx_project.controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -20,9 +18,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-import static java.util.logging.Level.parse;
+import static java.lang.Integer.parseInt;
 
 public class AppointmentController {
 
@@ -45,7 +44,7 @@ public class AppointmentController {
     private ComboBox<Contact> contactBox;
 
     @FXML
-    private TableColumn<Appointment, String> contactColumn;
+    private TableColumn<Appointment, Integer> contactColumn;
 
     @FXML
     private ComboBox<Customer> customerBox;
@@ -63,10 +62,7 @@ public class AppointmentController {
     private TextField descriptionField;
 
     @FXML
-    private TableColumn<Appointment, Date> endDateColumn;
-
-    @FXML
-    private TextField phoneNumberField;
+    private TableColumn<Appointment, LocalDate> endDateColumn;
 
     @FXML
     private TextField postalCodeField;
@@ -78,7 +74,7 @@ public class AppointmentController {
     private DatePicker endDatePicker;
 
     @FXML
-    private TableColumn<Appointment, Date> startDateColumn;
+    private TableColumn<Appointment, LocalDate> startDateColumn;
 
     @FXML
     private TableView<Appointment> table;
@@ -106,10 +102,21 @@ public class AppointmentController {
     private UserDAO userdao;
     @FXML
     private ComboBox<Appointment> typeBox;
+    @FXML
+    private TableColumn <Appointment, String> locationColumn;
+    @FXML
+    private TableColumn <Appointment, String> createdByColumn;
+    @FXML
+    private TableColumn <Appointment, String> lastUpdatedByColumn;
+    @FXML
+    private TableColumn <Appointment, String> createDateColumn;
+    @FXML
+    private TableColumn <Appointment, String> lastUpdateColumn;
 
 
-    public AppointmentController(TableColumn appointmentIdColumn) {
+    public AppointmentController(TableColumn appointmentIdColumn, AppointmentDAO appointmentDAO) {
         appointment_ID_Column = appointmentIdColumn;
+        this.appointmentDAO = appointmentDAO;
     }
 
     public AppointmentController() {
@@ -117,12 +124,6 @@ public class AppointmentController {
 
     @FXML
     void initialize() {
-
-        AppointmentDAO appointmentDAO = new AppointmentDAO();
-        List<Appointment> appointments = appointmentDAO.getAllAppointments();
-
-        ObservableList<Appointment> data = FXCollections.observableArrayList(appointments);
-        appointmentTable.setItems(data);
         //initialize DAOs
         appointmentDAO = new AppointmentDAO();
         contactDAO = new ContactDAO();
@@ -130,6 +131,32 @@ public class AppointmentController {
         customerDAO = new CustomerDAO();
         firstLevelDivisionDAO = new FirstLevelDivisionDAO();
         userdao = new UserDAO();
+
+        // Set up the columns in the table
+        appointment_ID_Column.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("appointmentId"));
+        titleColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("title"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("description"));
+        locationColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("location"));
+        contactColumn.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("contactId"));
+        typeColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("type"));
+        startDateColumn.setCellValueFactory(new PropertyValueFactory<Appointment, LocalDate>("start"));
+        endDateColumn.setCellValueFactory(new PropertyValueFactory<Appointment, LocalDate>("end"));
+        customer_ID_Column.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("customerId"));
+        user_ID_Column.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("userId"));
+        createdByColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("createdBy"));
+        lastUpdateColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("lastUpdate"));
+        lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("lastUpdatedBy"));
+        createDateColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("createDate"));
+
+        // Load data
+        loadAppointmentData();
+
+        AppointmentDAO appointmentDAO = new AppointmentDAO();
+        List<Appointment> appointments = appointmentDAO.getAllAppointments();
+
+        ObservableList<Appointment> data = FXCollections.observableList(appointments);
+        appointmentTable.setItems(data);
+
 
         //Load data from database
         appointmentTable.getItems().addAll(appointmentDAO.getAllAppointments());
@@ -142,6 +169,8 @@ public class AppointmentController {
         addAppointmentButton.setOnAction(e -> addAppointment());
         updateAppointmentButton.setOnAction(e -> updateAppointment());
         deleteAppointmentButton.setOnAction(e -> deleteAppointment());
+
+
 
 
 
@@ -178,13 +207,15 @@ public class AppointmentController {
         appointment.setTitle(titleField.getText());
         appointment.setDescription(descriptionField.getText());
         appointment.setLocation(postalCodeField.getText());
-        appointment.setContactId(Integer.parseInt(contactBox.getId()));
+        appointment.setContactId(parseInt(contactBox.getId()));
         appointment.setType(String.valueOf(typeBox.getValue()));
         appointment.setStart(startDatePicker.getValue());
         appointment.setEnd(endDatePicker.getValue());
-        appointment.setCustomerId(Integer.parseInt(customerBox.getId()));
-        appointment.setUserId(Integer.parseInt(user_ID_Column.getId()));
-        // TODO verify functionality
+        appointment.setCustomerId(parseInt(customerBox.getId()));
+        appointment.setUserId(parseInt(user_ID_Column.getId()));
+        appointment.setAppointmentId(parseInt(appointment_ID_Column.getId()));
+        appointment.setLastUpdate(LocalDate.parse(lastUpdateColumn.getText()));
+        appointment.setLastUpdatedBy(lastUpdatedByColumn.getText());
 
 
         // Update in database
@@ -204,8 +235,12 @@ public class AppointmentController {
         String type = String.valueOf(typeBox.getValue());
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
-        int customerId = Integer.parseInt(customerBox.getId());
-        int userId = Integer.parseInt(user_ID_Column.getId());
+        int customerId = parseInt(customerBox.getId());
+        int userId = parseInt(user_ID_Column.getId());
+        String createdBy = createdByColumn.getText();
+        LocalDate createDate = LocalDate.parse(createDateColumn.getText());
+        String lastUpdatedBy = lastUpdatedByColumn.getText();
+        LocalDate lastUpdate = LocalDate.parse(lastUpdateColumn.getText());
 
 
         // Create new Appointment object
@@ -213,12 +248,16 @@ public class AppointmentController {
         appointment.setTitle(title);
         appointment.setDescription(description);
         appointment.setLocation(location);
-        appointment.setContactId(Integer.parseInt(contact));
+        appointment.setContactId(parseInt(contact));
         appointment.setType(type);
         appointment.setStart(startDate);
         appointment.setEnd(endDate);
         appointment.setCustomerId(customerId);
         appointment.setUserId(userId);
+        appointment.setCreatedBy(createdBy);
+        appointment.setCreateDate(createDate);
+        appointment.setLastUpdatedBy(lastUpdatedBy);
+        appointment.setLastUpdate(lastUpdate);
 
         // Add to database
         appointmentDAO.addAppointment(appointment);
@@ -241,4 +280,21 @@ public class AppointmentController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }
+
+    private void loadAppointmentData() {
+        try {
+            // Get all appointments
+            List<Appointment> appointments = appointmentDAO.getAllAppointments();
+
+            // Convert to observable list and add to table
+            ObservableList<Appointment> appointmentData = FXCollections.observableArrayList(appointments);
+            appointmentTable.setItems(appointmentData);
+
+            // Refresh table
+            appointmentTable.refresh();
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
+    }
+
 }
