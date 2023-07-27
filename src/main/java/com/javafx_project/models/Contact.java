@@ -15,11 +15,15 @@ public class Contact {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return this.contactName;
+    public Contact(int id, String name) {
+        this.contactId = id;
+        this.contactName = name;
     }
 
+    @Override
+    public String toString() {
+        return contactId + " - " + contactName;
+    }
     // getters and setters
 
 

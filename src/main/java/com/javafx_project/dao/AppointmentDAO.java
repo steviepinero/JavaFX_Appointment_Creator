@@ -27,7 +27,7 @@ public class AppointmentDAO {
                 appointment.setTitle(rs.getString("title"));
                 appointment.setDescription(rs.getString("description"));
                 appointment.setLocation(rs.getString("location"));
-                appointment.setContactId(rs.getInt("contact_id"));
+                appointment.setContactId(String.valueOf(rs.getInt("contact_id")));
                 appointment.setType(rs.getString("type"));
                 appointment.setStart(rs.getDate("start").toLocalDate());
                 appointment.setEnd(rs.getDate("end").toLocalDate());
@@ -44,15 +44,6 @@ public class AppointmentDAO {
         }
         return appointments;
     }
-
-    public List<String> getAllTypes() {
-
-        List<String> types = Arrays.asList("Planning Session", "De-Briefing", "Scrum", "Presentation", "Consultation", "Interview", "Training", "Other");
-        ComboBox<Object> typeBox = new ComboBox<>();
-        typeBox.getItems().addAll(types);
-        return types;
-    }
-
 
 
     public void deleteAppointment(int appointmentId) {

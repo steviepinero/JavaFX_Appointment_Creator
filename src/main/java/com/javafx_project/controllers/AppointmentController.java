@@ -2,9 +2,13 @@ package com.javafx_project.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -24,6 +28,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import static com.javafx_project.dao.DatabaseConnection.connection;
 import static java.lang.Integer.parseInt;
 
 public class AppointmentController {
@@ -104,7 +109,7 @@ public class AppointmentController {
     private FirstLevelDivisionDAO firstLevelDivisionDAO;
     private UserDAO userdao;
     @FXML
-    private ComboBox<Appointment> typeBox;
+    private ComboBox<String> typeBox = new ComboBox<>();
     @FXML
     private TableColumn <Appointment, String> locationColumn;
     @FXML
@@ -115,6 +120,7 @@ public class AppointmentController {
     private TableColumn <Appointment, String> createDateColumn;
     @FXML
     private TableColumn <Appointment, String> lastUpdateColumn;
+    private String lastUpdatedBy;
 
 
     public AppointmentController(TableColumn appointmentIdColumn, AppointmentDAO appointmentDAO) {
@@ -124,6 +130,28 @@ public class AppointmentController {
 
     public AppointmentController() {
     }
+
+    public void populateContactBox() {
+        String query = "SELECT * FROM contacts";
+        try {
+            // Check if connection is open
+            if (connection == null || connection.isClosed()) {
+                // Open connection
+                DatabaseConnection.establishConnection();
+            }
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                int id = rs.getInt("Contact_ID");
+                String name = rs.getString("Contact_Name");
+                Contact contact = new Contact(id, name);
+                contactBox.getItems().add(contact);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     void initialize() throws SQLException {
@@ -161,19 +189,20 @@ public class AppointmentController {
         appointmentTable.setItems(data);
 
 
-        List<Contact> allContacts = (List<Contact>) contactDAO.getAllContacts();
+/*
+        List<Contact> allContacts = contactDAO.getAllContacts();
+*/
         List<Customer> allCustomers = (List<Customer>) customerDAO.getAllCustomers();
         List<String> allTypes = Arrays.asList("Planning Session", "De-Briefing", "Scrum", "Presentation", "Consultation", "Interview", "Training", "Other");
 
 
         // Populate the ComboBoxes
+/*
         contactBox.getItems().addAll(allContacts);
-        customerBox.getItems().addAll((Customer) allCustomers);
-        typeBox.getItems();
+*/
+        populateContactBox();
+        typeBox.getItems().addAll(allTypes);
         //Load data from database
-        appointmentTable.getItems().addAll(appointmentDAO.getAllAppointments());
-        typeBox.getItems();
-        contactBox.getItems().addAll(contactDAO.getAllContacts());
         customerBox.getItems().addAll(customerDAO.getAllCustomers());
 
         // Set up event handlers for buttons
@@ -215,17 +244,24 @@ public class AppointmentController {
         // Get selected appointment
         Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
 
+        // Get the selected Customer and Contact objects from the ComboBoxes
+        Customer selectedCustomer = customerBox.getValue();
+        Contact selectedContact = contactBox.getValue();
+
+// Get the IDs from the selected Customer and Contact objects
+        String customerId = String.valueOf(selectedCustomer.getCustomerId());  // Assuming Customer and Contact classes have getId() method
+        String contactId = String.valueOf(selectedContact.getContactId());
         // Update properties
         appointment.setTitle(titleField.getText());
         appointment.setDescription(descriptionField.getText());
         appointment.setLocation(locationField.getText());
-        appointment.setContactId(parseInt(contactBox.getId()));
+        appointment.setContactId(contactId);
         appointment.setType(String.valueOf(typeBox.getValue()));
         appointment.setStart(startDatePicker.getValue());
         appointment.setEnd(endDatePicker.getValue());
-        appointment.setCustomerId(parseInt(customerBox.getId()));
+        appointment.setCustomerId(Integer.parseInt(customerId));
         appointment.setUserId(parseInt(user_ID_Column.getId()));
-        appointment.setAppointmentId(parseInt(appointment_ID_Column.getId()));
+        appointment.setAppointmentId(appointment.getAppointmentId());
         appointment.setLastUpdate(LocalDate.parse(lastUpdateColumn.getText()));
         appointment.setLastUpdatedBy(lastUpdatedByColumn.getText());
 
@@ -239,45 +275,61 @@ public class AppointmentController {
 
     @FXML
     private void addAppointment() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
         String startDateString = startDatePicker.getValue().format(formatter);
         String endDateString = endDatePicker.getValue().format(formatter);
-        LocalDate startDateRefactor = LocalDate.parse((CharSequence) startDatePicker, formatter);
-        LocalDate endDateRefactor = LocalDate.parse((CharSequence) endDatePicker, formatter);
 
+        // Get the selected Customer and Contact objects from the ComboBoxes
+        Customer selectedCustomer = customerBox.getValue();
+        Contact selectedContact = contactBox.getValue();
+
+// Get the IDs from the selected Customer and Contact objects
+        String customerId = String.valueOf(selectedCustomer.getCustomerId());
+        String contact = String.valueOf(selectedContact.getContactId());
 
         // Get data from UI elements
         String title = titleField.getText();
         String description = descriptionField.getText();
         String location = locationField.getText();
-        String contact = String.valueOf(contactBox.getValue());
         String type = String.valueOf(typeBox.getValue());
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
-        String customerId = customerBox.getId();
         String userId = user_ID_Column.getId();
         String createdBy = createdByColumn.getText();
-        LocalDate createDate = LocalDate.parse(createDateColumn.getText());
+        LocalDate createDate = null;
+        LocalDate lastUpdate = null;
         String lastUpdatedBy = lastUpdatedByColumn.getText();
-        LocalDate lastUpdate = LocalDate.parse(lastUpdateColumn.getText());
-
+        try {
+            createDate = LocalDate.parse(createDateColumn.getText(), formatter);
+            lastUpdate = LocalDate.parse(lastUpdateColumn.getText(), formatter);
+        } catch (DateTimeParseException e) {
+            System.err.println("Failed to parse date: " + e.getMessage());
+        }
 
         // Create new Appointment object
         Appointment appointment = new Appointment();
         appointment.setTitle(title);
         appointment.setDescription(description);
         appointment.setLocation(location);
-        appointment.setContactId(parseInt(contact));
+        appointment.setContactId(contact);
         appointment.setType(type);
         appointment.setStart(startDate);
         appointment.setEnd(endDate);
-        appointment.setCustomerId(Integer.parseInt(customerId));
-        appointment.setUserId(Integer.parseInt(userId));
+        appointment.setCustomerId(parseInt(customerId));
+        appointment.setUserId(parseInt(userId));
         appointment.setCreatedBy(createdBy);
-        appointment.setCreateDate(createDate);
         appointment.setLastUpdatedBy(lastUpdatedBy);
-        appointment.setLastUpdate(lastUpdate);
+        appointment.setCreateDate(LocalDate.now());
+
+
+        if (createDate != null) {
+            appointment.setCreateDate(createDate);
+        }
+        appointment.setLastUpdatedBy(lastUpdatedBy);
+        if (lastUpdate != null) {
+            appointment.setLastUpdate(lastUpdate);
+        }
 
         // Add to database
         appointmentDAO.addAppointment(appointment);
@@ -285,6 +337,8 @@ public class AppointmentController {
         // Add to table
         appointmentTable.getItems().add(appointment);
     }
+
+
 
 
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
