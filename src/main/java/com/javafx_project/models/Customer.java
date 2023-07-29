@@ -29,6 +29,11 @@ public class Customer {
 
     }
 
+    public Customer(int customerId, String customerName) {
+        this.customerId = customerId;
+        this.customerName = customerName;
+    }
+
     @Override
     public String toString() {
         return this.customerName;

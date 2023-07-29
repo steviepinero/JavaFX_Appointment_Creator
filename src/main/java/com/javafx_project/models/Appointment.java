@@ -1,7 +1,6 @@
 package com.javafx_project.models;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Appointment {
     private int appointmentId;
@@ -68,6 +67,25 @@ public class Appointment {
         this.createdBy = createdBy;
         this.lastUpdate = lastUpdate;
         this.lastUpdatedBy = lastUpdatedBy;
+    }
+
+    public Appointment(int appointmentId, String title, String description, String location, int contactId, String type, LocalDate start, LocalDate end, int customerId, int userId, CharSequence createDate, String createdBy, CharSequence lastUpdate, String lastUpdatedBy) {
+            this.appointmentId = appointmentId;
+            this.title = title;
+            this.description = description;
+            this.location = location;
+            this.contactId = contactId;
+            this.type = type;
+            this.start = start;
+            this.end = end;
+            this.customerId = customerId;
+            this.userId = userId;
+            this.createDate = LocalDate.parse(createDate);
+            this.createdBy = createdBy;
+            this.lastUpdate = LocalDate.parse(lastUpdate);
+            this.lastUpdatedBy = lastUpdatedBy;
+
+
     }
 
     // getters and setters
@@ -186,5 +204,6 @@ public class Appointment {
     }
 
     public void setContactId(String id) {
+        this.contactId = Integer.parseInt(id);
     }
 }

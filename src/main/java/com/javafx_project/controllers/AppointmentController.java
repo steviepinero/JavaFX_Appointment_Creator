@@ -152,6 +152,27 @@ public class AppointmentController {
         }
     }
 
+    public void populateCustomerBox() {
+        String query = "SELECT * FROM customers";
+        try {
+            // Check if connection is open
+            if (connection == null || connection.isClosed()) {
+                // Open connection
+                DatabaseConnection.establishConnection();
+            }
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                int id = rs.getInt("Customer_ID");
+                String name = rs.getString("Customer_Name");
+                Customer customer = new Customer(id, name);
+                customerBox.getItems().add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     void initialize() throws SQLException {
@@ -203,8 +224,7 @@ public class AppointmentController {
         populateContactBox();
         typeBox.getItems().addAll(allTypes);
         //Load data from database
-        customerBox.getItems().addAll(customerDAO.getAllCustomers());
-
+        populateCustomerBox();
         // Set up event handlers for buttons
         addAppointmentButton.setOnAction(e -> addAppointment());
         updateAppointmentButton.setOnAction(e -> updateAppointment());
@@ -284,6 +304,11 @@ public class AppointmentController {
         Customer selectedCustomer = customerBox.getValue();
         Contact selectedContact = contactBox.getValue();
 
+        // Set the first Customer object to be selected by default
+        if (!customerBox.getItems().isEmpty()) {
+            customerBox.getSelectionModel().selectFirst();
+        }
+
 // Get the IDs from the selected Customer and Contact objects
         String customerId = String.valueOf(selectedCustomer.getCustomerId());
         String contact = String.valueOf(selectedContact.getContactId());
@@ -295,14 +320,15 @@ public class AppointmentController {
         String type = String.valueOf(typeBox.getValue());
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
-        String userId = user_ID_Column.getId();
+        // Get the user ID from the table column
+        int userId = user_ID_Column.getCellObservableValue(0).getValue();
         String createdBy = createdByColumn.getText();
         LocalDate createDate = null;
         LocalDate lastUpdate = null;
         String lastUpdatedBy = lastUpdatedByColumn.getText();
         try {
-            createDate = LocalDate.parse(createDateColumn.getText(), formatter);
-            lastUpdate = LocalDate.parse(lastUpdateColumn.getText(), formatter);
+            createDate = LocalDate.parse(createDateColumn.getText());
+            lastUpdate = LocalDate.parse(lastUpdateColumn.getText());
         } catch (DateTimeParseException e) {
             System.err.println("Failed to parse date: " + e.getMessage());
         }
@@ -317,10 +343,11 @@ public class AppointmentController {
         appointment.setStart(startDate);
         appointment.setEnd(endDate);
         appointment.setCustomerId(parseInt(customerId));
-        appointment.setUserId(parseInt(userId));
+        appointment.setUserId(parseInt(String.valueOf(userId)));
         appointment.setCreatedBy(createdBy);
         appointment.setLastUpdatedBy(lastUpdatedBy);
         appointment.setCreateDate(LocalDate.now());
+        appointment.setLastUpdate(LocalDate.now());
 
 
         if (createDate != null) {

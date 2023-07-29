@@ -6,9 +6,13 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.time.format.DateTimeFormatter.ofPattern;
 
 public class AppointmentDAO {
     public ObservableList<Appointment> getAllAppointments() {
@@ -67,7 +71,6 @@ public class AppointmentDAO {
         setTable(appointment, sql);
 
     }
-
     private void setTable(Appointment appointment, String sql) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -82,16 +85,31 @@ public class AppointmentDAO {
             pstmt.setInt(8, appointment.getCustomerId());
             pstmt.setInt(9, appointment.getUserId());
             pstmt.setInt(10, appointment.getAppointmentId());
-            pstmt.setTimestamp(11, Timestamp.valueOf(String.valueOf(appointment.getCreateDate())));
+
+            if (appointment.getCreateDate() != null && !appointment.getCreateDate().equals("Create Date")) {
+                LocalDate createDate = appointment.getCreateDate();
+                pstmt.setDate(11, Date.valueOf(createDate));
+            } else {
+                pstmt.setNull(11, java.sql.Types.DATE);
+            }
+
             pstmt.setString(12, appointment.getCreatedBy());
-            pstmt.setTimestamp(13, Timestamp.valueOf(String.valueOf(appointment.getLastUpdate())));
-            pstmt.setString(14, appointment.getLastUpdatedBy());
+
+            if (appointment.getLastUpdate() != null && !appointment.getLastUpdate().equals("Last Update")) {
+                LocalDate lastUpdate = appointment.getLastUpdate();
+                pstmt.setDate(13, Date.valueOf(lastUpdate));
+            } else {
+                pstmt.setNull(13, java.sql.Types.DATE);
+            }
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
+
+
+
 
 
     public void addAppointment(Appointment appointment) {
