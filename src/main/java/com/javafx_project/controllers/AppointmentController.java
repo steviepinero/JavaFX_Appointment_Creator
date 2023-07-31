@@ -2,13 +2,10 @@ package com.javafx_project.controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -124,7 +121,7 @@ public class AppointmentController {
 
 
     public AppointmentController(TableColumn appointmentIdColumn, AppointmentDAO appointmentDAO) {
-        appointment_ID_Column = appointmentIdColumn;
+        this.appointment_ID_Column = appointmentIdColumn;
         this.appointmentDAO = appointmentDAO;
     }
 
@@ -175,7 +172,7 @@ public class AppointmentController {
 
 
     @FXML
-    void initialize() throws SQLException {
+    public void initialize() throws SQLException {
         //initialize DAOs
         appointmentDAO = new AppointmentDAO();
         contactDAO = new ContactDAO();
@@ -230,13 +227,102 @@ public class AppointmentController {
         updateAppointmentButton.setOnAction(e -> updateAppointment());
         deleteAppointmentButton.setOnAction(e -> deleteAppointment());
 
+        UserDAO.getUserByUsername = userdao.getUserByUsername(String.valueOf(LoginController.loggedInUser));
+        int userId = userdao.getUserId();
+        UserDAO.getUserByUsername = userdao.getUserByUserId(userId);
+        String createdBy = userdao.getUserName();
+        createdBy.concat(createdBy);
 
+        // Set up event handler for table selection
+        appointmentTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                // Get selected appointment
+                Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
+                // Set text fields
+/*
+                appointment_ID_Field.concat(String.valueOf(appointment.getAppointmentId()));
+*/
+                titleField.setText(appointment.getTitle());
+                descriptionField.setText(appointment.getDescription());
+                locationField.setText(appointment.getLocation());
+                typeBox.setValue(appointment.getType());
+                contactBox.setValue(appointment.getContact());
+                startDatePicker.setValue(LocalDate.parse(appointment.getStart().toString()));
+                endDatePicker.setValue(LocalDate.parse(appointment.getEnd().toString()));
+                customerBox.setValue(appointment.getCustomerId());
+                createdBy.concat(appointment.getCreatedBy());
+/*
+                lastUpdatedBy.concat(appointment.getLastUpdatedBy());
+*/
+                            }
+        });
+    }
+@FXML
+    private void addAppointment() {
+        // Get the values from the text fields
+        String title = titleField.getText();
+        String description = descriptionField.getText();
+        String location = locationField.getText();
+        String type = typeBox.getValue();
+        LocalDate startDate = startDatePicker.getValue();
+        LocalDate endDate = endDatePicker.getValue();
+        int customerId = customerBox.getValue().getCustomerId();
+        int userId = LoginController.loggedInUser.getUserId();
+        int contactId = contactBox.getValue().getContactId();
+        String createdBy = LoginController.loggedInUser.getUserName();
+        String lastUpdatedBy = LoginController.loggedInUser.getUserName();
 
+        // Create a new Appointment object
+        Appointment appointment = new Appointment(title, description, location, type, startDate, endDate, customerId, userId, contactId, createdBy, lastUpdatedBy);
 
+        // Add to database
+        appointmentDAO.addAppointment(appointment);
+
+        // Add to table
+        appointmentTable.getItems().add(appointment);
+
+        // Show dialog
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Appointment Added");
+        alert.setHeaderText(null);
+        alert.setContentText("Appointment added successfully!");
+        alert.showAndWait();
+
+        // Clear text fields
+        titleField.clear();
+        descriptionField.clear();
+        locationField.clear();
+        typeBox.getSelectionModel().clearSelection();
+        startDatePicker.setValue(null);
+        endDatePicker.setValue(null);
+        customerBox.getSelectionModel().clearSelection();
+        contactBox.getSelectionModel().clearSelection();
 
     }
+@FXML
+    private void updateAppointment() {
+        // Get the values from the text fields
+        int appointmentId = appointmentTable.getSelectionModel().getSelectedItem().getAppointmentId();
+        String title = titleField.getText();
+        String description = descriptionField.getText();
+        String location = locationField.getText();
+        String type = typeBox.getValue();
+        LocalDate startDate = startDatePicker.getValue();
+        LocalDate endDate = endDatePicker.getValue();
+        int customerId = customerBox.getValue().getCustomerId();
+        int contactId = contactBox.getValue().getContactId();
+        String lastUpdatedBy = LoginController.loggedInUser.getUserName();
 
+        // Create a new Appointment object
+        Appointment updatedAppointment = new Appointment(appointmentId, title, description, location, type, startDate, endDate, customerId, contactId, lastUpdatedBy);
 
+        // Update database
+        appointmentDAO.updateAppointment(updatedAppointment);
+
+        // Update table
+        appointmentTable.getItems().set(appointmentTable.getSelectionModel().getSelectedIndex(), updatedAppointment);
+
+            }
 
 
     @FXML
@@ -259,7 +345,7 @@ public class AppointmentController {
 
     }
 
-    @FXML
+    /*@FXML
     private void updateAppointment() {
         // Get selected appointment
         Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
@@ -280,7 +366,7 @@ public class AppointmentController {
         appointment.setStart(startDatePicker.getValue());
         appointment.setEnd(endDatePicker.getValue());
         appointment.setCustomerId(Integer.parseInt(customerId));
-        appointment.setUserId(parseInt(user_ID_Column.getId()));
+        appointment.setUserId(Integer.parseInt(user_ID_Column.getId()));
         appointment.setAppointmentId(appointment.getAppointmentId());
         appointment.setLastUpdate(LocalDate.parse(lastUpdateColumn.getText()));
         appointment.setLastUpdatedBy(lastUpdatedByColumn.getText());
@@ -304,12 +390,7 @@ public class AppointmentController {
         Customer selectedCustomer = customerBox.getValue();
         Contact selectedContact = contactBox.getValue();
 
-        // Set the first Customer object to be selected by default
-        if (!customerBox.getItems().isEmpty()) {
-            customerBox.getSelectionModel().selectFirst();
-        }
-
-// Get the IDs from the selected Customer and Contact objects
+        // Get the IDs from the selected Customer and Contact objects
         String customerId = String.valueOf(selectedCustomer.getCustomerId());
         String contact = String.valueOf(selectedContact.getContactId());
 
@@ -323,15 +404,7 @@ public class AppointmentController {
         // Get the user ID from the table column
         int userId = user_ID_Column.getCellObservableValue(0).getValue();
         String createdBy = createdByColumn.getText();
-        LocalDate createDate = null;
-        LocalDate lastUpdate = null;
         String lastUpdatedBy = lastUpdatedByColumn.getText();
-        try {
-            createDate = LocalDate.parse(createDateColumn.getText());
-            lastUpdate = LocalDate.parse(lastUpdateColumn.getText());
-        } catch (DateTimeParseException e) {
-            System.err.println("Failed to parse date: " + e.getMessage());
-        }
 
         // Create new Appointment object
         Appointment appointment = new Appointment();
@@ -346,26 +419,17 @@ public class AppointmentController {
         appointment.setUserId(parseInt(String.valueOf(userId)));
         appointment.setCreatedBy(createdBy);
         appointment.setLastUpdatedBy(lastUpdatedBy);
+
+        // Set the create date and last update to the current date
         appointment.setCreateDate(LocalDate.now());
         appointment.setLastUpdate(LocalDate.now());
-
-
-        if (createDate != null) {
-            appointment.setCreateDate(createDate);
-        }
-        appointment.setLastUpdatedBy(lastUpdatedBy);
-        if (lastUpdate != null) {
-            appointment.setLastUpdate(lastUpdate);
-        }
 
         // Add to database
         appointmentDAO.addAppointment(appointment);
 
         // Add to table
         appointmentTable.getItems().add(appointment);
-    }
-
-
+    }*/
 
 
     public void backButtonAction(ActionEvent actionEvent) throws IOException {

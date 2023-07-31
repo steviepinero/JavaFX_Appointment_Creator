@@ -34,6 +34,32 @@ public class Customer {
         this.customerName = customerName;
     }
 
+    public Customer(String customerName, String address, String postalCode, String phoneNumber, String division) {
+        this.customerName = customerName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+        this.division = division;
+    }
+
+    public Customer(String customerName, String address, String postalCode, String phoneNumber, String division, String country) {
+        this.customerName = customerName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+        this.division = division;
+        this.country = country;
+    }
+
+    public Customer(int customerId, String customerName, String address, String postalCode, String phoneNumber, String division) {
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+        this.division = division;
+    }
+
     @Override
     public String toString() {
         return this.customerName;

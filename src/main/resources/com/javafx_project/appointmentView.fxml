@@ -61,7 +61,7 @@
             <DatePicker fx:id="endDatePicker" layoutX="10.0" layoutY="10.0" promptText="End Date" />
             <Separator prefWidth="200.0" />
             <Separator layoutX="184.0" layoutY="10.0" orientation="VERTICAL" prefHeight="40.0" prefWidth="0.0" />
-            <TextField fx:id="locationField" promptText="Postal Code" />
+            <TextField fx:id="locationField" promptText="Location" />
          </children>
       </HBox>
       <HBox fx:id="comboBoxHbox" alignment="CENTER">

@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginController extends Pane {
+    public static User loggedInUser;
     @FXML
     private TextField usernameField;
 
@@ -53,12 +54,13 @@ public class LoginController extends Pane {
 
         UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserByUsername(enteredUsername);
-        System.out.print("~~~~~~~~~~~~~login method~~~~~~~~~~~~");
+        System.out.print("~login method");
 
 
 
         if (user != null && user.getPassword().equals(enteredPassword)) {
             // login successful
+            loggedInUser = user;
             // navigate to the next scene.
             try {
                 FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));

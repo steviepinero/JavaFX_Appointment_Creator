@@ -1,17 +1,23 @@
 package com.javafx_project.controllers;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.javafx_project.dao.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import com.javafx_project.dao.*;
-import com.javafx_project.models.Appointment;
-import com.javafx_project.models.Contact;
 import com.javafx_project.models.Customer;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 public class CustomerController {
 
@@ -64,7 +70,7 @@ public class CustomerController {
     private TextField postalCodeField;
 
     @FXML
-    private TableView<?> tableCustomers;
+    private TableView<Customer> tableCustomers;
 
     @FXML
     private Button updateCustomerButton;
@@ -84,7 +90,7 @@ public class CustomerController {
 
 
     @FXML
-    void initialize() {
+    void initialize() throws SQLException {
 
         //initialize DAOs
         appointmentDAO = new AppointmentDAO();
@@ -95,12 +101,18 @@ public class CustomerController {
         userdao = new UserDAO();
 
         //Load data from database
-       /* tableCustomers.getItems().addAll(customerDAO.getAllCustomers());
-        divisionBox.getItems().addAll(firstLevelDivisionDAO.getAllDivisions());
+        tableCustomers.getItems().addAll(customerDAO.getAllCustomers());
+        /*divisionBox.getItems().addAll(firstLevelDivisionDAO.getAllDivisions());
         countryBox.getItems().addAll(countryDAO.getAllCountries());*/
 
         // Set up event handlers for buttons
-        addCustomerButton.setOnAction(e -> addCustomer());
+        addCustomerButton.setOnAction(e -> {
+            try {
+                addCustomer();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         updateCustomerButton.setOnAction(e -> updateCustomer());
         deleteCustomerButton.setOnAction(e -> deleteCustomer());
 
@@ -110,9 +122,197 @@ public class CustomerController {
     }
 
     private void updateCustomer() {
+        // Get values from text fields
+        String customerName = this.customerName.getText();
+        String address = this.addressField.getText();
+        String postalCode = this.postalCodeField.getText();
+        String phoneNumber = this.phoneNumberField.getText();
+        String division = this.divisionBox.getValue().toString();
+
+        // Create new customer object
+        Customer customer = new Customer(customerName, address, postalCode, phoneNumber, division);
+
+        // Add customer to database
+        customerDAO.updateCustomer(customer);
+
+        // Clear text fields
+        this.customerName.clear();
+        this.addressField.clear();
+        this.postalCodeField.clear();
+        this.phoneNumberField.clear();
+        this.divisionBox.getSelectionModel().clearSelection();
+
+        // Display success message
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText("Customer updated");
+        alert.setContentText("Customer updated successfully");
+        alert.showAndWait();
+
+        // Refresh table
+        tableCustomers.refresh();
     }
 
-    private void addCustomer() {
+    private void addCustomer() throws SQLException {
+        // Get values from text fields
+        String customerName = this.customerName.getText();
+        String address = this.addressField.getText();
+        String postalCode = this.postalCodeField.getText();
+        String phoneNumber = this.phoneNumberField.getText();
+        String division = this.divisionBox.getValue().toString();
+
+        // Create new customer object
+        Customer customer = new Customer(customerName, address, postalCode, phoneNumber, division);
+
+        // Add customer to database
+        customerDAO.addCustomer(customer);
+
+        // Clear text fields
+        this.customerName.clear();
+        this.addressField.clear();
+        this.postalCodeField.clear();
+        this.phoneNumberField.clear();
+        this.divisionBox.getSelectionModel().clearSelection();
+
+        // Display success message
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText("Customer added");
+        alert.setContentText("Customer added successfully");
+        alert.showAndWait();
+
+        // Refresh table
+        tableCustomers.refresh();
+
     }
 
+    public void backButtonAction(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
+        Parent root = loader.load();
+
+        // Get the current stage
+        Button backButton;
+        backButton = (Button) actionEvent.getSource();
+        Stage stage = (Stage) backButton.getScene().getWindow();
+
+        // Create new scene and set it on the stage
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+    }
+
+    public void loadCustomerData() throws SQLException {
+        // get all customers from database
+        List<Customer> customersList = (List<Customer>) customerDAO.getAllCustomers();
+
+        //convert customer list to observable list
+        ObservableList<Customer> customers = FXCollections.observableArrayList(customersList);
+
+        // set up table columns
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        postalCodeColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
+        divisionColumn.setCellValueFactory(new PropertyValueFactory<>("division"));
+        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+
+        // add customers to table
+        tableCustomers.setItems(customers);
+
+        // add countries to country combo box
+/*
+        countryBox.setItems(countryDAO.getAllCountries());
+*/
+
+        // add divisions to division combo box
+/*
+        divisionBox.setItems(firstLevelDivisionDAO.getAllDivisions());
+*/
+
+    }
+
+    public void deleteButtonAction(ActionEvent actionEvent) throws SQLException {
+        // Get selected customer
+        Customer customer = (Customer) tableCustomers.getSelectionModel().getSelectedItem();
+
+        // Delete customer from database
+        customerDAO.deleteCustomer(customer.getCustomerId());
+
+        // Display success message
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText("Customer deleted");
+        alert.setContentText("Customer deleted successfully");
+        alert.showAndWait();
+
+        // Refresh table
+        tableCustomers.getItems().clear();
+        tableCustomers.getItems().addAll(customerDAO.getAllCustomers());
+    }
+
+    public void updateButtonAction(ActionEvent actionEvent) throws SQLException {
+        // Get selected customer
+        Customer customer = (Customer) tableCustomers.getSelectionModel().getSelectedItem();
+
+        // Get values from text fields
+        TableView<Customer> customerTable;
+        customerTable = (TableView<Customer>) tableCustomers;
+        int customerId = customerTable.getSelectionModel().getSelectedItem().getCustomerId();
+        String customerName = this.customerName.getText();
+        String address = this.addressField.getText();
+        String postalCode = this.postalCodeField.getText();
+        String phoneNumber = this.phoneNumberField.getText();
+        String division = this.divisionBox.getValue().toString();
+
+        // Create new customer object
+        Customer updatedCustomer = new Customer(customer.getCustomerId(), customerName, address, postalCode, phoneNumber, division);
+
+        // Update customer in database
+        customerDAO.updateCustomer(updatedCustomer);
+
+        // Clear text fields
+        this.customerName.clear();
+        this.addressField.clear();
+        this.postalCodeField.clear();
+        this.phoneNumberField.clear();
+        this.divisionBox.getSelectionModel().clearSelection();
+
+        // Display success message
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText("Customer updated");
+        alert.setContentText("Customer updated successfully");
+        alert.showAndWait();
+
+        // Refresh table
+        tableCustomers.getItems().clear();
+        tableCustomers.getItems().addAll(customerDAO.getAllCustomers());
+
+
+    }
+
+    public void addButtonAction(ActionEvent actionEvent) {
+        // Get values from text fields
+        String customerName = this.customerName.getText();
+        String address = this.addressField.getText();
+        String postalCode = this.postalCodeField.getText();
+        String phoneNumber = this.phoneNumberField.getText();
+        String division = this.divisionBox.getValue().toString();
+        String country = this.countryBox.getValue().toString();
+
+        // Create new customer object
+        Customer customer = new Customer(customerName, address, postalCode, phoneNumber, division, country);
+
+        // Add customer to database
+        customerDAO.addCustomer(customer);
+
+        // Clear text fields
+        this.customerName.clear();
+        this.addressField.clear();
+        this.postalCodeField.clear();
+        this.phoneNumberField.clear();
+        this.divisionBox.getSelectionModel().clearSelection();
+        this.countryBox.getSelectionModel().clearSelection();
+
+
+    }
 }

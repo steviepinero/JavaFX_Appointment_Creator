@@ -31,9 +31,10 @@
         <ComboBox fx:id="divisionBox" promptText="Division" />
         <ComboBox fx:id="countryBox" promptText="Country" />
         <HBox spacing="10">
-            <Button fx:id="addButton" text="Add Customer" />
-            <Button fx:id="updateButton" text="Update Customer" />
-            <Button fx:id="deleteButton" text="Delete Customer" />
+            <Button fx:id="addCustomerButton" text="Add Customer" />
+            <Button fx:id="updateCustomerButton" text="Update Customer" />
+            <Button fx:id="deleteCustomerButton" text="Delete Customer" />
+         <Button fx:id="backButton" onAction="#backButtonAction" text="Back" />
         </HBox>
     </VBox>
 
