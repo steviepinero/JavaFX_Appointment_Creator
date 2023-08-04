@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,7 +20,7 @@ import com.javafx_project.models.Customer;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-public class CustomerController {
+public class CustomerController implements Initializable {
 
     @FXML
     private ResourceBundle resources;
@@ -31,7 +32,7 @@ public class CustomerController {
     private Button addButton;
 
     @FXML
-    private TableColumn<?, ?> addressColumn;
+    private TableColumn<Customer, String> addressColumn;
 
     @FXML
     private TextField addressField;
@@ -40,13 +41,13 @@ public class CustomerController {
     private ComboBox<?> countryBox;
 
     @FXML
-    private TableColumn<?, ?> countryColumn;
+    private TableColumn<Customer, String> countryColumn;
 
     @FXML
     private TextField customerName;
 
     @FXML
-    private TableColumn<?, ?> customerNameColumn;
+    private TableColumn<Customer, String> customerNameColumn;
 
     @FXML
     private Button deleteButton;
@@ -55,16 +56,16 @@ public class CustomerController {
     private ComboBox<?> divisionBox;
 
     @FXML
-    private TableColumn<?, ?> divisionColumn;
+    private TableColumn<Customer, String> divisionColumn;
 
     @FXML
-    private TableColumn<?, ?> phoneNumberColumn;
+    private TableColumn<Customer, String> phoneNumberColumn;
 
     @FXML
     private TextField phoneNumberField;
 
     @FXML
-    private TableColumn<?, ?> postalCodeColumn;
+    private TableColumn<Customer, String> postalCodeColumn;
 
     @FXML
     private TextField postalCodeField;
@@ -100,10 +101,27 @@ public class CustomerController {
         firstLevelDivisionDAO = new FirstLevelDivisionDAO();
         userdao = new UserDAO();
 
+
+        // Set up table columns
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        postalCodeColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        divisionColumn.setCellValueFactory(new PropertyValueFactory<>("division"));
+        countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
         //Load data from database
-        tableCustomers.getItems().addAll(customerDAO.getAllCustomers());
-        /*divisionBox.getItems().addAll(firstLevelDivisionDAO.getAllDivisions());
+        loadCustomerData();
+
+        CustomerDAO customerDAO = new CustomerDAO();
+        List<Customer> customers = customerDAO.getAllCustomers();
+        ObservableList<Customer> data = FXCollections.observableList(customers);
+        tableCustomers.setItems(data);
+
+
+        // Set up combo boxes
+     /*   divisionBox.getItems().addAll(firstLevelDivisionDAO.getAllDivisions());
         countryBox.getItems().addAll(countryDAO.getAllCountries());*/
+
 
         // Set up event handlers for buttons
         addCustomerButton.setOnAction(e -> {
@@ -202,22 +220,22 @@ public class CustomerController {
 
     public void loadCustomerData() throws SQLException {
         // get all customers from database
-        List<Customer> customersList = (List<Customer>) customerDAO.getAllCustomers();
+        List<Customer> customersList = customerDAO.getAllCustomers();
 
         //convert customer list to observable list
-        ObservableList<Customer> customers = FXCollections.observableArrayList(customersList);
+        ObservableList<Customer> customerData = FXCollections.observableArrayList(customersList);
 
         // set up table columns
-        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerName"));
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
         postalCodeColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
         divisionColumn.setCellValueFactory(new PropertyValueFactory<>("division"));
-        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
 
         // add customers to table
-        tableCustomers.setItems(customers);
-
+        tableCustomers.getItems().addAll(customerData);
+        tableCustomers.refresh();
         // add countries to country combo box
 /*
         countryBox.setItems(countryDAO.getAllCountries());
@@ -313,6 +331,11 @@ public class CustomerController {
         this.divisionBox.getSelectionModel().clearSelection();
         this.countryBox.getSelectionModel().clearSelection();
 
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
 }

@@ -30,10 +30,10 @@
         <TextField fx:id="phoneNumberField" promptText="Phone Number" />
         <ComboBox fx:id="divisionBox" promptText="Division" />
         <ComboBox fx:id="countryBox" promptText="Country" />
-        <HBox spacing="10">
-            <Button fx:id="addCustomerButton" text="Add Customer" />
-            <Button fx:id="updateCustomerButton" text="Update Customer" />
-            <Button fx:id="deleteCustomerButton" text="Delete Customer" />
+        <HBox alignment="CENTER" spacing="10">
+            <Button fx:id="addCustomerButton" onAction="#addButtonAction" text="Add Customer" />
+            <Button fx:id="updateCustomerButton" onAction="#updateButtonAction" text="Update Customer" />
+            <Button fx:id="deleteCustomerButton" onAction="#deleteButtonAction" text="Delete Customer" />
          <Button fx:id="backButton" onAction="#backButtonAction" text="Back" />
         </HBox>
     </VBox>

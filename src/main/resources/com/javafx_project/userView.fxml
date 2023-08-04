@@ -36,6 +36,6 @@
             <Button fx:id="updateUserButton" text="Update User"/>
             <Button fx:id="deleteUserButton" text="Delete User"/>
         </HBox>
-        <Button fx:id="backButton" text="Back"/>
+        <Button fx:id="backButton" text="Back" onAction="#backButtonAction"/>
     </VBox>
 </AnchorPane>

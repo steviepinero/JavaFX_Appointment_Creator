@@ -9,6 +9,7 @@ import static com.javafx_project.dao.DatabaseConnection.connection;
 
 public class UserDAO {
     public static User getUserByUsername;
+    public static User getUserByUserId;
     private int userId;
     private String userName;
 

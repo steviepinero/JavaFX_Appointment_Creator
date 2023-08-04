@@ -43,7 +43,7 @@ public class AppointmentController {
     private TableView<Appointment> appointmentTable;
 
     @FXML
-    private TableColumn<Appointment, Integer> appointment_ID_Column;
+    private TableColumn<Appointment, String> appointment_ID_Column;
 
     @FXML
     private ComboBox<Contact> contactBox;
@@ -55,7 +55,7 @@ public class AppointmentController {
     private ComboBox<Customer> customerBox;
 
     @FXML
-    private TableColumn<Appointment, Integer> customer_ID_Column;
+    private TableColumn<Appointment, String> customer_ID_Column;
 
     @FXML
     private Button deleteAppointmentButton;
@@ -117,12 +117,13 @@ public class AppointmentController {
     private TableColumn <Appointment, String> createDateColumn;
     @FXML
     private TableColumn <Appointment, String> lastUpdateColumn;
-    private String lastUpdatedBy;
+    private String lastUpdatedBy = LoginController.loggedInUser.getUserName();
+    private String createdBy = LoginController.loggedInUser.getUserName();
 
-
-    public AppointmentController(TableColumn appointmentIdColumn, AppointmentDAO appointmentDAO) {
+    public AppointmentController(TableColumn appointmentIdColumn, AppointmentDAO appointmentDAO, String lastUpdatedBy) {
         this.appointment_ID_Column = appointmentIdColumn;
         this.appointmentDAO = appointmentDAO;
+        this.lastUpdatedBy = lastUpdatedBy;
     }
 
     public AppointmentController() {
@@ -182,7 +183,7 @@ public class AppointmentController {
         userdao = new UserDAO();
 
         // Set up the columns in the table
-        appointment_ID_Column.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("appointmentId"));
+        appointment_ID_Column.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("title"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("description"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("location"));
@@ -190,7 +191,7 @@ public class AppointmentController {
         typeColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("type"));
         startDateColumn.setCellValueFactory(new PropertyValueFactory<Appointment, LocalDate>("start"));
         endDateColumn.setCellValueFactory(new PropertyValueFactory<Appointment, LocalDate>("end"));
-        customer_ID_Column.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("customerId"));
+        customer_ID_Column.setCellValueFactory(new PropertyValueFactory<Appointment, String>("customerId"));
         user_ID_Column.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("userId"));
         createdByColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("createdBy"));
         lastUpdateColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("lastUpdate"));
@@ -229,7 +230,7 @@ public class AppointmentController {
 
         UserDAO.getUserByUsername = userdao.getUserByUsername(String.valueOf(LoginController.loggedInUser));
         int userId = userdao.getUserId();
-        UserDAO.getUserByUsername = userdao.getUserByUserId(userId);
+        UserDAO.getUserByUserId = userdao.getUserByUserId(userId);
         String createdBy = userdao.getUserName();
         createdBy.concat(createdBy);
 
@@ -251,9 +252,8 @@ public class AppointmentController {
                 endDatePicker.setValue(LocalDate.parse(appointment.getEnd().toString()));
                 customerBox.setValue(appointment.getCustomerId());
                 createdBy.concat(appointment.getCreatedBy());
-/*
-                lastUpdatedBy.concat(appointment.getLastUpdatedBy());
-*/
+                lastUpdatedBy.equals(appointment.getLastUpdatedBy());
+
                             }
         });
     }

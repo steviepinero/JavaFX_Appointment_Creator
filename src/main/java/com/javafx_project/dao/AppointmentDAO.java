@@ -35,7 +35,10 @@ public class AppointmentDAO {
                 Date createDate = rs.getDate("create_date");
                 System.out.println(createDate);
                     if (createDate != null) {
+                        appointment.setCreateDate(rs.getDate("create_date").toLocalDate());
+/*
                         appointment.setCreateDate(createDate.toLocalDate());
+*/
                         System.out.println(createDate + " is not null"  + appointment.getCreateDate());
                     } else {
                         appointment.setCreateDate(LocalDate.now());
@@ -83,7 +86,7 @@ public class AppointmentDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            System.out.println(appointment.getCreateDate());
+            System.out.println(appointment.getCreateDate() + " is the create date in SetTable");
             System.out.println(appointment.getLastUpdate());
 
             pstmt.setString(1, appointment.getTitle());
@@ -98,6 +101,8 @@ public class AppointmentDAO {
             pstmt.setInt(10, appointment.getAppointmentId());
 
             if (appointment.getCreateDate() != null && !appointment.getCreateDate().equals("Create Date")) {
+                java.sql.Date sqlDate = java.sql.Date.valueOf(appointment.getCreateDate());
+                //TODO last change was made here 8/1/23
                 Date createDate = Date.valueOf(appointment.getCreateDate());
                 pstmt.setDate(11, createDate);
             } else {
@@ -113,7 +118,7 @@ public class AppointmentDAO {
                 pstmt.setDate(13, Date.valueOf(LocalDate.now()));
             }
 
-            pstmt.setString(14, appointment.getLastUpdatedBy());
+//            pstmt.setString(14, appointment.getLastUpdatedBy());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
