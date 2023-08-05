@@ -22,7 +22,9 @@ public class DatabaseConnection {
     }
 
     public static Connection getConnection() {
+/*
         establishConnection();
+*/
         return connection;
     }
 }

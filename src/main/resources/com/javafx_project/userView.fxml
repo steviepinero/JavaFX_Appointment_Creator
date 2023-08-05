@@ -12,7 +12,7 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javafx_project.controllers.UserController">
 
     <VBox xmlns:fx="http://javafx.com/fxml">
-        <TableView fx:id="userTable">
+        <TableView fx:id="userTable" prefHeight="400.0" prefWidth="606.0">
             <columns>
                 <TableColumn fx:id="userIdColumn" text="User ID" />
                 <TableColumn fx:id="userNameColumn" text="User Name" />
@@ -20,7 +20,7 @@
                 <TableColumn fx:id="createDateColumn" text="Create Date" />
                 <TableColumn fx:id="createdByColumn" text="Created By" />
                 <TableColumn fx:id="lastUpdateColumn" text="Last Update" />
-                <TableColumn fx:id="lastUpdatedByColumn" text="Last Updated By" />
+                <TableColumn fx:id="lastUpdatedByColumn" prefWidth="102.0" text="Last Updated By" />
             </columns>
         </TableView>
         <HBox alignment="CENTER">
@@ -32,9 +32,9 @@
          <TextField fx:id="passwordField" />
         </HBox>
         <HBox alignment="CENTER">
-            <Button fx:id="createUserButton" text="Create User" />
-            <Button fx:id="updateUserButton" text="Update User" />
-            <Button fx:id="deleteUserButton" text="Delete User" />
+            <Button fx:id="createUserButton" onAction="#addUser" text="Create User" />
+            <Button fx:id="updateUserButton" onAction="#updateUser" text="Update User" />
+            <Button fx:id="deleteUserButton" onAction="#deleteUser" text="Delete User" />
         </HBox>
         <Button fx:id="backButton" onAction="#backButtonAction" text="Back" />
     </VBox>

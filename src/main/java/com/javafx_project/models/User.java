@@ -1,18 +1,18 @@
 package com.javafx_project.models;
 
 public class User {
-    private int userId;
-    private String userName;
+    private int User_ID;
+    private String User_Name;
 
     private String password;
 
-    private String createDate;
+    private String Create_Date;
 
-    private String createdBy;
+    private String Created_By;
 
-    private String lastUpdate;
+    private String Last_Update;
 
-    private String lastUpdatedBy;
+    private String Last_Updated_By;
 
     public User() {
 
@@ -21,19 +21,19 @@ public class User {
     // getters and setters
 
     public int getUserId() {
-        return userId;
+        return User_ID;
     }
 
     public void setUserId(int userId) {
-        this.userId = userId;
+        this.User_ID = userId;
     }
 
     public String getUserName() {
-        return userName;
+        return User_Name;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.User_Name = userName;
     }
 
     public String getPassword() {
@@ -45,34 +45,34 @@ public class User {
     }
 
     public String getCreateDate() {
-        return createDate;
+        return Create_Date;
     }
 
     public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+        this.Create_Date = createDate;
     }
 
     public String getCreatedBy() {
-        return createdBy;
+        return Created_By;
     }
 
     public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+        this.Created_By = createdBy;
     }
 
     public String getLastUpdate() {
-        return lastUpdate;
+        return Last_Update;
     }
 
     public void setLastUpdate(String lastUpdate) {
-        this.lastUpdate = lastUpdate;
+        this.Last_Update = lastUpdate;
     }
 
     public String getLastUpdatedBy() {
-        return lastUpdatedBy;
+        return Last_Updated_By;
     }
 
     public void setLastUpdatedBy(String lastUpdatedBy) {
-        this.lastUpdatedBy = lastUpdatedBy;
+        this.Last_Updated_By = lastUpdatedBy;
     }
 }

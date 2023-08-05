@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 public class AppointmentDAO {
-    public ObservableList<Appointment> getAllAppointments() {
+    public static ObservableList<Appointment> getAllAppointments() {
 
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         // get all values from the appointments table

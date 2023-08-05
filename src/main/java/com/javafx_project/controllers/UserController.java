@@ -1,8 +1,10 @@
 package com.javafx_project.controllers;
 
+import com.javafx_project.dao.AppointmentDAO;
 import com.javafx_project.dao.DatabaseConnection;
+import com.javafx_project.models.Appointment;
 import com.javafx_project.models.User;
-import javafx.collections.FXCollections;
+import com.javafx_project.dao.UserDAO;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,13 +13,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -26,48 +27,45 @@ import java.util.logging.Logger;
 import static com.javafx_project.dao.DatabaseConnection.connection;
 
 public class UserController implements Initializable {
+    static ObservableList<User> userList = UserDAO.getAllUsers();
+    static ObservableList<Appointment> appointmentList = AppointmentDAO.getAllAppointments();
+    private static User selectedUser;
 
+    /** User table */
     @FXML
-    private Button backButton;
-
+    private TableView<User> userTable;
+    @FXML
+    private TableColumn<User, String> userIdColumn;
+    @FXML
+    private TableColumn<User, String> userNameColumn;
+    @FXML
+    private TableColumn<User, String> passwordColumn;
     @FXML
     private TableColumn<User, String> createDateColumn;
-
-    @FXML
-    private Button createUserButton;
-
     @FXML
     private TableColumn<User, String> createdByColumn;
-
-    @FXML
-    private Button deleteUserButton;
-
     @FXML
     private TableColumn<User, String> lastUpdateColumn;
-
     @FXML
     private TableColumn<User, String> lastUpdatedByColumn;
 
-    @FXML
-    private TableColumn<User, String> passwordColumn;
 
     @FXML
-    private TextField passwordField;
-
+    private Button backButton;
+    @FXML
+    private Button createUserButton;
+    @FXML
+    private Button deleteUserButton;
     @FXML
     private Button updateUserButton;
 
-    @FXML
-    private TableColumn<User, String> userIdColumn;
 
     @FXML
-    private TableColumn<User, String> userNameColumn;
-
+    private TextField passwordField;
     @FXML
     private TextField userNameField;
 
-    @FXML
-    private TableView<User> userTable;
+
 
 
     //constructor
@@ -75,7 +73,7 @@ public class UserController implements Initializable {
     }
 
     @FXML
-    public void addCustomer(ActionEvent actionEvent) {
+    public void addUser(ActionEvent actionEvent) {
         String userName, password, createdBy, lastUpdatedBy;
         userName = userNameField.getText();
         password = passwordField.getText();
@@ -107,45 +105,20 @@ public class UserController implements Initializable {
     }
     
     public void setTable() {
-        Connection conn = DatabaseConnection.connection;
-        ObservableList<User> users = FXCollections.observableArrayList();
-        try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM users");
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                User user = new User();
-                user.setUserId(rs.getInt("User_ID"));
-                user.setUserName(rs.getString("User_Name"));
-                user.setPassword(rs.getString("Password"));
-                user.setCreateDate(rs.getString("Create_Date"));
-                user.setCreatedBy(rs.getString("Created_By"));
-                user.setLastUpdate(rs.getString("Last_Update"));
-                user.setLastUpdatedBy(rs.getString("Last_Updated_By"));
-                userTable.getItems().add(user);
-            }
+        // Set the user table
+        userTable.setItems(userList);
+        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("User_ID"));
+        userNameColumn.setCellValueFactory(new PropertyValueFactory<>("User_Name"));
+        passwordColumn.setCellValueFactory(new PropertyValueFactory<>("Password"));
+        createDateColumn.setCellValueFactory(new PropertyValueFactory<>("Create_Date"));
+        createdByColumn.setCellValueFactory(new PropertyValueFactory<>("Created_By"));
+        lastUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Update"));
+        lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Updated_By"));
 
-
-            userTable.setItems(users);
-
-        } catch (SQLException e) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, e);
-        }
-
-        userTable.setRowFactory(tv -> {
-            TableRow<User> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 1 && (!row.isEmpty())) {
-                    User rowData = row.getItem();
-                    userNameField.setText(rowData.getUserName());
-                    passwordField.setText(rowData.getPassword());
-                }
-            });
-            return row;
-        });
     }
 
     @FXML
-    public void updateCustomer(ActionEvent actionEvent) {
+    public void updateUser(ActionEvent actionEvent) {
         String userName, password, lastUpdatedBy;
         int userId;
         userName = userNameField.getText();
@@ -178,29 +151,56 @@ public class UserController implements Initializable {
     }
 
     @FXML
-    public void deleteCustomer(ActionEvent actionEvent) {
-        int userId;
-        userId = userTable.getSelectionModel().getSelectedItem().getUserId();
+    public void deleteUser(ActionEvent actionEvent) {
+        selectedUser = userTable.getSelectionModel().getSelectedItem();
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users WHERE User_ID = ?");
-            preparedStatement.setInt(1, userId);
-            preparedStatement.executeUpdate();
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("User Deleted");
-            alert.setHeaderText("User Deleted");
-            alert.setContentText("User Deleted Successfully");
+        // Check if the user is the default admi
+        if (selectedUser.getUserId() == 1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Cannot delete the default admin user");
             alert.showAndWait();
-
-            setTable();
-
-            userNameField.setText("");
-            passwordField.setText("");
-
-        } catch (SQLException e) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, e);
+            return;
         }
+        // Chdeck if a user is selected
+        if (selectedUser == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Please select a user to delete");
+            alert.showAndWait();
+            return;
+        } else {
+            /** Check if user has any upcoming appointments */
+            for (Appointment appointment : appointmentList) {
+                if (appointment.getUserId() == selectedUser.getUserId()) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error");
+                    alert.setContentText("Cannot delete a user with upcoming appointments");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete User");
+            alert.setHeaderText("Delete User");
+            alert.setContentText("Are you sure you want to delete this user?");
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.OK) {
+                //user deleted from database
+                UserDAO.deleteUser(selectedUser.getUserId());
+
+                //console message verifying delete
+                System.out.println("User" + selectedUser.getUserName() + "deleted");
+                //reload table and remove deleted user from fxml table
+                userTable.setItems(UserDAO.getAllUsers());
+                userTable.refresh();
+            }
+        }
+
+
     }
 
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
@@ -223,8 +223,5 @@ public class UserController implements Initializable {
 
         DatabaseConnection.getConnection();
         setTable();
-
-
-
     }
 }
