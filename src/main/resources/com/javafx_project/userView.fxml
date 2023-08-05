@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.javafx_project.controllers.UserController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javafx_project.controllers.UserController">
 
     <VBox xmlns:fx="http://javafx.com/fxml">
         <TableView fx:id="userTable">
             <columns>
-                <TableColumn fx:id="userIdColumn" text="User ID"/>
-                <TableColumn fx:id="userNameColumn" text="User Name"/>
-                <TableColumn fx:id="passwordColumn" text="Password"/>
-                <TableColumn fx:id="createDateColumn" text="Create Date"/>
-                <TableColumn fx:id="createdByColumn" text="Created By"/>
-                <TableColumn fx:id="lastUpdateColumn" text="Last Update"/>
-                <TableColumn fx:id="lastUpdatedByColumn" text="Last Updated By"/>
+                <TableColumn fx:id="userIdColumn" text="User ID" />
+                <TableColumn fx:id="userNameColumn" text="User Name" />
+                <TableColumn fx:id="passwordColumn" text="Password" />
+                <TableColumn fx:id="createDateColumn" text="Create Date" />
+                <TableColumn fx:id="createdByColumn" text="Created By" />
+                <TableColumn fx:id="lastUpdateColumn" text="Last Update" />
+                <TableColumn fx:id="lastUpdatedByColumn" text="Last Updated By" />
             </columns>
         </TableView>
-        <HBox>
-            <Label text="User Name:"/>
-            <TextField fx:id="userNameField"/>
+        <HBox alignment="CENTER">
+            <Label text="User Name:" />
+            <TextField fx:id="userNameField" />
         </HBox>
-        <HBox>
-            <Label text="Password:"/>
-            <PasswordField fx:id="passwordField"/>
+        <HBox alignment="CENTER">
+            <Label text="Password:" />
+         <TextField fx:id="passwordField" />
         </HBox>
-        <HBox>
-            <Button fx:id="createUserButton" text="Create User"/>
-            <Button fx:id="updateUserButton" text="Update User"/>
-            <Button fx:id="deleteUserButton" text="Delete User"/>
+        <HBox alignment="CENTER">
+            <Button fx:id="createUserButton" text="Create User" />
+            <Button fx:id="updateUserButton" text="Update User" />
+            <Button fx:id="deleteUserButton" text="Delete User" />
         </HBox>
-        <Button fx:id="backButton" text="Back" onAction="#backButtonAction"/>
+        <Button fx:id="backButton" onAction="#backButtonAction" text="Back" />
     </VBox>
 </AnchorPane>
