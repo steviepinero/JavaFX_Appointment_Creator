@@ -18,21 +18,31 @@ public class User {
 
     }
 
+    public User(int userId, String userName, String password, String createDate, String createdBy, String lasUpdate, String lastUpdatedBy) {
+        this.User_ID = userId;
+        this.User_Name = userName;
+        this.password = password;
+        this.Create_Date = createDate;
+        this.Created_By = createdBy;
+        this.Last_Update = lasUpdate;
+        this.Last_Updated_By = lastUpdatedBy;
+    }
+
     // getters and setters
 
-    public int getUserId() {
+    public int getUser_Id() {
         return User_ID;
     }
 
-    public void setUserId(int userId) {
+    public void setUser_Id(int userId) {
         this.User_ID = userId;
     }
 
-    public String getUserName() {
+    public String getUser_Name() {
         return User_Name;
     }
 
-    public void setUserName(String userName) {
+    public void setUser_Name(String userName) {
         this.User_Name = userName;
     }
 
@@ -44,35 +54,35 @@ public class User {
         this.password = password;
     }
 
-    public String getCreateDate() {
+    public String getCreate_Date() {
         return Create_Date;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreate_Date(String createDate) {
         this.Create_Date = createDate;
     }
 
-    public String getCreatedBy() {
+    public String getCreated_By() {
         return Created_By;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreated_By(String createdBy) {
         this.Created_By = createdBy;
     }
 
-    public String getLastUpdate() {
+    public String getLast_Update() {
         return Last_Update;
     }
 
-    public void setLastUpdate(String lastUpdate) {
+    public void setLast_Update(String lastUpdate) {
         this.Last_Update = lastUpdate;
     }
 
-    public String getLastUpdatedBy() {
+    public String getLast_Updated_By() {
         return Last_Updated_By;
     }
 
-    public void setLastUpdatedBy(String lastUpdatedBy) {
+    public void setLast_Updated_By(String lastUpdatedBy) {
         this.Last_Updated_By = lastUpdatedBy;
     }
 }

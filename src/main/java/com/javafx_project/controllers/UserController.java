@@ -35,7 +35,7 @@ public class UserController implements Initializable {
     @FXML
     private TableView<User> userTable;
     @FXML
-    private TableColumn<User, String> userIdColumn;
+    private TableColumn<User, Integer> userIdColumn;
     @FXML
     private TableColumn<User, String> userNameColumn;
     @FXML
@@ -81,6 +81,7 @@ public class UserController implements Initializable {
         lastUpdatedBy = "test";
 
         try {
+            DatabaseConnection.establishConnection();
            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (User_Name, password, Create_Date, Created_By, Last_Update, Last_Updated_By) VALUES (?, ?, NOW(), ?, NOW(), ?)");
             preparedStatement.setString(1, userName);
             preparedStatement.setString(2, password);
@@ -98,6 +99,8 @@ public class UserController implements Initializable {
             
             userNameField.setText("");
             passwordField.setText("");
+
+            userTable.refresh();
             
         } catch (SQLException e) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, e);
@@ -119,12 +122,13 @@ public class UserController implements Initializable {
 
     @FXML
     public void updateUser(ActionEvent actionEvent) {
+        DatabaseConnection.establishConnection();
         String userName, password, lastUpdatedBy;
         int userId;
         userName = userNameField.getText();
         password = passwordField.getText();
         lastUpdatedBy = "test";
-        userId = userTable.getSelectionModel().getSelectedItem().getUserId();
+        userId = userTable.getSelectionModel().getSelectedItem().getUser_Id();
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE users SET User_Name = ?, Password = ?, Last_Update = NOW(), Last_Updated_By = ? WHERE User_ID = ?");
@@ -141,6 +145,7 @@ public class UserController implements Initializable {
             alert.showAndWait();
 
             setTable();
+            userTable.refresh();
 
             userNameField.setText("");
             passwordField.setText("");
@@ -152,10 +157,11 @@ public class UserController implements Initializable {
 
     @FXML
     public void deleteUser(ActionEvent actionEvent) {
+        DatabaseConnection.establishConnection();
         selectedUser = userTable.getSelectionModel().getSelectedItem();
 
         // Check if the user is the default admi
-        if (selectedUser.getUserId() == 1) {
+        if (selectedUser.getUser_Id() == 1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Error");
@@ -174,7 +180,7 @@ public class UserController implements Initializable {
         } else {
             /** Check if user has any upcoming appointments */
             for (Appointment appointment : appointmentList) {
-                if (appointment.getUserId() == selectedUser.getUserId()) {
+                if (appointment.getUserId() == selectedUser.getUser_Id()) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText("Error");
@@ -190,10 +196,10 @@ public class UserController implements Initializable {
             alert.showAndWait();
             if (alert.getResult() == ButtonType.OK) {
                 //user deleted from database
-                UserDAO.deleteUser(selectedUser.getUserId());
+                UserDAO.deleteUser(selectedUser.getUser_Id());
 
                 //console message verifying delete
-                System.out.println("User" + selectedUser.getUserName() + "deleted");
+                System.out.println("User" + selectedUser.getUser_Name() + "deleted");
                 //reload table and remove deleted user from fxml table
                 userTable.setItems(UserDAO.getAllUsers());
                 userTable.refresh();

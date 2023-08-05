@@ -23,14 +23,14 @@ public class UserDAO {
             ResultSet rs = loadUsers.executeQuery();
 
             while (rs.next()) {
-                User user = new User();
-                user.setUserId(rs.getInt("User_ID"));
-                user.setUserName(rs.getString("User_Name"));
-                user.setPassword(rs.getString("Password"));
-                user.setCreateDate(rs.getString("Create_Date"));
-                user.setCreatedBy(rs.getString("Created_By"));
-                user.setLastUpdate(rs.getString("Last_Update"));
-                user.setLastUpdatedBy(rs.getString("Last_Updated_By"));
+                Integer userId = rs.getInt("User_ID");
+                String userName = rs.getString("User_Name");
+                String password = rs.getString("Password");
+                String createDate = rs.getString("Create_Date");
+                String createdBy = rs.getString("Created_By");
+                String lasUpdate = rs.getString("Last_Update");
+                String lastUpdatedBy = rs.getString("Last_Updated_By");
+                User user = new User(userId, userName, password, createDate, createdBy, lasUpdate, lastUpdatedBy);
                 userList.add(user);
             }
             return userList;
@@ -49,7 +49,7 @@ public class UserDAO {
 
         if (rs.next()) {
             User user = new User();
-            user.setUserName(rs.getString("User_Name"));
+            user.setUser_Name(rs.getString("User_Name"));
             user.setPassword(rs.getString("Password"));
             // set other fields if it becomes necessary
             return user;
@@ -67,13 +67,13 @@ public class UserDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 User user = new User();
-                user.setUserId(rs.getInt("User_ID"));
-                user.setUserName(rs.getString("User_Name"));
+                user.setUser_Id(rs.getInt("User_ID"));
+                user.setUser_Name(rs.getString("User_Name"));
                 user.setPassword(rs.getString("Password"));
-                user.setCreateDate(rs.getString("Create_Date"));
-                user.setCreatedBy(rs.getString("Created_By"));
-                user.setLastUpdate(rs.getString("Last_Update"));
-                user.setLastUpdatedBy(rs.getString("Last_Updated_By"));
+                user.setCreate_Date(rs.getString("Create_Date"));
+                user.setCreated_By(rs.getString("Created_By"));
+                user.setLast_Update(rs.getString("Last_Update"));
+                user.setLast_Updated_By(rs.getString("Last_Updated_By"));
                 return user;
             } else {
                 return null;

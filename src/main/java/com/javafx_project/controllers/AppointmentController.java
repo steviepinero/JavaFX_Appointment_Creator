@@ -117,8 +117,8 @@ public class AppointmentController {
     private TableColumn <Appointment, String> createDateColumn;
     @FXML
     private TableColumn <Appointment, String> lastUpdateColumn;
-    private String lastUpdatedBy = LoginController.loggedInUser.getUserName();
-    private String createdBy = LoginController.loggedInUser.getUserName();
+    private String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
+    private String createdBy = LoginController.loggedInUser.getUser_Name();
 
     public AppointmentController(TableColumn appointmentIdColumn, AppointmentDAO appointmentDAO, String lastUpdatedBy) {
         this.appointment_ID_Column = appointmentIdColumn;
@@ -267,10 +267,10 @@ public class AppointmentController {
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
         int customerId = customerBox.getValue().getCustomerId();
-        int userId = LoginController.loggedInUser.getUserId();
+        int userId = LoginController.loggedInUser.getUser_Id();
         int contactId = contactBox.getValue().getContactId();
-        String createdBy = LoginController.loggedInUser.getUserName();
-        String lastUpdatedBy = LoginController.loggedInUser.getUserName();
+        String createdBy = LoginController.loggedInUser.getUser_Name();
+        String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
 
         // Create a new Appointment object
         Appointment appointment = new Appointment(title, description, location, type, startDate, endDate, customerId, userId, contactId, createdBy, lastUpdatedBy);
@@ -311,7 +311,7 @@ public class AppointmentController {
         LocalDate endDate = endDatePicker.getValue();
         int customerId = customerBox.getValue().getCustomerId();
         int contactId = contactBox.getValue().getContactId();
-        String lastUpdatedBy = LoginController.loggedInUser.getUserName();
+        String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
 
         // Create a new Appointment object
         Appointment updatedAppointment = new Appointment(appointmentId, title, description, location, type, startDate, endDate, customerId, contactId, lastUpdatedBy);
