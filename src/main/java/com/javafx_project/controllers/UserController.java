@@ -77,9 +77,8 @@ public class UserController implements Initializable {
         String userName, password, createdBy, lastUpdatedBy;
         userName = userNameField.getText();
         password = passwordField.getText();
-        createdBy = "test";
-        lastUpdatedBy = "test";
-
+        createdBy = String.valueOf(LoginController.loggedInUser.getUser_Name());;
+        lastUpdatedBy = createdBy;
         try {
             DatabaseConnection.establishConnection();
            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (User_Name, password, Create_Date, Created_By, Last_Update, Last_Updated_By) VALUES (?, ?, NOW(), ?, NOW(), ?)");
@@ -100,8 +99,10 @@ public class UserController implements Initializable {
             userNameField.setText("");
             passwordField.setText("");
 
+            userTable.setItems(UserDAO.getAllUsers());
             userTable.refresh();
-            
+
+
         } catch (SQLException e) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, e);
      }
@@ -127,7 +128,8 @@ public class UserController implements Initializable {
         int userId;
         userName = userNameField.getText();
         password = passwordField.getText();
-        lastUpdatedBy = "test";
+        //get the username of the logged in user
+        lastUpdatedBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
         userId = userTable.getSelectionModel().getSelectedItem().getUser_Id();
 
         try {
@@ -145,6 +147,7 @@ public class UserController implements Initializable {
             alert.showAndWait();
 
             setTable();
+            userTable.setItems(UserDAO.getAllUsers());
             userTable.refresh();
 
             userNameField.setText("");
