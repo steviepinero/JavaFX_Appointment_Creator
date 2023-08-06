@@ -137,6 +137,13 @@ public class CustomerController implements Initializable {
     }
 
     private void deleteCustomer() {
+        // Get selected customer from table
+        Customer customer = tableCustomers.getSelectionModel().getSelectedItem();
+        // Delete customer from database
+        customerDAO.deleteCustomer(customer.getCustomerId());
+        // Refresh table
+        tableCustomers.refresh();
+
     }
 
     private void updateCustomer() {
@@ -232,6 +239,7 @@ public class CustomerController implements Initializable {
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
         divisionColumn.setCellValueFactory(new PropertyValueFactory<>("division"));
+
 
         // add customers to table
         tableCustomers.getItems().addAll(customerData);
@@ -336,6 +344,7 @@ public class CustomerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
 
     }
 }
