@@ -2,10 +2,12 @@ package com.javafx_project.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
     public static Connection connection;
+    public static PreparedStatement preparedStatement;
 
     public static Connection establishConnection() {
 
@@ -22,9 +24,7 @@ public class DatabaseConnection {
     }
 
     public static Connection getConnection() {
-/*
-        establishConnection();
-*/
+//        establishConnection();
         return connection;
     }
 }

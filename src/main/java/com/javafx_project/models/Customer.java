@@ -4,65 +4,84 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Customer {
-    private int customerId;
-    private String customerName;
-    private String address;
-    private String postalCode;
-    private String phoneNumber;
-    private String division;
-    private String country;
 
-    public Customer(int customerId, String customerName, String address, String postalCode, String phoneNumber, LocalDateTime createDate, String createdBy, LocalDate lastUpdate, String lastUpdatedBy, String division) {
-        this.customerId = customerId;
-        this.customerName = customerName;
+    private int customer_Id;
+    private String customer_Name;
+    private String address;
+    private String postal_Code;
+    private String phone;
+    private LocalDateTime create_Date;
+    private String created_By;
+    private LocalDateTime last_Update;
+    private String last_Updated_By;
+    private int country_Id;
+    private int division_Id;
+
+    public Customer(int customer_Id, String customer_Name, String address, String postal_Code, String phone, LocalDateTime createDate, String createdBy, LocalDate lastUpdate, String lastUpdatedBy, Integer division_Id) {
+        this.customer_Id = customer_Id;
+        this.customer_Name = customer_Name;
         this.address = address;
-        this.postalCode = postalCode;
-        this.phoneNumber = phoneNumber;
+        this.postal_Code = postal_Code;
+        this.phone = phone;
         this.createDate = createDate;
         this.createdBy = createdBy;
         this.lastUpdate = lastUpdate;
         this.lastUpdatedBy = lastUpdatedBy;
-        this.division = division;
+        this.division_Id = division_Id;
     }
 
     public Customer() {
 
     }
 
-    public Customer(int customerId, String customerName) {
-        this.customerId = customerId;
-        this.customerName = customerName;
+    public Customer(int customer_Id, String customer_Name) {
+        this.customer_Id = customer_Id;
+        this.customer_Name = customer_Name;
     }
 
-    public Customer(String customerName, String address, String postalCode, String phoneNumber, String division) {
-        this.customerName = customerName;
+    public Customer(String customer_Name, String address, String postal_Code, String phone, String division_Id) {
+        this.customer_Name = customer_Name;
         this.address = address;
-        this.postalCode = postalCode;
-        this.phoneNumber = phoneNumber;
-        this.division = division;
+        this.postal_Code = postal_Code;
+        this.phone = phone;
+        this.division_Id = Integer.parseInt(division_Id);
     }
 
-    public Customer(String customerName, String address, String postalCode, String phoneNumber, String division, String country) {
-        this.customerName = customerName;
+    public Customer(String customer_Name, String address, String postal_Code, String phone, String division_Id, String country_Id) {
+        this.customer_Name = customer_Name;
         this.address = address;
-        this.postalCode = postalCode;
-        this.phoneNumber = phoneNumber;
-        this.division = division;
-        this.country = country;
+        this.postal_Code = postal_Code;
+        this.phone = phone;
+        this.division_Id = Integer.parseInt(division_Id);
+        this.country_Id = Integer.parseInt(country_Id);
     }
 
-    public Customer(int customerId, String customerName, String address, String postalCode, String phoneNumber, String division) {
-        this.customerId = customerId;
-        this.customerName = customerName;
+    public Customer(int customer_Id, String customer_Name, String address, String postal_Code, String phone, String division_Id) {
+        this.customer_Id = customer_Id;
+        this.customer_Name = customer_Name;
         this.address = address;
-        this.postalCode = postalCode;
-        this.phoneNumber = phoneNumber;
-        this.division = division;
+        this.postal_Code = postal_Code;
+        this.phone = phone;
+        this.division_Id = Integer.parseInt(division_Id);
+    }
+
+    public Customer(int customer_Id, String customer_Name, String address, String postal_Code, String phone, String createDate, String createdBy, String lastUpdate, String lastUpdatedBy, int country_Id, int division_Id) {
+        this.customer_Id = customer_Id;
+        this.customer_Name = customer_Name;
+        this.address = address;
+        this.postal_Code = postal_Code;
+        this.phone = phone;
+        this.createDate = LocalDate.parse(createDate).atStartOfDay();
+        this.createdBy = createdBy;
+        this.lastUpdate = LocalDate.parse(lastUpdate);
+        this.lastUpdatedBy = lastUpdatedBy;
+        this.country_Id = country_Id;
+        this.division_Id = division_Id;
     }
 
     @Override
     public String toString() {
-        return this.customerName;
+        return this.customer_Name;
     }
 
     public LocalDateTime getCreateDate() {
@@ -104,20 +123,29 @@ public class Customer {
 
     // getters and setters
 
-    public int getCustomerId() {
-        return customerId;
+    public int getCountry_Id() {
+        return country_Id;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public void setCountry_Id(int country_Id) {
+        this.country_Id = country_Id;
     }
 
-    public String getCustomerName() {
-        return customerName;
+
+    public int getCustomer_Id() {
+        return customer_Id;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setCustomer_Id(int customer_Id) {
+        this.customer_Id = customer_Id;
+    }
+
+    public String getCustomer_Name() {
+        return customer_Name;
+    }
+
+    public void setCustomer_Name(String customer_Name) {
+        this.customer_Name = customer_Name;
     }
 
     public String getAddress() {
@@ -128,35 +156,29 @@ public class Customer {
         this.address = address;
     }
 
-    public String getPostalCode() {
-        return postalCode;
+    public String getPostal_Code() {
+        return postal_Code;
     }
 
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
+    public void setPostal_Code(String postal_Code) {
+        this.postal_Code = postal_Code;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getDivision() {
-        return division;
+    public int getDivision_Id() {
+        return division_Id;
     }
 
-    public void setDivision(String division) {
-        this.division = division;
+    public void setDivision_Id(int division_Id) {
+        this.division_Id = division_Id;
     }
 
-    public String getCountry() {
-        return country;
-    }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
 }

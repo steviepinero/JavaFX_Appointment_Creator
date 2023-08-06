@@ -54,7 +54,7 @@ public class LoginController extends Pane {
 
         UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserByUsername(enteredUsername);
-        System.out.print("~login method");
+        System.out.print("~login method \n");
 
         //save logged in username to a variable
         loggedInUser = user;

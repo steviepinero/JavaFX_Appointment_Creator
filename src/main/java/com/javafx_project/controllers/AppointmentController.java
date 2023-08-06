@@ -97,11 +97,7 @@ public class AppointmentController implements Initializable {
     private Button updateAppointmentButton;
 
     private AppointmentDAO appointmentDAO;
-    private ContactDAO contactDAO;
-    private CountryDAO countryDAO;
-    private CustomerDAO customerDAO;
-    private FirstLevelDivisionDAO firstLevelDivisionDAO;
-    private UserDAO userdao;
+
     @FXML
     private ComboBox<String> typeBox = new ComboBox<>();
     @FXML
@@ -204,7 +200,7 @@ public class AppointmentController implements Initializable {
         String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
         Timestamp createDate = Timestamp.valueOf(LocalDateTime.now());
         Timestamp lastUpdate = Timestamp.valueOf(LocalDateTime.now());
-        int customerId = customerBox.getValue().getCustomerId();
+        int customerId = customerBox.getValue().getCustomer_Id();
         int userId = LoginController.loggedInUser.getUser_Id();
         int contactId = contactBox.getValue().getContactId();
 
@@ -245,7 +241,7 @@ public class AppointmentController implements Initializable {
         String type = typeBox.getValue();
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
-        int customerId = customerBox.getValue().getCustomerId();
+        int customerId = customerBox.getValue().getCustomer_Id();
         int contactId = contactBox.getValue().getContactId();
         String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
 

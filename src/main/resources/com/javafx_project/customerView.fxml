@@ -14,7 +14,7 @@
 
 
     <VBox spacing="10" xmlns:fx="http://javafx.com/fxml">
-        <TableView fx:id="tableCustomers">
+        <TableView fx:id="customerTable">
             <columns>
                 <TableColumn fx:id="customerIdColumn" text="Customer ID" />
                 <TableColumn fx:id="customerNameColumn" text="Name" />
@@ -25,8 +25,8 @@
                 <TableColumn fx:id="createdByColumn" text="Created By" />
                 <TableColumn fx:id="lastUpdateColumn" text="Last Update" />
                 <TableColumn fx:id="lastUpdatedByColumn" text="Last Updated By" />
-                <TableColumn fx:id="divisionColumn" text="Division" />
-                <TableColumn fx:id="countryColumn" text="Country" />
+                <TableColumn fx:id="divisionIdColumn" text="Division" />
+                <TableColumn fx:id="countryIdColumn" text="Country" />
             </columns>
         </TableView>
         <TextField fx:id="customerName" promptText="Customer Name" />
@@ -36,9 +36,9 @@
         <ComboBox fx:id="divisionBox" promptText="Division" />
         <ComboBox fx:id="countryBox" promptText="Country" />
         <HBox alignment="CENTER" spacing="10">
-            <Button fx:id="addCustomerButton" onAction="#addButtonAction" text="Add Customer" />
-            <Button fx:id="updateCustomerButton" onAction="#updateButtonAction" text="Update Customer" />
-            <Button fx:id="deleteCustomerButton" onAction="#deleteButtonAction" text="Delete Customer" />
+            <Button fx:id="addCustomerButton" onAction="#addCustomer" text="Add Customer" />
+            <Button fx:id="updateCustomerButton" onAction="#updateCustomer" text="Update Customer" />
+            <Button fx:id="deleteCustomerButton" onAction="#deleteCustomer" text="Delete Customer" />
          <Button fx:id="backButton" onAction="#backButtonAction" text="Back" />
         </HBox>
     </VBox>

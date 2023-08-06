@@ -2,12 +2,16 @@ package com.javafx_project.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.javafx_project.dao.*;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +24,12 @@ import com.javafx_project.models.Customer;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import static com.javafx_project.dao.DatabaseConnection.connection;
+
 public class CustomerController implements Initializable {
+
+    static ObservableList<Customer> customerList = CustomerDAO.getAllCustomers();
+    private static Customer selectedCustomer;
 
     @FXML
     private ResourceBundle resources;
@@ -28,60 +37,60 @@ public class CustomerController implements Initializable {
     @FXML
     private URL location;
 
-    @FXML
-    private Button addButton;
 
+    /** Customer table */
     @FXML
-    private TableColumn<Customer, String> addressColumn;
-
+    private TableView<Customer> customerTable;
     @FXML
-    private TextField addressField;
-
-    @FXML
-    private ComboBox<?> countryBox;
-
-    @FXML
-    private TableColumn<Customer, String> countryColumn;
-
-    @FXML
-    private TextField customerName;
-
+    private TableColumn<Customer, Integer> customerIdColumn;
     @FXML
     private TableColumn<Customer, String> customerNameColumn;
-
     @FXML
-    private Button deleteButton;
+    private TableColumn<Customer, String> addressColumn;
+    @FXML
+    private TableColumn<Customer, String> postalCodeColumn;
+    @FXML
+    private TableColumn<Customer, String> phoneNumberColumn;
+    @FXML
+    private TableColumn<Customer, Timestamp> createDateColumn;
+    @FXML
+    private TableColumn<Customer, String> createdByColumn;
+    @FXML
+    private TableColumn<Customer, Timestamp> lastUpdateColumn;
+    @FXML
+    private TableColumn<Customer, String> lastUpdatedByColumn;
+    @FXML
+    private TableColumn<Customer, Integer> countryIdColumn;
+    @FXML
+    private TableColumn<Customer, Integer> divisionIdColumn;
+    /** Customer table */
 
+
+    // combo boxes
+    @FXML
+    private ComboBox<?> countryBox;
     @FXML
     private ComboBox<?> divisionBox;
 
+    // fields
     @FXML
-    private TableColumn<Customer, String> divisionColumn;
-
+    private TextField customerName;
     @FXML
-    private TableColumn<Customer, String> phoneNumberColumn;
-
+    private TextField addressField;
     @FXML
     private TextField phoneNumberField;
-
-    @FXML
-    private TableColumn<Customer, String> postalCodeColumn;
-
     @FXML
     private TextField postalCodeField;
 
-    @FXML
-    private TableView<Customer> tableCustomers;
-
+    // buttons
     @FXML
     private Button updateCustomerButton;
     @FXML
-
     private Button addCustomerButton;
     @FXML
-
     private Button deleteCustomerButton;
 
+    // database objects
     private AppointmentDAO appointmentDAO;
     private ContactDAO contactDAO;
     private CountryDAO countryDAO;
@@ -90,84 +99,57 @@ public class CustomerController implements Initializable {
     private UserDAO userdao;
 
 
+
+
     @FXML
-    void initialize() throws SQLException {
-
-        //initialize DAOs
-        appointmentDAO = new AppointmentDAO();
-        contactDAO = new ContactDAO();
-        countryDAO = new CountryDAO();
-        customerDAO = new CustomerDAO();
-        firstLevelDivisionDAO = new FirstLevelDivisionDAO();
-        userdao = new UserDAO();
-
-
-        // Set up table columns
-        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
-        postalCodeColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
-        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        divisionColumn.setCellValueFactory(new PropertyValueFactory<>("division"));
-        countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
-        //Load data from database
-        loadCustomerData();
-
-        CustomerDAO customerDAO = new CustomerDAO();
-        List<Customer> customers = customerDAO.getAllCustomers();
-        ObservableList<Customer> data = FXCollections.observableList(customers);
-        tableCustomers.setItems(data);
-
-
-        // Set up combo boxes
-     /*   divisionBox.getItems().addAll(firstLevelDivisionDAO.getAllDivisions());
-        countryBox.getItems().addAll(countryDAO.getAllCountries());*/
-
-
-        // Set up event handlers for buttons
-        addCustomerButton.setOnAction(e -> {
-            try {
-                addCustomer();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        updateCustomerButton.setOnAction(e -> updateCustomer());
-        deleteCustomerButton.setOnAction(e -> deleteCustomer());
-
-    }
-
     private void deleteCustomer() {
         // Get selected customer from table
-        Customer customer = tableCustomers.getSelectionModel().getSelectedItem();
+        Customer customer = customerTable.getSelectionModel().getSelectedItem();
         // Delete customer from database
-        customerDAO.deleteCustomer(customer.getCustomerId());
+        customerDAO.deleteCustomer(customer.getCustomer_Id());
+        //display success message
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText("Customer deleted");
+        alert.setContentText("Customer deleted successfully");
+        alert.showAndWait();
         // Refresh table
-        tableCustomers.refresh();
+        customerTable.refresh();
 
     }
 
+    @FXML
     private void updateCustomer() {
-        // Get values from text fields
-        String customerName = this.customerName.getText();
-        String address = this.addressField.getText();
-        String postalCode = this.postalCodeField.getText();
-        String phoneNumber = this.phoneNumberField.getText();
-        String division = this.divisionBox.getValue().toString();
+        DatabaseConnection.establishConnection();
+        int customerId;
+        String lastUpdatedBy;
 
-        // Create new customer object
-        Customer customer = new Customer(customerName, address, postalCode, phoneNumber, division);
+        lastUpdatedBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
 
-        // Add customer to database
-        customerDAO.updateCustomer(customer);
+        // Get selected customer from table
+        Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
 
-        // Clear text fields
-        this.customerName.clear();
-        this.addressField.clear();
-        this.postalCodeField.clear();
-        this.phoneNumberField.clear();
-        this.divisionBox.getSelectionModel().clearSelection();
+        // Get customer id from database
+        customerId = selectedCustomer.getCustomer_Id();
 
-        // Display success message
+        try {
+            DatabaseConnection.establishConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM customers WHERE customer_id = ?");
+            preparedStatement.setInt(1, customerId);
+            //TODO stopped here for dinner 8/6/23
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+        // Update customer in database
+        customerDAO.updateCustomer(selectedCustomer);
+
+        // Update table
+        customerTable.getItems().set(customerTable.getSelectionModel().getSelectedIndex(), selectedCustomer);
+
+        //display success message
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
         alert.setHeaderText("Customer updated");
@@ -175,39 +157,65 @@ public class CustomerController implements Initializable {
         alert.showAndWait();
 
         // Refresh table
-        tableCustomers.refresh();
-    }
-
-    private void addCustomer() throws SQLException {
-        // Get values from text fields
-        String customerName = this.customerName.getText();
-        String address = this.addressField.getText();
-        String postalCode = this.postalCodeField.getText();
-        String phoneNumber = this.phoneNumberField.getText();
-        String division = this.divisionBox.getValue().toString();
-
-        // Create new customer object
-        Customer customer = new Customer(customerName, address, postalCode, phoneNumber, division);
-
-        // Add customer to database
-        customerDAO.addCustomer(customer);
+        customerTable.setItems(CustomerDAO.getAllCustomers());
+        customerTable.refresh();
 
         // Clear text fields
-        this.customerName.clear();
-        this.addressField.clear();
-        this.postalCodeField.clear();
-        this.phoneNumberField.clear();
-        this.divisionBox.getSelectionModel().clearSelection();
+        customerName.clear();
+        addressField.clear();
+        postalCodeField.clear();
+        phoneNumberField.clear();
+        countryBox.getSelectionModel().clearSelection();
+        divisionBox.getSelectionModel().clearSelection();
 
-        // Display success message
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText("Customer added");
-        alert.setContentText("Customer added successfully");
-        alert.showAndWait();
 
-        // Refresh table
-        tableCustomers.refresh();
+
+
+    }
+
+    @FXML
+    private void addCustomer()  {
+        String createdBy, lastUpdatedBy;
+        createdBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
+        lastUpdatedBy = createdBy;
+
+        try {
+            DatabaseConnection.establishConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO customers (customer_name, address, postal_code, phone, create_date, created_by, last_update, last_updated_by, country_id, division_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+            preparedStatement.setString(1, customerName.getText());
+            preparedStatement.setString(2, addressField.getText());
+            preparedStatement.setString(3, postalCodeField.getText());
+            preparedStatement.setString(4, phoneNumberField.getText());
+            preparedStatement.setTimestamp(5, Timestamp.valueOf(LocalDate.now().atStartOfDay()));
+            preparedStatement.setString(6, createdBy);
+            preparedStatement.setTimestamp(7, Timestamp.valueOf(LocalDate.now().atStartOfDay()));
+            preparedStatement.setString(8, lastUpdatedBy);
+            preparedStatement.setString(9, countryBox.getValue().toString());
+            preparedStatement.setString(10, divisionBox.getValue().toString());
+            preparedStatement.executeUpdate();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Customer added");
+            alert.setContentText("Customer added successfully");
+            alert.showAndWait();
+
+            setCustomerTable();
+
+            customerName.clear();
+            addressField.clear();
+            postalCodeField.clear();
+            phoneNumberField.clear();
+            countryBox.getSelectionModel().clearSelection();
+            divisionBox.getSelectionModel().clearSelection();
+
+            customerTable.setItems(CustomerDAO.getAllCustomers());
+            customerTable.refresh();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
@@ -225,126 +233,26 @@ public class CustomerController implements Initializable {
         stage.setScene(scene);
     }
 
-    public void loadCustomerData() throws SQLException {
-        // get all customers from database
-        List<Customer> customersList = customerDAO.getAllCustomers();
-
-        //convert customer list to observable list
-        ObservableList<Customer> customerData = FXCollections.observableArrayList(customersList);
-
-        // set up table columns
-        customerNameColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerName"));
-        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
-        postalCodeColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
-        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
-        divisionColumn.setCellValueFactory(new PropertyValueFactory<>("division"));
-
-
-        // add customers to table
-        tableCustomers.getItems().addAll(customerData);
-        tableCustomers.refresh();
-        // add countries to country combo box
-/*
-        countryBox.setItems(countryDAO.getAllCountries());
-*/
-
-        // add divisions to division combo box
-/*
-        divisionBox.setItems(firstLevelDivisionDAO.getAllDivisions());
-*/
-
-    }
-
-    public void deleteButtonAction(ActionEvent actionEvent) throws SQLException {
-        // Get selected customer
-        Customer customer = (Customer) tableCustomers.getSelectionModel().getSelectedItem();
-
-        // Delete customer from database
-        customerDAO.deleteCustomer(customer.getCustomerId());
-
-        // Display success message
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText("Customer deleted");
-        alert.setContentText("Customer deleted successfully");
-        alert.showAndWait();
-
-        // Refresh table
-        tableCustomers.getItems().clear();
-        tableCustomers.getItems().addAll(customerDAO.getAllCustomers());
-    }
-
-    public void updateButtonAction(ActionEvent actionEvent) throws SQLException {
-        // Get selected customer
-        Customer customer = (Customer) tableCustomers.getSelectionModel().getSelectedItem();
-
-        // Get values from text fields
-        TableView<Customer> customerTable;
-        customerTable = (TableView<Customer>) tableCustomers;
-        int customerId = customerTable.getSelectionModel().getSelectedItem().getCustomerId();
-        String customerName = this.customerName.getText();
-        String address = this.addressField.getText();
-        String postalCode = this.postalCodeField.getText();
-        String phoneNumber = this.phoneNumberField.getText();
-        String division = this.divisionBox.getValue().toString();
-
-        // Create new customer object
-        Customer updatedCustomer = new Customer(customer.getCustomerId(), customerName, address, postalCode, phoneNumber, division);
-
-        // Update customer in database
-        customerDAO.updateCustomer(updatedCustomer);
-
-        // Clear text fields
-        this.customerName.clear();
-        this.addressField.clear();
-        this.postalCodeField.clear();
-        this.phoneNumberField.clear();
-        this.divisionBox.getSelectionModel().clearSelection();
-
-        // Display success message
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText("Customer updated");
-        alert.setContentText("Customer updated successfully");
-        alert.showAndWait();
-
-        // Refresh table
-        tableCustomers.getItems().clear();
-        tableCustomers.getItems().addAll(customerDAO.getAllCustomers());
-
-
-    }
-
-    public void addButtonAction(ActionEvent actionEvent) {
-        // Get values from text fields
-        String customerName = this.customerName.getText();
-        String address = this.addressField.getText();
-        String postalCode = this.postalCodeField.getText();
-        String phoneNumber = this.phoneNumberField.getText();
-        String division = this.divisionBox.getValue().toString();
-        String country = this.countryBox.getValue().toString();
-
-        // Create new customer object
-        Customer customer = new Customer(customerName, address, postalCode, phoneNumber, division, country);
-
-        // Add customer to database
-        customerDAO.addCustomer(customer);
-
-        // Clear text fields
-        this.customerName.clear();
-        this.addressField.clear();
-        this.postalCodeField.clear();
-        this.phoneNumberField.clear();
-        this.divisionBox.getSelectionModel().clearSelection();
-        this.countryBox.getSelectionModel().clearSelection();
-
-
+    public void setCustomerTable() {
+        customerTable.setItems(customerList);
+        customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("Customer_ID"));
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("Customer_Name"));
+        addressColumn.setCellValueFactory(new PropertyValueFactory<>("Address"));
+        postalCodeColumn.setCellValueFactory(new PropertyValueFactory<>("Postal_Code"));
+        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("Phone"));
+        createDateColumn.setCellValueFactory(new PropertyValueFactory<>("Create_Date"));
+        createdByColumn.setCellValueFactory(new PropertyValueFactory<>("Create_By"));
+        lastUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Update"));
+        lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Updated_By"));
+        countryIdColumn.setCellValueFactory(new PropertyValueFactory<>("Country_ID"));
+        divisionIdColumn.setCellValueFactory(new PropertyValueFactory<>("Division_ID"));
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        DatabaseConnection.getConnection();
+        setCustomerTable();
 
     }
 }
