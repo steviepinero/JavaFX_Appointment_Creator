@@ -9,15 +9,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ContactController {
-    public void addContact(ActionEvent actionEvent) {
-    }
-
-    public void updateContact(ActionEvent actionEvent) {
-    }
-
-    public void deleteContact(ActionEvent actionEvent) {
-    }
+public class ReportController {
 
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));

@@ -88,6 +88,7 @@ public class MainController {
 
     }
 
+    @FXML
     protected void contactButtonClick() throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/contactView.fxml"));
         Parent root = loader.load();

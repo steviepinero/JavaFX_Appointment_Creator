@@ -9,15 +9,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ContactController {
-    public void addContact(ActionEvent actionEvent) {
+public class FirstLevelDivisionController {
+    public void addFirstLevelDivision() {
     }
 
-    public void updateContact(ActionEvent actionEvent) {
+    public void updateFirstLevelDivision() {
     }
 
-    public void deleteContact(ActionEvent actionEvent) {
+    public void deleteFirstLevelDivision() {
     }
+
 
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));

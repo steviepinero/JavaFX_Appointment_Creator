@@ -9,14 +9,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ContactController {
-    public void addContact(ActionEvent actionEvent) {
+public class CountryController {
+    public void addCountry(ActionEvent actionEvent) {
     }
 
-    public void updateContact(ActionEvent actionEvent) {
+    public void updateCountry(ActionEvent actionEvent) {
     }
 
-    public void deleteContact(ActionEvent actionEvent) {
+    public void deleteCountry(ActionEvent actionEvent) {
     }
 
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
