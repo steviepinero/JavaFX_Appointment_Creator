@@ -16,10 +16,15 @@
     <VBox spacing="10" xmlns:fx="http://javafx.com/fxml">
         <TableView fx:id="tableCustomers" prefHeight="400.0" prefWidth="622.0">
             <columns>
+                <TableColumn fx:id="customerIdColumn" text="Customer ID" />
                 <TableColumn fx:id="customerNameColumn" text="Name" />
                 <TableColumn fx:id="addressColumn" text="Address" />
                 <TableColumn fx:id="postalCodeColumn" text="Postal Code" />
                 <TableColumn fx:id="phoneNumberColumn" text="Phone Number" />
+                <TableColumn fx:id="createDateColumn" text="Create Date" />
+                <TableColumn fx:id="createdByColumn" text="Created By" />
+                <TableColumn fx:id="lastUpdateColumn" text="Last Update" />
+                <TableColumn fx:id="lastUpdatedByColumn" text="Last Updated By" />
                 <TableColumn fx:id="divisionColumn" text="Division" />
                 <TableColumn fx:id="countryColumn" text="Country" />
             </columns>
