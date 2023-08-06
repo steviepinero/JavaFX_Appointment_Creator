@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -14,48 +15,34 @@ public class AppointmentDAO {
 
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         // get all values from the appointments table
-        String sql = "SELECT * FROM appointments";
+        String sql = "SELECT * FROM appointments ORDER BY appointment_id";
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (PreparedStatement loadAppointments = DatabaseConnection.getConnection().prepareStatement(sql);
+             ResultSet rs = loadAppointments.executeQuery()) {
 
             while (rs.next()) {
-                Appointment appointment = new Appointment();
-                appointment.setAppointmentId(rs.getInt("appointment_id"));
-                appointment.setTitle(rs.getString("title"));
-                appointment.setDescription(rs.getString("description"));
-                appointment.setLocation(rs.getString("location"));
-                appointment.setContactId(rs.getInt("contact_id"));
-                appointment.setType(rs.getString("type"));
-                appointment.setStart(rs.getDate("start").toLocalDate());
-                appointment.setEnd(rs.getDate("end").toLocalDate());
-                appointment.setCustomerIdInt(rs.getInt("customer_id"));
-                appointment.setUserId(rs.getInt("user_id"));
-                Date createDate = rs.getDate("create_date");
-                System.out.println(createDate);
-                    if (createDate != null) {
-                        appointment.setCreateDate(rs.getDate("create_date").toLocalDate());
-/*
-                        appointment.setCreateDate(createDate.toLocalDate());
-*/
-                        System.out.println(createDate + " is not null"  + appointment.getCreateDate());
-                    } else {
-                        appointment.setCreateDate(LocalDate.now());
-                        System.out.println(createDate + " is null" + appointment.getCreateDate());
-                    }
-                appointment.setCreatedBy(rs.getString("created_by"));
-                    Date lastUpdate = rs.getDate("last_update");
-                    if (lastUpdate != null) {
-                        appointment.setLastUpdate(lastUpdate.toLocalDate());
-                    } else {
-                        appointment.setLastUpdate(LocalDate.now());
-                    }
-                appointment.setLastUpdatedBy(rs.getString("last_updated_by"));
-                appointments.add(new Appointment(appointment.getAppointmentId(), appointment.getTitle(), appointment.getDescription(), appointment.getLocation(), appointment.getContactId(), appointment.getType(), appointment.getStart(), appointment.getEnd(), appointment.getCustomerIdInt(), appointment.getUserId(), appointment.getCreateDate(), appointment.getCreatedBy(), appointment.getLastUpdate(), appointment.getLastUpdatedBy()));
+
+                int appointmentId = rs.getInt("appointment_id");
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                String location = rs.getString("location");
+                String type = rs.getString("type");
+                LocalDateTime start = rs.getTimestamp("start").toLocalDateTime();
+                LocalDateTime end = rs.getTimestamp("end").toLocalDateTime();
+                Timestamp createDate = rs.getTimestamp("create_date");
+                String createdBy = rs.getString("created_by");
+                Timestamp lastUpdate = rs.getTimestamp("last_update");
+                String lastUpdatedBy = rs.getString("last_updated_by");
+                int customerId = rs.getInt("customer_id");
+                int userId = rs.getInt("user_id");
+                int contactId = rs.getInt("contact_id");
+
+                Appointment appointment = new Appointment(appointmentId, title, description, location, type, start, end, createDate, createdBy, lastUpdate, lastUpdatedBy, customerId, userId, contactId);
+                appointments.add(appointment);
+
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
         return appointments;
     }
@@ -82,37 +69,36 @@ public class AppointmentDAO {
         setTable(appointment, sql);
 
     }
-    private void setTable(Appointment appointment, String sql) {
+    private static void setTable(Appointment appointment, String sql) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            System.out.println(appointment.getCreateDate() + " is the create date in SetTable");
-            System.out.println(appointment.getLastUpdate());
+            System.out.println(appointment.getCreate_date() + " is the create date in SetTable");
+            System.out.println(appointment.getLast_Update());
 
             pstmt.setString(1, appointment.getTitle());
             pstmt.setString(2, appointment.getDescription());
             pstmt.setString(3, appointment.getLocation());
-            pstmt.setString(4, String.valueOf(appointment.getContactId()));
+            pstmt.setString(4, String.valueOf(appointment.getContact_Id()));
             pstmt.setString(5, appointment.getType());
             pstmt.setDate(6, Date.valueOf(appointment.getStart()));
             pstmt.setDate(7, Date.valueOf(appointment.getEnd()));
-            pstmt.setInt(8, appointment.getCustomerIdInt());
-            pstmt.setInt(9, appointment.getUserId());
-            pstmt.setInt(10, appointment.getAppointmentId());
+            pstmt.setInt(8, appointment.getCustomer_id());
+            pstmt.setInt(9, appointment.getUser_Id());
+            pstmt.setInt(10, appointment.getAppointment_Id());
 
-            if (appointment.getCreateDate() != null && !appointment.getCreateDate().equals("Create Date")) {
-                java.sql.Date sqlDate = java.sql.Date.valueOf(appointment.getCreateDate());
-                //TODO last change was made here 8/1/23
-                Date createDate = Date.valueOf(appointment.getCreateDate());
+            if (appointment.getCreate_date() != null && !appointment.getCreate_date().equals("Create Date")) {
+                java.sql.Date sqlDate = java.sql.Date.valueOf(appointment.getCreate_date());
+                Date createDate = Date.valueOf(appointment.getCreate_date());
                 pstmt.setDate(11, createDate);
             } else {
                 pstmt.setDate(11, Date.valueOf(LocalDate.now()));
             }
 
-            pstmt.setString(12, appointment.getCreatedBy());
+            pstmt.setString(12, appointment.getCreated_By());
 
-            if (appointment.getLastUpdate() != null && !appointment.getLastUpdate().equals("Last Update")) {
-                LocalDate lastUpdate = appointment.getLastUpdate();
+            if (appointment.getLast_Update() != null && !appointment.getLast_Update().equals("Last Update")) {
+                LocalDate lastUpdate = appointment.getLast_Update();
                 pstmt.setDate(13, Date.valueOf(lastUpdate));
             } else {
                 pstmt.setDate(13, Date.valueOf(LocalDate.now()));
@@ -130,11 +116,28 @@ public class AppointmentDAO {
 
 
 
-    public void addAppointment(Appointment appointment) {
-        String sql = "INSERT INTO appointments (title, description, location, contact_id, type, start, end, customer_id, user_id, create_date, created_by, last_update, last_updated_by ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static void addAppointment(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, Timestamp create_date, String created_by, Timestamp last_update, String last_updated_by, int customerId, int userId, int contactId) {
+        //add appointment to database
+        try{
+            PreparedStatement addAppointments = DatabaseConnection.getConnection().prepareStatement("INSERT INTO appointments (title, description, location, type, start, end, create_date, created_by, last_update, last_updated_by, customer_id, user_id, contact_id ) VALUES (? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,?)");
+            addAppointments.setString(1, title);
+            addAppointments.setString(2, description);
+            addAppointments.setString(3, location);
+            addAppointments.setString(4, type);
+            addAppointments.setTimestamp(5, Timestamp.valueOf(start));
+            addAppointments.setTimestamp(6, Timestamp.valueOf(end));
+            addAppointments.setTimestamp(7, create_date);
+            addAppointments.setString(8, created_by);
+            addAppointments.setTimestamp(9, last_update);
+            addAppointments.setString(10, last_updated_by);
+            addAppointments.setInt(11, customerId);
+            addAppointments.setInt(12, userId);
+            addAppointments.setInt(13, contactId);
+            addAppointments.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        setTable(appointment, sql);
 
-        // TODO fix error: Data truncation: Incorrect date value: '0' for column 'Create_Date' at row 1
     }
 }

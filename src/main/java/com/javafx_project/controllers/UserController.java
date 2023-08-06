@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,11 +42,11 @@ public class UserController implements Initializable {
     @FXML
     private TableColumn<User, String> passwordColumn;
     @FXML
-    private TableColumn<User, String> createDateColumn;
+    private TableColumn<User, Timestamp> createDateColumn;
     @FXML
     private TableColumn<User, String> createdByColumn;
     @FXML
-    private TableColumn<User, String> lastUpdateColumn;
+    private TableColumn<User, Timestamp> lastUpdateColumn;
     @FXML
     private TableColumn<User, String> lastUpdatedByColumn;
 
@@ -183,7 +184,7 @@ public class UserController implements Initializable {
         } else {
             /** Check if user has any upcoming appointments */
             for (Appointment appointment : appointmentList) {
-                if (appointment.getUserId() == selectedUser.getUser_Id()) {
+                if (appointment.getUser_Id() == selectedUser.getUser_Id()) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText("Error");
