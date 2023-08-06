@@ -31,6 +31,8 @@
             </Label>
             <Button id="appointmentViewButton" fx:id="appointmentButton" alignment="CENTER" defaultButton="true" mnemonicParsing="false" onAction="#appointmentButtonClick" text="Appointments" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <Button fx:id="customerButton" mnemonicParsing="false" onAction="#customerButtonClick" text="Customers" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <!-- button to navigate to contacts view -->
+            <Button fx:id="contactButton" mnemonicParsing="false" onAction="#contactButtonClick" text="Contacts" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
             <Button fx:id="reportButton" mnemonicParsing="false" onAction="#reportButtonClick" text="Reports" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
          </children>
       </GridPane>

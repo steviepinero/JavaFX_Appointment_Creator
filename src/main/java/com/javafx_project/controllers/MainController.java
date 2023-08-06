@@ -1,5 +1,6 @@
 package com.javafx_project.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -85,5 +86,17 @@ public class MainController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
 
+    }
+
+    protected void contactButtonClick() throws IOException {
+        FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/contactView.fxml"));
+        Parent root = loader.load();
+
+        // Get the current stage
+        Stage stage = (Stage) reportButton.getScene().getWindow();
+
+        // Create new scene and set it on the stage
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
     }
 }
