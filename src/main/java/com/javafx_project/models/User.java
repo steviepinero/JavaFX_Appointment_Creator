@@ -30,11 +30,11 @@ public class User {
 
     // getters and setters
 
-    public int getUser_Id() {
+    public int getUser_ID() {
         return User_ID;
     }
 
-    public void setUser_Id(int userId) {
+    public void setUser_ID(int userId) {
         this.User_ID = userId;
     }
 

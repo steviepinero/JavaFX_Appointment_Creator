@@ -201,7 +201,7 @@ public class AppointmentController implements Initializable {
         Timestamp createDate = Timestamp.valueOf(LocalDateTime.now());
         Timestamp lastUpdate = Timestamp.valueOf(LocalDateTime.now());
         int customerId = customerBox.getValue().getCustomer_Id();
-        int userId = LoginController.loggedInUser.getUser_Id();
+        int userId = LoginController.loggedInUser.getUser_ID();
         int contactId = contactBox.getValue().getContactId();
 
         // Create a new Appointment object

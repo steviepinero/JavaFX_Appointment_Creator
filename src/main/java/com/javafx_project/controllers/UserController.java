@@ -131,7 +131,7 @@ public class UserController implements Initializable {
         password = passwordField.getText();
         //get the username of the logged in user
         lastUpdatedBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
-        userId = userTable.getSelectionModel().getSelectedItem().getUser_Id();
+        userId = userTable.getSelectionModel().getSelectedItem().getUser_ID();
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE users SET User_Name = ?, Password = ?, Last_Update = NOW(), Last_Updated_By = ? WHERE User_ID = ?");
@@ -165,7 +165,7 @@ public class UserController implements Initializable {
         selectedUser = userTable.getSelectionModel().getSelectedItem();
 
         // Check if the user is the default admi
-        if (selectedUser.getUser_Id() == 1) {
+        if (selectedUser.getUser_ID() == 1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Error");
@@ -184,7 +184,7 @@ public class UserController implements Initializable {
         } else {
             /** Check if user has any upcoming appointments */
             for (Appointment appointment : appointmentList) {
-                if (appointment.getUser_Id() == selectedUser.getUser_Id()) {
+                if (appointment.getUser_Id() == selectedUser.getUser_ID()) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText("Error");
@@ -200,7 +200,7 @@ public class UserController implements Initializable {
             alert.showAndWait();
             if (alert.getResult() == ButtonType.OK) {
                 //user deleted from database
-                UserDAO.deleteUser(selectedUser.getUser_Id());
+                UserDAO.deleteUser(selectedUser.getUser_ID());
 
                 //console message verifying delete
                 System.out.println("User" + selectedUser.getUser_Name() + "deleted");

@@ -67,7 +67,7 @@ public class UserDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 User user = new User();
-                user.setUser_Id(rs.getInt("User_ID"));
+                user.setUser_ID(rs.getInt("User_ID"));
                 user.setUser_Name(rs.getString("User_Name"));
                 user.setPassword(rs.getString("Password"));
                 user.setCreate_Date(rs.getString("Create_Date"));
@@ -98,22 +98,6 @@ public class UserDAO {
 
 
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        userName = String.valueOf(getUserByUsername);
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
 
 }

@@ -119,58 +119,72 @@ public class CustomerController implements Initializable {
     }
 
     @FXML
-    private void updateCustomer() {
+    public void updateCustomer(ActionEvent actionEvent) {
         DatabaseConnection.establishConnection();
-        int customerId;
-        String lastUpdatedBy;
 
-        lastUpdatedBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
+        String customerName = customerNameField.getText();
+        String address = addressField.getText();
+        String postalCode = postalCodeField.getText();
+        String phone = phoneNumberField.getText();
+        String lastUpdatedBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
 
         // Get selected customer from table
         Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
 
         // Get customer id from database
-        customerId = selectedCustomer.getCustomer_Id();
+        int customerId = selectedCustomer.getCustomer_Id();
+
 
         try {
-            DatabaseConnection.establishConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM customers WHERE customer_id = ?");
-            preparedStatement.setInt(1, customerId);
-            //TODO stopped here for dinner 8/6/23
+
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE customers SET Customer_Name = ?, Address = ?., Postal_Code = ?, Phone = ?, Last_Update = NOW(), Last_Updated_By = ? WHERE customer_id = ?");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            resultSet.next();
+           preparedStatement.setString(1, customerName);
+           preparedStatement.setString(2, address);
+           preparedStatement.setString(3, postalCode);
+           preparedStatement.setString(4, phone);
+           preparedStatement.setTimestamp(5, Timestamp.valueOf(LocalDate.now().atStartOfDay()));
+           preparedStatement.setString(6, lastUpdatedBy);
+           preparedStatement.setInt(7, customerId);
+           preparedStatement.executeUpdate();
+
+
+//            addressField.setText(resultSet.getString("address"));
+//            postalCodeField.setText(resultSet.getString("postal_code"));
+//            phoneNumberField.setText(resultSet.getString("phone"));
+
+
+            // Update customer in database
+            customerDAO.updateCustomer(selectedCustomer);
+
+            // Update table
+            customerTable.getItems().set(customerTable.getSelectionModel().getSelectedIndex(), selectedCustomer);
+
+            //display success message
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Customer updated");
+            alert.setContentText("Customer updated successfully");
+            alert.showAndWait();
+
+            // Refresh table
+            customerTable.setItems(CustomerDAO.getAllCustomers());
+            customerTable.refresh();
+
+            // Clear text fields
+            customerNameField.clear();
+            addressField.clear();
+            postalCodeField.clear();
+            phoneNumberField.clear();
+            countryBox.getSelectionModel().clearSelection();
+            divisionBox.getSelectionModel().clearSelection();
+
 
         } catch (SQLException ex) {
             Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-        // Update customer in database
-        customerDAO.updateCustomer(selectedCustomer);
-
-        // Update table
-        customerTable.getItems().set(customerTable.getSelectionModel().getSelectedIndex(), selectedCustomer);
-
-        //display success message
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText("Customer updated");
-        alert.setContentText("Customer updated successfully");
-        alert.showAndWait();
-
-        // Refresh table
-        customerTable.setItems(CustomerDAO.getAllCustomers());
-        customerTable.refresh();
-
-        // Clear text fields
-        customerName.clear();
-        addressField.clear();
-        postalCodeField.clear();
-        phoneNumberField.clear();
-        countryBox.getSelectionModel().clearSelection();
-        divisionBox.getSelectionModel().clearSelection();
-
-
-
-
     }
 
     @FXML
