@@ -202,7 +202,7 @@ public class AppointmentController implements Initializable {
         Timestamp lastUpdate = Timestamp.valueOf(LocalDateTime.now());
         int customerId = customerBox.getValue().getCustomer_Id();
         int userId = LoginController.loggedInUser.getUser_ID();
-        int contactId = contactBox.getValue().getContactId();
+        int contactId = contactBox.getValue().getContact_ID();
 
         // Create a new Appointment object
         Appointment appointment = new Appointment(title, description, location, type, startDate, endDate, customerId, userId, contactId, createdBy, lastUpdatedBy, createDate, lastUpdate);
@@ -234,7 +234,7 @@ public class AppointmentController implements Initializable {
 @FXML
     private void updateAppointment() {
         // Get the values from the text fields
-        int appointmentId = appointmentTable.getSelectionModel().getSelectedItem().getAppointment_Id();
+        int appointmentId = appointmentTable.getSelectionModel().getSelectedItem().getAppointment_ID();
         String title = titleField.getText();
         String description = descriptionField.getText();
         String location = locationField.getText();
@@ -242,7 +242,7 @@ public class AppointmentController implements Initializable {
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
         int customerId = customerBox.getValue().getCustomer_Id();
-        int contactId = contactBox.getValue().getContactId();
+        int contactId = contactBox.getValue().getContact_ID();
         String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
 
         // Create a new Appointment object
@@ -263,7 +263,7 @@ public class AppointmentController implements Initializable {
         Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
 
         // Delete from database
-        appointmentDAO.deleteAppointment(appointment.getAppointment_Id());
+        appointmentDAO.deleteAppointment(appointment.getAppointment_ID());
 
         // Delete from table
         appointmentTable.getItems().remove(appointment);
@@ -272,7 +272,7 @@ public class AppointmentController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Appointment Deleted");
         alert.setHeaderText(null);
-        alert.setContentText("Appointment " + appointment.getAppointment_Id() + " has been deleted.");
+        alert.setContentText("Appointment " + appointment.getAppointment_ID() + " has been deleted.");
         alert.showAndWait();
 
     }

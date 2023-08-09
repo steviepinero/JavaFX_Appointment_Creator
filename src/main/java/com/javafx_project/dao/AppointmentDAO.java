@@ -83,9 +83,9 @@ public class AppointmentDAO {
             pstmt.setString(5, appointment.getType());
             pstmt.setDate(6, Date.valueOf(appointment.getStart()));
             pstmt.setDate(7, Date.valueOf(appointment.getEnd()));
-            pstmt.setInt(8, appointment.getCustomer_id());
+            pstmt.setInt(8, appointment.getCustomer_ID());
             pstmt.setInt(9, appointment.getUser_Id());
-            pstmt.setInt(10, appointment.getAppointment_Id());
+            pstmt.setInt(10, appointment.getAppointment_ID());
 
             if (appointment.getCreate_date() != null && !appointment.getCreate_date().equals("Create Date")) {
                 java.sql.Date sqlDate = java.sql.Date.valueOf(appointment.getCreate_date());

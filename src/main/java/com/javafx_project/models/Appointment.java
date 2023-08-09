@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Appointment {
-    private int appointment_Id;
+    private int appointment_ID;
     private String title;
     private String description;
     private String location;
@@ -16,28 +16,28 @@ public class Appointment {
     private String created_By;
     private LocalDate last_Update;
     private String last_Updated_By;
-    private int customer_id;
-    private Customer customer_Id;
+    private int customer_ID;
+    private Customer customer;
     private int user_Id;
     private int contact_Id;
     private Contact contact;
 
-    public Appointment(int appointment_Id, String title, String description, String location, String type, LocalDate startDate, LocalDate endDate, int customer_id, int user_Id, int contact_Id, String last_Updated_By) {
-        this.appointment_Id = appointment_Id;
+    public Appointment(int appointment_ID, String title, String description, String location, String type, LocalDate startDate, LocalDate endDate, int customer_ID, int user_Id, int contact_Id, String last_Updated_By) {
+        this.appointment_ID = appointment_ID;
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
         this.start = startDate;
         this.end = endDate;
-        this.customer_id = customer_id;
+        this.customer_ID = customer_ID;
         this.user_Id = user_Id;
         this.contact_Id = contact_Id;
         this.last_Updated_By = last_Updated_By;
     }
 
-    public Appointment(int appointment_Id, String title, String description, String type, String location, LocalDate start, LocalDate end, LocalDate create_date, String created_By, LocalDate last_Update, String last_Updated_By, int customer_id, int user_Id, int contact_Id) {
-        this.appointment_Id = appointment_Id;
+    public Appointment(int appointment_ID, String title, String description, String type, String location, LocalDate start, LocalDate end, LocalDate create_date, String created_By, LocalDate last_Update, String last_Updated_By, int customer_ID, int user_Id, int contact_Id) {
+        this.appointment_ID = appointment_ID;
         this.title = title;
         this.description = description;
         this.location = location;
@@ -48,13 +48,13 @@ public class Appointment {
         this.created_By = created_By;
         this.last_Update = last_Update;
         this.last_Updated_By = last_Updated_By;
-        this.customer_id = customer_id;
+        this.customer_ID = customer_ID;
         this.user_Id = user_Id;
         this.contact_Id = contact_Id;
     }
 
-    public Appointment(int appointment_Id, String title, String description, String location, int contact_Id, String type, LocalDate start, LocalDate end, int customer_id, int user_Id) {
-        this.appointment_Id = appointment_Id;
+    public Appointment(int appointment_ID, String title, String description, String location, int contact_Id, String type, LocalDate start, LocalDate end, int customer_ID, int user_Id) {
+        this.appointment_ID = appointment_ID;
         this.title = title;
         this.description = description;
         this.location = location;
@@ -62,12 +62,12 @@ public class Appointment {
         this.type = type;
         this.start = start;
         this.end = end;
-        this.customer_id = customer_id;
+        this.customer_ID = customer_ID;
         this.user_Id = user_Id;
     }
 
-    public Appointment(int appointment_Id, String title, String description, String location, int contact_Id, String type, LocalDate start, LocalDate end, int customer_id, int user_Id, LocalDate create_date, String created_By, LocalDate last_Update, String last_Updated_By) {
-        this.appointment_Id = appointment_Id;
+    public Appointment(int appointment_ID, String title, String description, String location, int contact_Id, String type, LocalDate start, LocalDate end, int customer_ID, int user_Id, LocalDate create_date, String created_By, LocalDate last_Update, String last_Updated_By) {
+        this.appointment_ID = appointment_ID;
         this.title = title;
         this.description = description;
         this.location = location;
@@ -75,7 +75,7 @@ public class Appointment {
         this.type = type;
         this.start = start;
         this.end = end;
-        this.customer_id = customer_id;
+        this.customer_ID = customer_ID;
         this.user_Id = user_Id;
         this.create_date = create_date;
         this.created_By = created_By;
@@ -83,14 +83,14 @@ public class Appointment {
         this.last_Updated_By = last_Updated_By;
     }
 
-    public Appointment(String title, String description, String location, String type, LocalDate startDate, LocalDate endDate, int customer_id, int user_Id, int contact_Id, String created_By, String last_Updated_By) {
+    public Appointment(String title, String description, String location, String type, LocalDate startDate, LocalDate endDate, int customer_ID, int user_Id, int contact_Id, String created_By, String last_Updated_By) {
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
         this.start = startDate;
         this.end = endDate;
-        this.customer_id = customer_id;
+        this.customer_ID = customer_ID;
         this.user_Id = user_Id;
         this.contact_Id = contact_Id;
         this.created_By = created_By;
@@ -99,15 +99,15 @@ public class Appointment {
 
     }
 
-    public Appointment(int appointment_Id, String title, String description, String location, String type, LocalDate startDate, LocalDate endDate, int customer_id, int contact_Id, String last_Updated_By) {
-        this.appointment_Id = appointment_Id;
+    public Appointment(int appointment_ID, String title, String description, String location, String type, LocalDate startDate, LocalDate endDate, int customer_ID, int contact_Id, String last_Updated_By) {
+        this.appointment_ID = appointment_ID;
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
         this.start = startDate;
         this.end = endDate;
-        this.customer_id = customer_id;
+        this.customer_ID = customer_ID;
         this.contact_Id = contact_Id;
         this.last_Updated_By = last_Updated_By;
 
@@ -117,8 +117,8 @@ public class Appointment {
 
     }
 
-    public Appointment(int appointment_Id, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, Timestamp create_date, String created_By, Timestamp last_Update, String last_Updated_By, int customer_Id, int user_Id, int contact_Id) {
-        this.appointment_Id = appointment_Id;
+    public Appointment(int appointment_ID, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, Timestamp create_date, String created_By, Timestamp last_Update, String last_Updated_By, int customer, int user_Id, int contact_Id) {
+        this.appointment_ID = appointment_ID;
         this.title = title;
         this.description = description;
         this.location = location;
@@ -129,19 +129,19 @@ public class Appointment {
         this.created_By = created_By;
         this.last_Update = LocalDate.from(last_Update.toLocalDateTime());
         this.last_Updated_By = last_Updated_By;
-        this.customer_id = customer_Id;
+        this.customer_ID = customer;
         this.user_Id = user_Id;
         this.contact_Id = contact_Id;
     }
 
-    public Appointment(String title, String description, String location, String type, LocalDate startDate, LocalDate endDate, int customer_Id, int user_Id, int contact_Id, String created_By, String last_Updated_By, Timestamp create_date, Timestamp last_Update) {
+    public Appointment(String title, String description, String location, String type, LocalDate startDate, LocalDate endDate, int customer, int user_Id, int contact_Id, String created_By, String last_Updated_By, Timestamp create_date, Timestamp last_Update) {
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
         this.start = startDate;
         this.end = endDate;
-        this.customer_id = customer_Id;
+        this.customer_ID = customer;
         this.user_Id = user_Id;
         this.contact_Id = contact_Id;
         this.created_By = created_By;
@@ -151,14 +151,14 @@ public class Appointment {
 
     }
 
-    public Appointment(String title, String description, String location, String type, LocalDateTime startDate, LocalDateTime endDate, int customer_Id, int user_Id, int contact_Id, String created_By, String last_Updated_By, Timestamp create_date, Timestamp last_Update) {
+    public Appointment(String title, String description, String location, String type, LocalDateTime startDate, LocalDateTime endDate, int customer, int user_Id, int contact_Id, String created_By, String last_Updated_By, Timestamp create_date, Timestamp last_Update) {
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
         this.start = LocalDate.from(startDate);
         this.end = LocalDate.from(endDate);
-        this.customer_id = customer_Id;
+        this.customer_ID = customer;
         this.user_Id = user_Id;
         this.contact_Id = contact_Id;
         this.created_By = created_By;
@@ -172,12 +172,12 @@ public class Appointment {
     // getters and setters
 
 
-    public int getAppointment_Id() {
-        return appointment_Id;
+    public int getAppointment_ID() {
+        return appointment_ID;
     }
 
-    public void setAppointment_Id(int appointment_Id) {
-        this.appointment_Id = appointment_Id;
+    public void setAppointment_ID(int appointment_ID) {
+        this.appointment_ID = appointment_ID;
     }
 
     public String getTitle() {
@@ -260,12 +260,12 @@ public class Appointment {
         this.last_Updated_By = last_Updated_By;
     }
 
-    public int getCustomer_id() {
-        return customer_id;
+    public int getCustomer_ID() {
+        return customer_ID;
     }
 
-    public void setCustomer_id(int customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomer_ID(int customer_ID) {
+        this.customer_ID = customer_ID;
     }
 
     public int getUser_Id() {
@@ -296,11 +296,11 @@ public class Appointment {
         this.contact_Id = Integer.parseInt(id);
     }
 
-    public Customer getCustomer_Id() {
-        return customer_Id;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomer_Id(Customer customer_Id) {
-        this.customer_Id = customer_Id;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

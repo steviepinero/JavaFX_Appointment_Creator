@@ -39,31 +39,6 @@ public class Customer {
         this.customer_Name = customer_Name;
     }
 
-    public Customer(String customer_Name, String address, String postal_Code, String phone, String division_Id) {
-        this.customer_Name = customer_Name;
-        this.address = address;
-        this.postal_Code = postal_Code;
-        this.phone = phone;
-        this.division_Id = Integer.parseInt(division_Id);
-    }
-
-    public Customer(String customer_Name, String address, String postal_Code, String phone, String division_Id, String country_Id) {
-        this.customer_Name = customer_Name;
-        this.address = address;
-        this.postal_Code = postal_Code;
-        this.phone = phone;
-        this.division_Id = Integer.parseInt(division_Id);
-        this.country_Id = Integer.parseInt(country_Id);
-    }
-
-    public Customer(int customer_Id, String customer_Name, String address, String postal_Code, String phone, String division_Id) {
-        this.customer_Id = customer_Id;
-        this.customer_Name = customer_Name;
-        this.address = address;
-        this.postal_Code = postal_Code;
-        this.phone = phone;
-        this.division_Id = Integer.parseInt(division_Id);
-    }
 
     public Customer(int customer_Id, String customer_Name, String address, String postal_Code, String phone, String createDate, String createdBy, String lastUpdate, String lastUpdatedBy, int country_Id, int division_Id) {
         this.customer_Id = customer_Id;

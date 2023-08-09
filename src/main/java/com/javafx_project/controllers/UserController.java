@@ -52,16 +52,6 @@ public class UserController implements Initializable {
 
 
     @FXML
-    private Button backButton;
-    @FXML
-    private Button createUserButton;
-    @FXML
-    private Button deleteUserButton;
-    @FXML
-    private Button updateUserButton;
-
-
-    @FXML
     private TextField passwordField;
     @FXML
     private TextField userNameField;

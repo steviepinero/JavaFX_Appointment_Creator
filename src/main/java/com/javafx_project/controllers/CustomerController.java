@@ -102,11 +102,12 @@ public class CustomerController implements Initializable {
 
 
     @FXML
-    private void deleteCustomer() {
+    private void deleteCustomer(ActionEvent actionEvent) {
         // Get selected customer from table
-        Customer customer = customerTable.getSelectionModel().getSelectedItem();
+        DatabaseConnection.establishConnection();
+        selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
         // Delete customer from database
-        customerDAO.deleteCustomer(customer.getCustomer_Id());
+        customerDAO.deleteCustomer(selectedCustomer.getCustomer_Id());
         //display success message
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
@@ -114,6 +115,7 @@ public class CustomerController implements Initializable {
         alert.setContentText("Customer deleted successfully");
         alert.showAndWait();
         // Refresh table
+        customerTable.setItems(CustomerDAO.getAllCustomers());
         customerTable.refresh();
 
     }
@@ -137,30 +139,18 @@ public class CustomerController implements Initializable {
 
         try {
 
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE customers SET Customer_Name = ?, Address = ?., Postal_Code = ?, Phone = ?, Last_Update = NOW(), Last_Updated_By = ? WHERE customer_id = ?");
-            ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = NOW(), Last_Updated_By = ? WHERE customer_id = ?");
+//            ResultSet resultSet = preparedStatement.executeQuery();
 
-            resultSet.next();
            preparedStatement.setString(1, customerName);
            preparedStatement.setString(2, address);
            preparedStatement.setString(3, postalCode);
            preparedStatement.setString(4, phone);
-           preparedStatement.setTimestamp(5, Timestamp.valueOf(LocalDate.now().atStartOfDay()));
-           preparedStatement.setString(6, lastUpdatedBy);
-           preparedStatement.setInt(7, customerId);
+           preparedStatement.setString(5, lastUpdatedBy);
+           preparedStatement.setInt(6, customerId);
            preparedStatement.executeUpdate();
 
 
-//            addressField.setText(resultSet.getString("address"));
-//            postalCodeField.setText(resultSet.getString("postal_code"));
-//            phoneNumberField.setText(resultSet.getString("phone"));
-
-
-            // Update customer in database
-            customerDAO.updateCustomer(selectedCustomer);
-
-            // Update table
-            customerTable.getItems().set(customerTable.getSelectionModel().getSelectedIndex(), selectedCustomer);
 
             //display success message
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -169,7 +159,7 @@ public class CustomerController implements Initializable {
             alert.setContentText("Customer updated successfully");
             alert.showAndWait();
 
-            // Refresh table
+            setCustomerTable();
             customerTable.setItems(CustomerDAO.getAllCustomers());
             customerTable.refresh();
 
@@ -216,16 +206,18 @@ public class CustomerController implements Initializable {
             alert.showAndWait();
 
             setCustomerTable();
+            customerTable.setItems(CustomerDAO.getAllCustomers());
+            customerTable.refresh();
 
-            customerName.clear();
+            customerNameField.clear();
             addressField.clear();
             postalCodeField.clear();
             phoneNumberField.clear();
             countryBox.getSelectionModel().clearSelection();
             divisionBox.getSelectionModel().clearSelection();
 
-            customerTable.setItems(CustomerDAO.getAllCustomers());
-            customerTable.refresh();
+
+
 
         } catch (SQLException ex) {
             Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);

@@ -1,6 +1,7 @@
 package com.javafx_project.dao;
 
 import com.javafx_project.models.Contact;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactDAO {
-    public List<Contact> getAllContacts() {
+    public ObservableList<Contact> getAllContacts() {
         String sql = "SELECT * FROM contacts";
-        List<Contact> contacts = new ArrayList<>();
+        ObservableList<Contact> contacts = javafx.collections.FXCollections.observableArrayList();
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -20,10 +21,10 @@ public class ContactDAO {
 
             while (rs.next()) {
                 Contact contact = new Contact();
-                contact.setContactId(rs.getInt("contact_id"));
-                contact.setContactName(rs.getString("contact_name"));
-                contact.setEmail(rs.getString("email"));
-                contacts.add(new Contact(contact.getContactId(), contact.getContactName(), contact.getEmail()));
+                contact.setContact_ID(rs.getInt("Contact_ID"));
+                contact.setContact_Name(rs.getString("Contact_Name"));
+                contact.setEmail(rs.getString("Email"));
+                contacts.add(new Contact(contact.getContact_ID(), contact.getContact_Name(), contact.getEmail()));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

@@ -1,53 +1,53 @@
 package com.javafx_project.models;
 
 public class Contact {
-    private int contactId;
-    private String contactName;
-    private String email;
+    private int Contact_ID;
+    private String Contact_Name;
+    private String Email;
 
     public Contact() {
 
     }
 
-    public Contact(int contactId, String contactName, String email) {
-        this.contactId = contactId;
-        this.contactName = contactName;
-        this.email = email;
+    public Contact(int contact_ID, String Contact_Name, String email) {
+        this.Contact_ID = contact_ID;
+        this.Contact_Name = Contact_Name;
+        this.Email = email;
     }
 
     public Contact(int id, String name) {
-        this.contactId = id;
-        this.contactName = name;
+        this.Contact_ID = id;
+        this.Contact_Name = name;
     }
 
     @Override
     public String toString() {
-        return contactId + " - " + contactName;
+        return Contact_ID + " - " + Contact_Name;
     }
     // getters and setters
 
 
-    public int getContactId() {
-        return contactId;
+    public int getContact_ID() {
+        return Contact_ID;
     }
 
-    public void setContactId(int contactId) {
-        this.contactId = contactId;
+    public void setContact_ID(int contact_ID) {
+        this.Contact_ID = contact_ID;
     }
 
-    public String getContactName() {
-        return contactName;
+    public String getContact_Name() {
+        return Contact_Name;
     }
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
+    public void setContact_Name(String contact_Name) {
+        this.Contact_Name = contact_Name;
     }
 
     public String getEmail() {
-        return email;
+        return Email;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.Email = email;
     }
 }

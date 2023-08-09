@@ -39,9 +39,9 @@ public class CustomerDAO {
                 }
 
             }
-            return null;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
         return customerList;
     }
