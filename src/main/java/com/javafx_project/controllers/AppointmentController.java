@@ -2,10 +2,7 @@ package com.javafx_project.controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -16,6 +13,7 @@ import com.javafx_project.dao.*;
 import com.javafx_project.models.Appointment;
 import com.javafx_project.models.Contact;
 import com.javafx_project.models.Customer;
+import com.javafx_project.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,6 +28,7 @@ import javafx.stage.Stage;
 
 import static com.javafx_project.controllers.UserController.appointmentList;
 import static com.javafx_project.dao.DatabaseConnection.connection;
+import static com.javafx_project.controllers.LoginController.loggedInUser;
 import static java.lang.Integer.parseInt;
 
 public class AppointmentController implements Initializable {
@@ -42,6 +41,8 @@ public class AppointmentController implements Initializable {
 
     @FXML
     private Button addAppointmentButton;
+
+    private static Appointment selectedAppointment;
 
 
     /** Appointment table */
@@ -162,7 +163,7 @@ public class AppointmentController implements Initializable {
     private void setAppointmentTable() {
         // Set up the columns in the table
         appointmentTable.setItems(appointmentList);
-        appointment_ID_Column.setCellValueFactory(new PropertyValueFactory<>("appointment_Id"));
+        appointment_ID_Column.setCellValueFactory(new PropertyValueFactory<>("appointment_ID"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
@@ -171,11 +172,11 @@ public class AppointmentController implements Initializable {
         endDateColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
         createDateColumn.setCellValueFactory(new PropertyValueFactory<>("create_date"));
         createdByColumn.setCellValueFactory(new PropertyValueFactory<>("created_By"));
-        lastUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("last_update"));
-        lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<>("last_updated_by"));
-        customer_ID_Column.setCellValueFactory(new PropertyValueFactory<>("customer_Id"));
-        user_ID_Column.setCellValueFactory(new PropertyValueFactory<>("user_Id"));
-        contactColumn.setCellValueFactory(new PropertyValueFactory<>("contact_Id"));
+        lastUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("last_Update"));
+        lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<>("last_Updated_By"));
+        customer_ID_Column.setCellValueFactory(new PropertyValueFactory<>("customer_ID"));
+        user_ID_Column.setCellValueFactory(new PropertyValueFactory<>("User_ID"));
+        contactColumn.setCellValueFactory(new PropertyValueFactory<>("Contact_ID"));
 
 
         populateContactBox();
@@ -188,52 +189,63 @@ public class AppointmentController implements Initializable {
     }
 
     @FXML
-    private void addAppointment() {
-        // Get the values from the text fields
-        String title = titleField.getText();
-        String description = descriptionField.getText();
-        String location = locationField.getText();
-        String type = typeBox.getValue();
-        LocalDateTime startDate = startDatePicker.getValue().atStartOfDay();
-        LocalDateTime endDate = endDatePicker.getValue().atStartOfDay();
-        String createdBy = LoginController.loggedInUser.getUser_Name();
-        String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
-        Timestamp createDate = Timestamp.valueOf(LocalDateTime.now());
-        Timestamp lastUpdate = Timestamp.valueOf(LocalDateTime.now());
-        int customerId = customerBox.getValue().getCustomer_Id();
-        int userId = LoginController.loggedInUser.getUser_ID();
-        int contactId = contactBox.getValue().getContact_ID();
+    private void addAppointment(ActionEvent actionEvent) {
+        String createdBy, lastUpdatedBy;
+       createdBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
+       lastUpdatedBy = createdBy;
+       int currentUser = loggedInUser.getUser_ID();
 
-        // Create a new Appointment object
-        Appointment appointment = new Appointment(title, description, location, type, startDate, endDate, customerId, userId, contactId, createdBy, lastUpdatedBy, createDate, lastUpdate);
+       try {
+            DatabaseConnection.establishConnection();
+           PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-        // Add to database
-        AppointmentDAO.addAppointment(title, description, location, type, startDate, endDate, createDate, createdBy, lastUpdate, lastUpdatedBy, customerId, userId, contactId);
+           preparedStatement.setString(1, titleField.getText());
+           preparedStatement.setString(2, descriptionField.getText());
+           preparedStatement.setString(3, locationField.getText());
+           preparedStatement.setString(4, typeBox.getValue());
+           preparedStatement.setDate(5, Date.valueOf(startDatePicker.getValue()));
+           preparedStatement.setObject(6, Date.valueOf(endDatePicker.getValue()));
+           preparedStatement.setObject(7, LocalDate.now());
+           preparedStatement.setString(8, createdBy);
+           preparedStatement.setObject(9, LocalDate.now());
+           preparedStatement.setString(10, lastUpdatedBy);
+           preparedStatement.setInt(11, customerBox.getValue().getCustomer_Id());
+           preparedStatement.setInt(12, currentUser);
+           preparedStatement.setInt(13, contactBox.getValue().getContact_ID());
+           preparedStatement.executeUpdate();
 
-        // Add to table
-        appointmentTable.getItems().add(appointment);
+           // Show dialog
+           Alert alert = new Alert(Alert.AlertType.INFORMATION);
+           alert.setTitle("Appointment Added");
+           alert.setHeaderText(null);
+           alert.setContentText("Appointment added successfully!");
+           alert.showAndWait();
 
-        // Show dialog
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Appointment Added");
-        alert.setHeaderText(null);
-        alert.setContentText("Appointment added successfully!");
-        alert.showAndWait();
+           setAppointmentTable();
+           appointmentTable.setItems(AppointmentDAO.getAllAppointments());
+           appointmentTable.refresh();
 
-        // Clear text fields
-        titleField.clear();
-        descriptionField.clear();
-        locationField.clear();
-        typeBox.getSelectionModel().clearSelection();
-        startDatePicker.setValue(null);
-        endDatePicker.setValue(null);
-        customerBox.getSelectionModel().clearSelection();
-        contactBox.getSelectionModel().clearSelection();
+           // Clear text fields
+           titleField.clear();
+           descriptionField.clear();
+           locationField.clear();
+           typeBox.getSelectionModel().clearSelection();
+           startDatePicker.setValue(null);
+           endDatePicker.setValue(null);
+           customerBox.getSelectionModel().clearSelection();
+           contactBox.getSelectionModel().clearSelection();
+
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
 
     }
 @FXML
     private void updateAppointment() {
-        // Get the values from the text fields
+
+    selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
+
+    // Get the values from the text fields
         int appointmentId = appointmentTable.getSelectionModel().getSelectedItem().getAppointment_ID();
         String title = titleField.getText();
         String description = descriptionField.getText();
@@ -260,19 +272,19 @@ public class AppointmentController implements Initializable {
     @FXML
     private void deleteAppointment() {
         // Get selected appointment
-        Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
+        selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
 
         // Delete from database
-        appointmentDAO.deleteAppointment(appointment.getAppointment_ID());
+        appointmentDAO.deleteAppointment(selectedAppointment.getAppointment_ID());
 
         // Delete from table
-        appointmentTable.getItems().remove(appointment);
+        appointmentTable.getItems().remove(selectedAppointment);
 
         // Show dialog
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Appointment Deleted");
         alert.setHeaderText(null);
-        alert.setContentText("Appointment " + appointment.getAppointment_ID() + " has been deleted.");
+        alert.setContentText("Appointment " + selectedAppointment.getAppointment_ID() + " has been deleted.");
         alert.showAndWait();
 
     }

@@ -174,7 +174,7 @@ public class UserController implements Initializable {
         } else {
             /** Check if user has any upcoming appointments */
             for (Appointment appointment : appointmentList) {
-                if (appointment.getUser_Id() == selectedUser.getUser_ID()) {
+                if (appointment.getUser_ID() == selectedUser.getUser_ID()) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText("Error");

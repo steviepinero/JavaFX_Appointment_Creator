@@ -79,12 +79,12 @@ public class AppointmentDAO {
             pstmt.setString(1, appointment.getTitle());
             pstmt.setString(2, appointment.getDescription());
             pstmt.setString(3, appointment.getLocation());
-            pstmt.setString(4, String.valueOf(appointment.getContact_Id()));
+            pstmt.setString(4, String.valueOf(appointment.getContact_ID()));
             pstmt.setString(5, appointment.getType());
             pstmt.setDate(6, Date.valueOf(appointment.getStart()));
             pstmt.setDate(7, Date.valueOf(appointment.getEnd()));
             pstmt.setInt(8, appointment.getCustomer_ID());
-            pstmt.setInt(9, appointment.getUser_Id());
+            pstmt.setInt(9, appointment.getUser_ID());
             pstmt.setInt(10, appointment.getAppointment_ID());
 
             if (appointment.getCreate_date() != null && !appointment.getCreate_date().equals("Create Date")) {
@@ -104,7 +104,7 @@ public class AppointmentDAO {
                 pstmt.setDate(13, Date.valueOf(LocalDate.now()));
             }
 
-//            pstmt.setString(14, appointment.getLastUpdatedBy());
+            pstmt.setString(14, appointment.getLast_Updated_By());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -118,6 +118,7 @@ public class AppointmentDAO {
 
     public static void addAppointment(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, Timestamp create_date, String created_by, Timestamp last_update, String last_updated_by, int customerId, int userId, int contactId) {
         //add appointment to database
+
         try{
             PreparedStatement addAppointments = DatabaseConnection.getConnection().prepareStatement("INSERT INTO appointments (title, description, location, type, start, end, create_date, created_by, last_update, last_updated_by, customer_id, user_id, contact_id ) VALUES (? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,?)");
             addAppointments.setString(1, title);
