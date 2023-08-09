@@ -74,7 +74,7 @@ public class CustomerController implements Initializable {
 
     // fields
     @FXML
-    private TextField customerName;
+    private TextField customerNameField;
     @FXML
     private TextField addressField;
     @FXML
@@ -187,7 +187,7 @@ public class CustomerController implements Initializable {
             DatabaseConnection.establishConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO customers (customer_name, address, postal_code, phone, create_date, created_by, last_update, last_updated_by, country_id, division_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-            preparedStatement.setString(1, customerName.getText());
+            preparedStatement.setString(1, customerNameField.getText());
             preparedStatement.setString(2, addressField.getText());
             preparedStatement.setString(3, postalCodeField.getText());
             preparedStatement.setString(4, phoneNumberField.getText());

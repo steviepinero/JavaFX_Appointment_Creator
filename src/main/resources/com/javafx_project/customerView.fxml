@@ -29,7 +29,7 @@
                 <TableColumn fx:id="countryIdColumn" text="Country" />
             </columns>
         </TableView>
-        <TextField fx:id="customerName" promptText="Customer Name" />
+        <TextField fx:id="customerNameField" promptText="Customer Name" />
         <TextField fx:id="addressField" promptText="Address" />
         <TextField fx:id="postalCodeField" promptText="Postal Code" />
         <TextField fx:id="phoneNumberField" promptText="Phone Number" />
