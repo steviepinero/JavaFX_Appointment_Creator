@@ -30,6 +30,7 @@ public class ContactController implements Initializable {
 
     private static Contact selectedContact;
 
+
     /** Contact table */
     @FXML
     private TableView<Contact> contactTable;
@@ -81,6 +82,14 @@ public class ContactController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    //TODO populate fields with selected contact
+    @FXML
+    public void populateFields() {
+        selectedContact = contactTable.getSelectionModel().getSelectedItem();
+        contactNameField.setText(selectedContact.getContact_Name());
+        emailField.setText(selectedContact.getEmail());
     }
 
     @FXML
