@@ -26,6 +26,10 @@ public class MainController {
 
     @FXML
     private Button reportButton;
+    @FXML
+    private Button countryButton;
+    @FXML
+    private Button firstLevelDivisionButton;
 
     @FXML
     protected void onHelloButtonClick() {
@@ -95,6 +99,30 @@ public class MainController {
 
         // Get the current stage
         Stage stage = (Stage) reportButton.getScene().getWindow();
+
+        // Create new scene and set it on the stage
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+    }
+
+    public void countryButtonClick() throws IOException {
+        FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/countryView.fxml"));
+        Parent root = loader.load();
+
+        // Get the current stage
+        Stage stage = (Stage) countryButton.getScene().getWindow();
+
+        // Create new scene and set it on the stage
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+    }
+
+    public void firstLevelDivisionButtonClick() throws IOException {
+        FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/firstLevelDivisionView.fxml"));
+        Parent root = loader.load();
+
+        // Get the current stageN
+        Stage stage = (Stage) firstLevelDivisionButton.getScene().getWindow();
 
         // Create new scene and set it on the stage
         Scene scene = new Scene(root);
