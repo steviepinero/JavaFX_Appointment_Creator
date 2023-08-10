@@ -30,6 +30,7 @@ import static com.javafx_project.controllers.UserController.appointmentList;
 import static com.javafx_project.dao.DatabaseConnection.connection;
 import static com.javafx_project.controllers.LoginController.loggedInUser;
 import static java.lang.Integer.parseInt;
+import static java.lang.Integer.valueOf;
 
 public class AppointmentController implements Initializable {
 
@@ -42,7 +43,7 @@ public class AppointmentController implements Initializable {
     @FXML
     private Button addAppointmentButton;
 
-    private static Appointment selectedAppointment;
+    private  Appointment selectedAppointment;
 
 
     /** Appointment table */
@@ -106,7 +107,7 @@ public class AppointmentController implements Initializable {
     @FXML
     private ComboBox<Customer> customerBox;
     private String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
-    private final String createdBy = LoginController.loggedInUser.getUser_Name();
+    private  String createdBy = LoginController.loggedInUser.getUser_Name();
 
     public AppointmentController(TableColumn appointmentIdColumn, AppointmentDAO appointmentDAO, String lastUpdatedBy) {
         this.appointment_ID_Column = appointmentIdColumn;
@@ -191,12 +192,22 @@ public class AppointmentController implements Initializable {
     @FXML
     private void addAppointment(ActionEvent actionEvent) {
         String createdBy, lastUpdatedBy;
+
        createdBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
        lastUpdatedBy = createdBy;
-       int currentUser = loggedInUser.getUser_ID();
 
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.getUserByUserId(loggedInUser.getUser_ID());
+        System.out.print("~Add Appt method \n");
+
+        //save logged in userID to a variable
+        Integer loggedInUserID = user.getUser_ID();
+        System.out.print(loggedInUserID);
        try {
-            DatabaseConnection.establishConnection();
+           if (connection == null || connection.isClosed()) {
+               // Open connection
+               DatabaseConnection.establishConnection();
+           }
            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
            preparedStatement.setString(1, titleField.getText());
@@ -210,7 +221,7 @@ public class AppointmentController implements Initializable {
            preparedStatement.setObject(9, LocalDate.now());
            preparedStatement.setString(10, lastUpdatedBy);
            preparedStatement.setInt(11, customerBox.getValue().getCustomer_Id());
-           preparedStatement.setInt(12, currentUser);
+           preparedStatement.setInt(12, loggedInUserID);
            preparedStatement.setInt(13, contactBox.getValue().getContact_ID());
            preparedStatement.executeUpdate();
 
@@ -243,7 +254,7 @@ public class AppointmentController implements Initializable {
 @FXML
     private void updateAppointment() {
 
-    selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
+    this.selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
 
     // Get the values from the text fields
         int appointmentId = appointmentTable.getSelectionModel().getSelectedItem().getAppointment_ID();
@@ -272,19 +283,19 @@ public class AppointmentController implements Initializable {
     @FXML
     private void deleteAppointment() {
         // Get selected appointment
-        selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
+        this.selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
 
         // Delete from database
-        appointmentDAO.deleteAppointment(selectedAppointment.getAppointment_ID());
+        appointmentDAO.deleteAppointment(this.selectedAppointment.getAppointment_ID());
 
         // Delete from table
-        appointmentTable.getItems().remove(selectedAppointment);
+        appointmentTable.getItems().remove(this.selectedAppointment);
 
         // Show dialog
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Appointment Deleted");
         alert.setHeaderText(null);
-        alert.setContentText("Appointment " + selectedAppointment.getAppointment_ID() + " has been deleted.");
+        alert.setContentText("Appointment " + this.selectedAppointment.getAppointment_ID() + " has been deleted.");
         alert.showAndWait();
 
     }
@@ -302,22 +313,6 @@ public class AppointmentController implements Initializable {
         // Create new scene and set it on the stage
         Scene scene = new Scene(root);
         stage.setScene(scene);
-    }
-
-    private void loadAppointmentData() {
-        try {
-            // Get all appointments
-            List<Appointment> appointments = AppointmentDAO.getAllAppointments();
-
-            // Convert to observable list and add to table
-            ObservableList<Appointment> appointmentData = FXCollections.observableArrayList(appointments);
-            appointmentTable.setItems(appointmentData);
-
-            // Refresh table
-            appointmentTable.refresh();
-        } catch (Exception e) {
-            System.out.println("Exception: " + e.getMessage());
-        }
     }
 
     @Override

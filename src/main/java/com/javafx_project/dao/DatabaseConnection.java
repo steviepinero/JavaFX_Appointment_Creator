@@ -11,6 +11,7 @@ public class DatabaseConnection {
 
     public static Connection establishConnection() {
 
+        if (connection == null) {
             try {
                 String url = "jdbc:mysql://localhost:3306/appointments";
                 String username = "admin";
@@ -20,6 +21,7 @@ public class DatabaseConnection {
                 // Handle any errors
                 e.printStackTrace();
             }
+        }
         return connection;
     }
 

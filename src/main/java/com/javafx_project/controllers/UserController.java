@@ -70,8 +70,9 @@ public class UserController implements Initializable {
         password = passwordField.getText();
         createdBy = String.valueOf(LoginController.loggedInUser.getUser_Name());;
         lastUpdatedBy = createdBy;
+        DatabaseConnection.establishConnection();
+
         try {
-            DatabaseConnection.establishConnection();
            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (User_Name, password, Create_Date, Created_By, Last_Update, Last_Updated_By) VALUES (?, ?, NOW(), ?, NOW(), ?)");
             preparedStatement.setString(1, userName);
             preparedStatement.setString(2, password);
