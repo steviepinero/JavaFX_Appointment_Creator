@@ -85,9 +85,73 @@ public class ContactController implements Initializable {
 
     @FXML
     public void updateContact(ActionEvent actionEvent) {
+        String contactName, email;
+        int contact_ID;
+        selectedContact = contactTable.getSelectionModel().getSelectedItem();
+        contact_ID = selectedContact.getContact_ID();
+        contactName = contactNameField.getText();
+        email = emailField.getText();
+        DatabaseConnection.establishConnection();
+
+        String sql = "UPDATE contacts SET Contact_Name = ?, Email = ? WHERE Contact_ID = ?";
+        try {
+            PreparedStatement updateContact = connection.prepareStatement(sql);
+            updateContact.setString(1, contactName);
+            updateContact.setString(2, email);
+            updateContact.setInt(3, contact_ID);
+            updateContact.executeUpdate();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Contact updated");
+            alert.setContentText("Contact updated successfully");
+            alert.showAndWait();
+
+            setContactTable();
+            contactTable.setItems(ContactDAO.getAllContacts());
+            contactTable.refresh();
+
+            contactNameField.setText("");
+            emailField.setText("");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
     @FXML
     public void deleteContact(ActionEvent actionEvent) {
+        int contact_ID;
+        selectedContact = contactTable.getSelectionModel().getSelectedItem();
+        contact_ID = selectedContact.getContact_ID();
+        DatabaseConnection.establishConnection();
+
+        String sql = "DELETE FROM contacts WHERE Contact_ID = ?";
+        try {
+            PreparedStatement deleteContact = connection.prepareStatement(sql);
+            deleteContact.setInt(1, contact_ID);
+            deleteContact.executeUpdate();
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Contact");
+            alert.setHeaderText("Delete Contact");
+            alert.setContentText("Are you sure you want to delete this contact?");
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.OK) {
+
+                Alert alertSuccess = new Alert(Alert.AlertType.INFORMATION);
+                alertSuccess.setTitle("Success");
+                alertSuccess.setHeaderText("Contact deleted");
+                alertSuccess.setContentText("Contact deleted successfully");
+                alertSuccess.showAndWait();
+
+                setContactTable();
+                contactTable.setItems(ContactDAO.getAllContacts());
+                contactTable.refresh();
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void backButtonAction(ActionEvent actionEvent) throws IOException {

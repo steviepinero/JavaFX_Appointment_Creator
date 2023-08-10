@@ -32,4 +32,19 @@ public class ContactDAO {
         }
         return null;
     }
+
+    public static void deleteContact(int contact_ID) {
+        String sql = "DELETE FROM contacts WHERE Contact_ID = ?";
+        try {
+            PreparedStatement deleteContact = DatabaseConnection.getConnection().prepareStatement(sql);
+            deleteContact.setInt(1, contact_ID);
+            deleteContact.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+
 }
+
