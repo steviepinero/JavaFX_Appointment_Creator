@@ -194,11 +194,11 @@ public class AppointmentController implements Initializable {
        lastUpdatedBy = createdBy;
 
         UserDAO userDAO = new UserDAO();
-        User user = userDAO.getUserByUserId(loggedInUser.getUser_ID());
+        User loggedInUserID = userDAO.getUserByUserId(loggedInUser.getUser_ID());
         System.out.print("~Add Appt method \n");
 
         //save logged in userID to a variable
-        Integer loggedInUserID = user.getUser_ID();
+
         System.out.print(loggedInUserID);
        try {
            if (connection == null || connection.isClosed()) {
@@ -218,7 +218,7 @@ public class AppointmentController implements Initializable {
            preparedStatement.setObject(9, LocalDate.now());
            preparedStatement.setString(10, lastUpdatedBy);
            preparedStatement.setInt(11, customerBox.getValue().getCustomer_ID());
-           preparedStatement.setInt(12, loggedInUserID);
+           preparedStatement.setInt(12, loggedInUserID.getUser_ID());
            preparedStatement.setInt(13, contactBox.getValue().getContact_ID());
            preparedStatement.executeUpdate();
 
