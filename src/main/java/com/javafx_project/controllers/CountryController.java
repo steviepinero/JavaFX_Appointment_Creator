@@ -76,7 +76,7 @@ public class CountryController implements Initializable {
     public void setCountryTable() {
         countryTable.setItems(countryList);
         countryIdColumn.setCellValueFactory(new PropertyValueFactory<>("country_ID"));
-        countryNameColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
+        countryNameColumn.setCellValueFactory(new PropertyValueFactory<>("country_Name"));
     }
 
 
