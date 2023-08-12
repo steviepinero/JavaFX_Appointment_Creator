@@ -5,154 +5,150 @@ import java.time.LocalDateTime;
 
 public class Customer {
 
-    private int customer_Id;
-    private String customer_Name;
-    private String address;
-    private String postal_Code;
-    private String phone;
-    private LocalDateTime create_Date;
-    private String created_By;
-    private LocalDateTime last_Update;
-    private String last_Updated_By;
-    private int country_Id;
-    private int division_Id;
+    private int Customer_ID;
+    private String Customer_Name;
+    private String Address;
+    private String Postal_Code;
+    private String Phone;
+    private LocalDateTime Create_Date;
+    private String Created_By;
+    private LocalDate Last_Update;
+    private String Last_Updated_By;
+    private int Country_ID;
+    private int Division_ID;
 
-    public Customer(int customer_Id, String customer_Name, String address, String postal_Code, String phone, LocalDateTime createDate, String createdBy, LocalDate lastUpdate, String lastUpdatedBy, Integer division_Id) {
-        this.customer_Id = customer_Id;
-        this.customer_Name = customer_Name;
-        this.address = address;
-        this.postal_Code = postal_Code;
-        this.phone = phone;
-        this.createDate = createDate;
-        this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
-        this.lastUpdatedBy = lastUpdatedBy;
-        this.division_Id = division_Id;
+    public Customer(int Customer_ID, String customer_Name, String address, String postal_Code, String phone, LocalDateTime Create_Date, String Created_By, LocalDate Last_Update, String Last_Updated_By, Integer Division_ID) {
+        this.Customer_ID = Customer_ID;
+        this.Customer_Name = customer_Name;
+        this.Address = address;
+        this.Postal_Code = postal_Code;
+        this.Phone = phone;
+        this.Create_Date = Create_Date;
+        this.Created_By = Created_By;
+        this.Last_Update = Last_Update;
+        this.Last_Updated_By = Last_Updated_By;
+        this.Division_ID = Division_ID;
     }
 
     public Customer() {
 
     }
 
-    public Customer(int customer_Id, String customer_Name) {
-        this.customer_Id = customer_Id;
-        this.customer_Name = customer_Name;
+    public Customer(int Customer_ID, String customer_Name) {
+        this.Customer_ID = Customer_ID;
+        this.Customer_Name = customer_Name;
     }
 
 
-    public Customer(int customer_Id, String customer_Name, String address, String postal_Code, String phone, String createDate, String createdBy, String lastUpdate, String lastUpdatedBy, int country_Id, int division_Id) {
-        this.customer_Id = customer_Id;
-        this.customer_Name = customer_Name;
-        this.address = address;
-        this.postal_Code = postal_Code;
-        this.phone = phone;
-        this.createDate = LocalDate.parse(createDate).atStartOfDay();
-        this.createdBy = createdBy;
-        this.lastUpdate = LocalDate.parse(lastUpdate);
-        this.lastUpdatedBy = lastUpdatedBy;
-        this.country_Id = country_Id;
-        this.division_Id = division_Id;
+    public Customer(int Customer_ID, String customer_Name, String address, String postal_Code, String phone, String Create_Date, String Created_By, String Last_Update, String Last_Updated_By, int Country_ID, int Division_ID) {
+        this.Customer_ID = Customer_ID;
+        this.Customer_Name = customer_Name;
+        this.Address = address;
+        this.Postal_Code = postal_Code;
+        this.Phone = phone;
+        this.Create_Date = LocalDate.parse(Create_Date).atStartOfDay();
+        this.Created_By = Created_By;
+        this.Last_Update = LocalDate.parse(Last_Update);
+        this.Last_Updated_By = Last_Updated_By;
+        this.Country_ID = Country_ID;
+        this.Division_ID = Division_ID;
     }
 
     @Override
     public String toString() {
-        return this.customer_Name;
+        return this.Customer_Name;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
+    public LocalDateTime getCreate_Date() {
+        return Create_Date;
     }
 
-    public void setCreateDate(LocalDate createDate) {
-        this.createDate = createDate.atStartOfDay();
+    public void setCreate_Date(LocalDate create_Date) {
+        this.Create_Date = create_Date.atStartOfDay();
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getCreated_By() {
+        return Created_By;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setCreated_By(String created_By) {
+        this.Created_By = created_By;
     }
 
-    public LocalDate getLastUpdate() {
-        return lastUpdate;
+    public LocalDate getLast_Update() {
+        return Last_Update;
     }
 
-    public void setLastUpdate(LocalDate lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setLast_Update(LocalDate last_Update) {
+        this.Last_Update = last_Update;
     }
 
-    public String getLastUpdatedBy() {
-        return lastUpdatedBy;
+    public String getLast_Updated_By() {
+        return Last_Updated_By;
     }
 
-    public void setLastUpdatedBy(String lastUpdatedBy) {
-        this.lastUpdatedBy = lastUpdatedBy;
+    public void setLast_Updated_By(String last_Updated_By) {
+        this.Last_Updated_By = last_Updated_By;
     }
 
-    private LocalDateTime createDate;
-    private String createdBy;
-    private LocalDate lastUpdate;
-    private String lastUpdatedBy;
 
     // getters and setters
 
-    public int getCountry_Id() {
-        return country_Id;
+    public int getCountry_ID() {
+        return Country_ID;
     }
 
-    public void setCountry_Id(int country_Id) {
-        this.country_Id = country_Id;
+    public void setCountry_ID(int country_ID) {
+        this.Country_ID = country_ID;
     }
 
 
-    public int getCustomer_Id() {
-        return customer_Id;
+    public int getCustomer_ID() {
+        return Customer_ID;
     }
 
-    public void setCustomer_Id(int customer_Id) {
-        this.customer_Id = customer_Id;
+    public void setCustomer_ID(int customer_ID) {
+        this.Customer_ID = customer_ID;
     }
 
     public String getCustomer_Name() {
-        return customer_Name;
+        return Customer_Name;
     }
 
     public void setCustomer_Name(String customer_Name) {
-        this.customer_Name = customer_Name;
+        this.Customer_Name = customer_Name;
     }
 
     public String getAddress() {
-        return address;
+        return Address;
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.Address = address;
     }
 
     public String getPostal_Code() {
-        return postal_Code;
+        return Postal_Code;
     }
 
     public void setPostal_Code(String postal_Code) {
-        this.postal_Code = postal_Code;
+        this.Postal_Code = postal_Code;
     }
 
     public String getPhone() {
-        return phone;
+        return Phone;
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.Phone = phone;
     }
 
-    public int getDivision_Id() {
-        return division_Id;
+    public int getDivision_ID() {
+        return Division_ID;
     }
 
-    public void setDivision_Id(int division_Id) {
-        this.division_Id = division_Id;
+    public void setDivision_ID(int division_ID) {
+        this.Division_ID = division_ID;
     }
 
 

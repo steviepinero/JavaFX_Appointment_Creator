@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -14,8 +13,6 @@ import com.javafx_project.models.Appointment;
 import com.javafx_project.models.Contact;
 import com.javafx_project.models.Customer;
 import com.javafx_project.models.User;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -220,7 +217,7 @@ public class AppointmentController implements Initializable {
            preparedStatement.setString(8, createdBy);
            preparedStatement.setObject(9, LocalDate.now());
            preparedStatement.setString(10, lastUpdatedBy);
-           preparedStatement.setInt(11, customerBox.getValue().getCustomer_Id());
+           preparedStatement.setInt(11, customerBox.getValue().getCustomer_ID());
            preparedStatement.setInt(12, loggedInUserID);
            preparedStatement.setInt(13, contactBox.getValue().getContact_ID());
            preparedStatement.executeUpdate();
@@ -264,7 +261,7 @@ public class AppointmentController implements Initializable {
         String type = typeBox.getValue();
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
-        int customerId = customerBox.getValue().getCustomer_Id();
+        int customerId = customerBox.getValue().getCustomer_ID();
         int contactId = contactBox.getValue().getContact_ID();
         String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
 

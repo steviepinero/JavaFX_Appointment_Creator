@@ -3,7 +3,6 @@ package com.javafx_project.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -12,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.javafx_project.dao.*;
+import com.javafx_project.models.Country;
+import com.javafx_project.models.FirstLevelDivision;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -68,9 +69,9 @@ public class CustomerController implements Initializable {
 
     // combo boxes
     @FXML
-    private ComboBox<?> countryBox;
+    private ComboBox<Country> countryBox;
     @FXML
-    private ComboBox<?> divisionBox;
+    private ComboBox<FirstLevelDivision> divisionBox;
 
     // fields
     @FXML
@@ -107,7 +108,7 @@ public class CustomerController implements Initializable {
         DatabaseConnection.establishConnection();
         selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
         // Delete customer from database
-        customerDAO.deleteCustomer(selectedCustomer.getCustomer_Id());
+        customerDAO.deleteCustomer(selectedCustomer.getCustomer_ID());
         //display success message
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
@@ -134,7 +135,7 @@ public class CustomerController implements Initializable {
         Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
 
         // Get customer id from database
-        int customerId = selectedCustomer.getCustomer_Id();
+        int customerId = selectedCustomer.getCustomer_ID();
 
 
         try {
@@ -247,7 +248,7 @@ public class CustomerController implements Initializable {
         postalCodeColumn.setCellValueFactory(new PropertyValueFactory<>("Postal_Code"));
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("Phone"));
         createDateColumn.setCellValueFactory(new PropertyValueFactory<>("Create_Date"));
-        createdByColumn.setCellValueFactory(new PropertyValueFactory<>("Create_By"));
+        createdByColumn.setCellValueFactory(new PropertyValueFactory<>("Created_By"));
         lastUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Update"));
         lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Updated_By"));
         countryIdColumn.setCellValueFactory(new PropertyValueFactory<>("Country_ID"));
