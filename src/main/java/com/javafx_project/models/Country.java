@@ -1,28 +1,34 @@
 package com.javafx_project.models;
 
 public class Country {
-    private int countryID;
+    private int Country_ID;
 
     private String country;
 
-    private String createDate;
+    private String Create_Date;
 
-    private String createdBy;
+    private String Created_By;
 
-    private String lastUpdate;
+    private String Last_Update;
 
-    private String lasteUpdatedBy;
+    private String Last_Updated_By;
 
     public Country() {
 
     };
 
-    public int getCountryID() {
-        return countryID;
+    //will need to add create and last update
+    public Country(Integer countryId, String countryName) {
+        this.Country_ID = countryId;
+        this.country = countryName;
     }
 
-    public void setCountryID(int countryID) {
-        this.countryID = countryID;
+    public int getCountry_ID() {
+        return Country_ID;
+    }
+
+    public void setCountry_ID(int country_ID) {
+        this.Country_ID = country_ID;
     }
 
     public String getCountry() {
@@ -33,35 +39,35 @@ public class Country {
         this.country = country;
     }
 
-    public String getCreateDate() {
-        return createDate;
+    public String getCreate_Date() {
+        return Create_Date;
     }
 
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+    public void setCreate_Date(String create_Date) {
+        this.Create_Date = create_Date;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getCreated_By() {
+        return Created_By;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setCreated_By(String created_By) {
+        this.Created_By = created_By;
     }
 
-    public String getLastUpdate() {
-        return lastUpdate;
+    public String getLast_Update() {
+        return Last_Update;
     }
 
-    public void setLastUpdate(String lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setLast_Update(String last_Update) {
+        this.Last_Update = last_Update;
     }
 
-    public String getLasteUpdatedBy() {
-        return lasteUpdatedBy;
+    public String getLast_Updated_By() {
+        return Last_Updated_By;
     }
 
-    public void setLasteUpdatedBy(String lasteUpdatedBy) {
-        this.lasteUpdatedBy = lasteUpdatedBy;
+    public void setLast_Updated_By(String last_Updated_By) {
+        this.Last_Updated_By = last_Updated_By;
     }
 }
