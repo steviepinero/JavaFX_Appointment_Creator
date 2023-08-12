@@ -39,10 +39,9 @@ public class CountryController implements Initializable {
     private TableColumn<Country, String> countryNameColumn;
     /** Country table */
 
-
-
     @FXML
     private TextField countryNameField;
+
     public void addCountry(ActionEvent actionEvent) {
         String countryName, countryID;
         countryName = countryNameField.getText();
@@ -124,6 +123,7 @@ public class CountryController implements Initializable {
         alert.setTitle("Success");
         alert.setHeaderText("Country deleted");
         alert.setContentText("Country deleted successfully");
+        alert.showAndWait();
 
         setCountryTable();
         countryTable.setItems(CountryDAO.getAllCountries());

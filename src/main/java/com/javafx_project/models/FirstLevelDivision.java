@@ -2,30 +2,38 @@ package com.javafx_project.models;
 
 public class FirstLevelDivision {
     //This is like 'States' in the United States
-    private int divisionID;
+    private int Division_ID;
+
+    private String Division_Name;
 
     private String division;
 
-    private String createDate;
+    private String Create_Date;
 
-    private String createdBy;
+    private String Created_By;
 
-    private String lastUpdate;
+    private String Last_Update;
 
-    private String lastUpdatedBy;
+    private String Last_Updated_By;
 
-    private String countryID;
+    private Integer Country_ID;
 
     public FirstLevelDivision() {
 
     }
 
-    public int getDivisionID() {
-        return divisionID;
+    public FirstLevelDivision(Integer divisionId, String divisionName, Integer countryId) {
+        this.Division_ID = divisionId;
+        this.Division_Name = divisionName;
+        this.Country_ID = countryId;
     }
 
-    public void setDivisionID(int divisionID) {
-        this.divisionID = divisionID;
+    public int getDivision_ID() {
+        return Division_ID;
+    }
+
+    public void setDivision_ID(int division_ID) {
+        this.Division_ID = division_ID;
     }
 
     public String getDivision() {
@@ -36,43 +44,53 @@ public class FirstLevelDivision {
         this.division = division;
     }
 
-    public String getCreateDate() {
-        return createDate;
+    public String getCreate_Date() {
+        return Create_Date;
     }
 
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+    public void setCreate_Date(String create_Date) {
+        this.Create_Date = create_Date;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getCreated_By() {
+        return Created_By;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setCreated_By(String created_By) {
+        this.Created_By = created_By;
     }
 
-    public String getLastUpdate() {
-        return lastUpdate;
+    public String getLast_Update() {
+        return Last_Update;
     }
 
-    public void setLastUpdate(String lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setLast_Update(String last_Update) {
+        this.Last_Update = last_Update;
     }
 
-    public String getLastUpdatedBy() {
-        return lastUpdatedBy;
+    public String getLast_Updated_By() {
+        return Last_Updated_By;
     }
 
-    public void setLastUpdatedBy(String lastUpdatedBy) {
-        this.lastUpdatedBy = lastUpdatedBy;
+    public void setLast_Updated_By(String last_Updated_By) {
+        this.Last_Updated_By = last_Updated_By;
     }
 
-    public String getCountryID() {
-        return countryID;
+    public Integer getCountry_ID() {
+        return Country_ID;
     }
 
-    public void setCountryID(String countryID) {
-        this.countryID = countryID;
+    public void setCountry_ID(int country_ID) {
+        this.Country_ID = country_ID;
+    }
+
+
+    public String getDivision_Name() {
+        return Division_Name;
+    }
+
+    public void setDivision_Name(String division_Name) {
+        Division_Name = division_Name;
     }
 }
+

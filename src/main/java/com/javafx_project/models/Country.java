@@ -3,7 +3,7 @@ package com.javafx_project.models;
 public class Country {
     private int Country_ID;
 
-    private String country;
+    private String Country_Name;
 
     private String Create_Date;
 
@@ -20,7 +20,7 @@ public class Country {
     //will need to add create and last update
     public Country(Integer countryId, String countryName) {
         this.Country_ID = countryId;
-        this.country = countryName;
+        this.Country_Name = countryName;
     }
 
     public int getCountry_ID() {
@@ -31,12 +31,12 @@ public class Country {
         this.Country_ID = country_ID;
     }
 
-    public String getCountry() {
-        return country;
+    public String getCountry_Name() {
+        return Country_Name;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setCountry_Name(String country_Name) {
+        this.Country_Name = country_Name;
     }
 
     public String getCreate_Date() {
@@ -69,5 +69,10 @@ public class Country {
 
     public void setLast_Updated_By(String last_Updated_By) {
         this.Last_Updated_By = last_Updated_By;
+    }
+
+    @Override
+    public String toString() {
+        return Country_ID + " - " + Country_Name;
     }
 }

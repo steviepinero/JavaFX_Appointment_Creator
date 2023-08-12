@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.javafx_project.controllers.FirstLevelDivisionController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <!-- Columns for Division_ID, Division_Name, Country_ID, add update delete button -->
+    <VBox xmlns:fx="http://javafx.com/fxml">
+        <TableView fx:id="divisionTable" prefHeight="400.0" prefWidth="606.00">
+            <columns>
+                <TableColumn fx:id="divisionIdColumn" text="Division ID" />
+                <TableColumn fx:id="divisionNameColumn" text="Division Name" />
+                <TableColumn fx:id="countryIdColumn" text="Country ID" />
+            </columns>
+        </TableView>
+        <HBox alignment="CENTER">
+            <Label text="Division Name:" />
+            <TextField fx:id="divisionNameField" />
+            <ComboBox fx:id="countryComboBox"/>
+
+        </HBox>
+        <HBox alignment="CENTER">
+            <Button fx:id="createDivisionButton" onAction="#addDivision" text="Create Division" />
+            <Button fx:id="updateDivisionButton" onAction="#updateDivision" text="Update Division" />
+            <Button fx:id="deleteDivisionButton" onAction="#deleteDivision" text="Delete Division" />
+        </HBox>
+        <Button fx:id="backButton" onAction="#backButtonAction" text="Back" />
+    </VBox>
+
+</AnchorPane>
