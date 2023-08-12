@@ -100,7 +100,16 @@ public class CustomerController implements Initializable {
     private UserDAO userdao;
 
 
+    @FXML
+    private void populateCountryBox() {
+        countryBox.setItems(CountryDAO.getAllCountries());
 
+    }
+    @FXML
+    private void populateDivisionBox() {
+        divisionBox.setItems(FirstLevelDivisionDAO.getAllDivisions());
+
+    }
 
     @FXML
     private void deleteCustomer(ActionEvent actionEvent) {
@@ -131,8 +140,24 @@ public class CustomerController implements Initializable {
         String phone = phoneNumberField.getText();
         String lastUpdatedBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
 
-        // Get selected customer from table
-        Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+
+        //Update fields with selectedCustomer data
+        customerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                //get selected customer from table
+                Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+
+                // Update text fields
+                customerNameField.setText(selectedCustomer.getCustomer_Name());
+                addressField.setText(selectedCustomer.getAddress());
+                postalCodeField.setText(selectedCustomer.getPostal_Code());
+                phoneNumberField.setText(selectedCustomer.getPhone());
+
+                // Update combo boxes
+//                countryBox.setValue(selectedCustomer.getCountry_ID());
+//                divisionBox.setValue(selectedCustomer.getDivision_ID());
+            }
+        });
 
         // Get customer id from database
         int customerId = selectedCustomer.getCustomer_ID();
