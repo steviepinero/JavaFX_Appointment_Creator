@@ -71,7 +71,7 @@ public class CustomerDAO {
         pstmt.setString(4, customer.getPhone());
         pstmt.setDate(5, Date.valueOf(String.valueOf(customer.getCreate_Date())));
         pstmt.setString(6, customer.getCreated_By());
-        pstmt.setDate(7, Date.valueOf(customer.getLast_Update()));
+        pstmt.setDate(7, Date.valueOf(String.valueOf(customer.getLast_Update())));
         pstmt.setString(8, customer.getLast_Updated_By());
         pstmt.setInt(9, customer.getCountry_ID());
         pstmt.setInt(10, customer.getDivision_ID());

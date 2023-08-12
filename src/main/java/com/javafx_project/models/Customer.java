@@ -2,6 +2,7 @@ package com.javafx_project.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Customer {
 
@@ -12,12 +13,12 @@ public class Customer {
     private String Phone;
     private LocalDateTime Create_Date;
     private String Created_By;
-    private LocalDate Last_Update;
+    private LocalDateTime Last_Update;
     private String Last_Updated_By;
     private int Country_ID;
     private int Division_ID;
 
-    public Customer(int Customer_ID, String customer_Name, String address, String postal_Code, String phone, LocalDateTime Create_Date, String Created_By, LocalDate Last_Update, String Last_Updated_By, Integer Division_ID) {
+    public Customer(int Customer_ID, String customer_Name, String address, String postal_Code, String phone, LocalDateTime Create_Date, String Created_By, LocalDateTime Last_Update, String Last_Updated_By, Integer Division_ID) {
         this.Customer_ID = Customer_ID;
         this.Customer_Name = customer_Name;
         this.Address = address;
@@ -46,13 +47,17 @@ public class Customer {
         this.Address = address;
         this.Postal_Code = postal_Code;
         this.Phone = phone;
-        this.Create_Date = LocalDate.parse(Create_Date).atStartOfDay();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        this.Create_Date = LocalDateTime.parse(Create_Date, formatter);
         this.Created_By = Created_By;
-        this.Last_Update = LocalDate.parse(Last_Update);
+        this.Last_Update = LocalDateTime.parse(Last_Update, formatter);
         this.Last_Updated_By = Last_Updated_By;
         this.Country_ID = Country_ID;
         this.Division_ID = Division_ID;
     }
+
 
     @Override
     public String toString() {
@@ -75,11 +80,11 @@ public class Customer {
         this.Created_By = created_By;
     }
 
-    public LocalDate getLast_Update() {
+    public LocalDateTime getLast_Update() {
         return Last_Update;
     }
 
-    public void setLast_Update(LocalDate last_Update) {
+    public void setLast_Update(LocalDateTime last_Update) {
         this.Last_Update = last_Update;
     }
 
