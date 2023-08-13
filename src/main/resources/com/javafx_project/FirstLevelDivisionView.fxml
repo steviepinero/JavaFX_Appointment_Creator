@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.javafx_project.controllers.FirstLevelDivisionController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javafx_project.controllers.FirstLevelDivisionController">
 
     <!-- Columns for Division_ID, Division_Name, Country_ID, add update delete button -->
     <VBox xmlns:fx="http://javafx.com/fxml">
@@ -18,12 +19,16 @@
                 <TableColumn fx:id="divisionIdColumn" text="Division ID" />
                 <TableColumn fx:id="divisionNameColumn" text="Division Name" />
                 <TableColumn fx:id="countryIdColumn" text="Country ID" />
+            <TableColumn fx:id="createDateColumn" text="Create Date" />
+            <TableColumn fx:id="createdByColumn" text="Created By" />
+            <TableColumn fx:id="lastUpdateColumn" text="Last Update" />
+            <TableColumn fx:id="lastUpdatedByColumn" prefWidth="102.0" text="Last Updated By" />
             </columns>
         </TableView>
         <HBox alignment="CENTER">
             <Label text="Division Name:" />
             <TextField fx:id="divisionNameField" />
-            <ComboBox fx:id="countryComboBox"/>
+            <ComboBox fx:id="countryComboBox" />
 
         </HBox>
         <HBox alignment="CENTER">

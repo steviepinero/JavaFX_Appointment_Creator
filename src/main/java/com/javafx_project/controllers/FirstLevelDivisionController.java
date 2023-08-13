@@ -3,6 +3,7 @@ package com.javafx_project.controllers;
 import com.javafx_project.dao.DatabaseConnection;
 import com.javafx_project.dao.FirstLevelDivisionDAO;
 import com.javafx_project.models.Country;
+import com.javafx_project.models.Customer;
 import com.javafx_project.models.FirstLevelDivision;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,10 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +39,14 @@ public class FirstLevelDivisionController implements Initializable {
     private TableColumn<FirstLevelDivision, String> divisionNameColumn;
     @FXML
     private TableColumn<FirstLevelDivision,Integer> countryIdColumn;
+    @FXML
+    private TableColumn<FirstLevelDivision, Timestamp> createDateColumn;
+    @FXML
+    private TableColumn<FirstLevelDivision, String> createdByColumn;
+    @FXML
+    private TableColumn<FirstLevelDivision, Timestamp> lastUpdateColumn;
+    @FXML
+    private TableColumn<FirstLevelDivision, String> lastUpdatedByColumn;
     /** Division table */
 
     @FXML
@@ -176,7 +182,10 @@ public class FirstLevelDivisionController implements Initializable {
         divisionIdColumn.setCellValueFactory(new PropertyValueFactory<>("Division_ID"));
         divisionNameColumn.setCellValueFactory(new PropertyValueFactory<>("Division_Name"));
         countryIdColumn.setCellValueFactory(new PropertyValueFactory<>("Country_ID"));
-
+        createDateColumn.setCellValueFactory(new PropertyValueFactory<>("Create_Date"));
+        createdByColumn.setCellValueFactory(new PropertyValueFactory<>("Created_By"));
+        lastUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Update"));
+        lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Updated_By"));
         populateCountryBox();
 
     }
