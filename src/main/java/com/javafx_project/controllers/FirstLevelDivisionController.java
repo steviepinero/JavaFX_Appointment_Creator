@@ -3,7 +3,6 @@ package com.javafx_project.controllers;
 import com.javafx_project.dao.DatabaseConnection;
 import com.javafx_project.dao.FirstLevelDivisionDAO;
 import com.javafx_project.models.Country;
-import com.javafx_project.models.Customer;
 import com.javafx_project.models.FirstLevelDivision;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

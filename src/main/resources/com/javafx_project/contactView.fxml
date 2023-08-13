@@ -17,10 +17,6 @@
                 <TableColumn fx:id="contactIdColumn" text="Contact ID" />
                 <TableColumn fx:id="contactNameColumn" text="Contact Name" />
                 <TableColumn fx:id="emailColumn" text="Email" />
-            <TableColumn fx:id="createDateColumn" text="Create Date" />
-            <TableColumn fx:id="createdByColumn" text="Created By" />
-            <TableColumn fx:id="lastUpdateColumn" text="Last Update" />
-            <TableColumn fx:id="lastUpdatedByColumn" prefWidth="102.0" text="Last Updated By" />
             </columns>
         </TableView>
         <HBox alignment="CENTER">

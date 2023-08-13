@@ -16,6 +16,10 @@
             <columns>
                 <TableColumn fx:id="countryIdColumn" text="Country ID" />
                 <TableColumn fx:id="countryNameColumn" text="Country Name" />
+                <TableColumn fx:id="createDateColumn" text="Create Date" />
+                <TableColumn fx:id="createdByColumn" text="Created By" />
+                <TableColumn fx:id="lastUpdateColumn" text="Last Update" />
+                <TableColumn fx:id="lastUpdatedByColumn" text="Last Updated By" />
             </columns>
         </TableView>
         <HBox alignment="CENTER">

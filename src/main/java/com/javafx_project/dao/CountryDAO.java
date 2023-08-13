@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class CountryDAO {
     public static ObservableList<Country> getAllCountries() {
@@ -21,7 +22,11 @@ public class CountryDAO {
                 while (rs.next()) {
                     Integer country_ID = rs.getInt("Country_ID");
                     String country_Name = rs.getString("Country_Name");
-                    Country country = new Country(country_ID, country_Name);
+                    Timestamp createDate = rs.getTimestamp("Create_Date");
+                    String createdBy = rs.getString("Created_By");
+                    Timestamp lastUpdate = rs.getTimestamp("Last_Update");
+                    String lastUpdatedBy = rs.getString("Last_Updated_By");
+                    Country country = new Country(country_ID, country_Name, createDate, createdBy, lastUpdate, lastUpdatedBy);
 
                     countryList.add(country);
                 }
@@ -44,5 +49,6 @@ public class CountryDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
     }
 }

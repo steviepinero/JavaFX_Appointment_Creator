@@ -1,11 +1,11 @@
 package com.javafx_project.models;
 
+import java.sql.Timestamp;
+
 public class Contact {
     private int Contact_ID;
     private String Contact_Name;
     private String Email;
-
-    private String Last_Updated_By;
 
 
     public Contact() {
@@ -16,6 +16,7 @@ public class Contact {
         this.Contact_ID = contact_ID;
         this.Contact_Name = Contact_Name;
         this.Email = email;
+
     }
 
     public Contact(int id, String name) {

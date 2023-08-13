@@ -1,15 +1,18 @@
 package com.javafx_project.models;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 public class Country {
     private int Country_ID;
 
     private String Country_Name;
 
-    private String Create_Date;
+    private LocalDateTime Create_Date;
 
     private String Created_By;
 
-    private String Last_Update;
+    private LocalDateTime Last_Update;
 
     private String Last_Updated_By;
 
@@ -18,9 +21,27 @@ public class Country {
     };
 
     //will need to add create and last update
-    public Country(Integer countryId, String countryName) {
+    public Country(Integer countryId, String countryName, Timestamp createDate, String createdBy, Timestamp lastUpdate, String lastUpdatedBy) {
         this.Country_ID = countryId;
         this.Country_Name = countryName;
+        this.Create_Date = createDate.toLocalDateTime();
+        this.Created_By = createdBy;
+        this.Last_Update = lastUpdate.toLocalDateTime();
+        this.Last_Updated_By = lastUpdatedBy;
+    }
+
+    public Country(int countryId, String countryName) {
+        this.Country_ID = countryId;
+        this.Country_Name = countryName;
+    }
+
+    public Country(Integer countryId, String countryName, String createDate, String createdBy, String lastUpdate, String lastUpdatedBy) {
+        this.Country_ID = countryId;
+        this.Country_Name = countryName;
+        this.Create_Date = LocalDateTime.parse(String.valueOf(createDate));
+        this.Created_By = createdBy;
+        this.Last_Update = LocalDateTime.parse(lastUpdate);
+        this.Last_Updated_By = lastUpdatedBy;
     }
 
     public int getCountry_ID() {
@@ -39,11 +60,11 @@ public class Country {
         this.Country_Name = country_Name;
     }
 
-    public String getCreate_Date() {
+    public LocalDateTime getCreate_Date() {
         return Create_Date;
     }
 
-    public void setCreate_Date(String create_Date) {
+    public void setCreate_Date(LocalDateTime create_Date) {
         this.Create_Date = create_Date;
     }
 
@@ -55,11 +76,11 @@ public class Country {
         this.Created_By = created_By;
     }
 
-    public String getLast_Update() {
+    public LocalDateTime getLast_Update() {
         return Last_Update;
     }
 
-    public void setLast_Update(String last_Update) {
+    public void setLast_Update(LocalDateTime last_Update) {
         this.Last_Update = last_Update;
     }
 

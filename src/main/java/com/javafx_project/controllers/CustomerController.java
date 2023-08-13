@@ -2,9 +2,7 @@ package com.javafx_project.controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -101,10 +99,28 @@ public class CustomerController implements Initializable {
 
 
     @FXML
-    private void populateCountryBox() {
-        countryBox.setItems(CountryDAO.getAllCountries());
-
+    public void populateCountryBox() {
+        String query = "SELECT * FROM countries";
+        try {
+            // Check if connection is open
+            if (connection == null || connection.isClosed()) {
+                // Open connection
+                DatabaseConnection.establishConnection();
+            }
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                int countryId = resultSet.getInt("Country_ID");
+                String countryName = resultSet.getString("Country_Name");
+                Country country = new Country(countryId, countryName);
+                countryBox.getItems().add(country);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            Logger.getLogger(FirstLevelDivisionController.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
+
     @FXML
     private void populateDivisionBox() {
         divisionBox.setItems(FirstLevelDivisionDAO.getAllDivisions());
@@ -278,7 +294,12 @@ public class CustomerController implements Initializable {
         lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Updated_By"));
         countryIdColumn.setCellValueFactory(new PropertyValueFactory<>("Country_ID"));
         divisionIdColumn.setCellValueFactory(new PropertyValueFactory<>("Division_ID"));
+
+        populateCountryBox();
+        populateDivisionBox();
     }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

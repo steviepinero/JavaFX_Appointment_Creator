@@ -4,8 +4,6 @@ import com.javafx_project.models.Contact;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ContactDAO {
     public static ObservableList<Contact> getAllContacts() {
