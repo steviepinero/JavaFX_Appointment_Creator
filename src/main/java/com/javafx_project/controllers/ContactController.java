@@ -3,6 +3,7 @@ package com.javafx_project.controllers;
 import com.javafx_project.dao.DatabaseConnection;
 import com.javafx_project.models.Contact;
 import com.javafx_project.dao.ContactDAO;
+import com.javafx_project.models.Customer;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +42,14 @@ public class ContactController implements Initializable {
     private TableColumn<Contact, String> contactNameColumn;
     @FXML
     private TableColumn<Contact, String> emailColumn;
+    @FXML
+    private TableColumn<Contact, Timestamp> createDateColumn;
+    @FXML
+    private TableColumn<Contact, String> createdByColumn;
+    @FXML
+    private TableColumn<Contact, Timestamp> lastUpdateColumn;
+    @FXML
+    private TableColumn<Contact, String> lastUpdatedByColumn;
     /** Contact table */
 
     @FXML
@@ -179,9 +189,14 @@ public class ContactController implements Initializable {
 
     public void setContactTable(){
         contactTable.setItems(contactList);
-    contactIdColumn.setCellValueFactory(new PropertyValueFactory<>("Contact_ID"));
-    contactNameColumn.setCellValueFactory(new PropertyValueFactory<>("Contact_Name"));
-    emailColumn.setCellValueFactory(new PropertyValueFactory<>("Email"));
+         contactIdColumn.setCellValueFactory(new PropertyValueFactory<>("Contact_ID"));
+         contactNameColumn.setCellValueFactory(new PropertyValueFactory<>("Contact_Name"));
+         emailColumn.setCellValueFactory(new PropertyValueFactory<>("Email"));
+        createDateColumn.setCellValueFactory(new PropertyValueFactory<>("Create_Date"));
+        createdByColumn.setCellValueFactory(new PropertyValueFactory<>("Created_By"));
+        lastUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Update"));
+        lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Updated_By"));
+
     }
 
     @Override

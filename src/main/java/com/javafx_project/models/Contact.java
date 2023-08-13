@@ -5,6 +5,9 @@ public class Contact {
     private String Contact_Name;
     private String Email;
 
+    private String Last_Updated_By;
+
+
     public Contact() {
 
     }
