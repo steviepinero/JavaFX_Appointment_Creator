@@ -109,12 +109,7 @@ public class AppointmentController implements Initializable {
     private  String createdBy = LoginController.loggedInUser.getUser_Name();
     private int userId = LoginController.loggedInUser.getUser_ID();
 
-    public AppointmentController(TableColumn appointmentIdColumn, AppointmentDAO appointmentDAO, String lastUpdatedBy) {
-        this.appointment_ID_Column = appointmentIdColumn;
-        this.appointmentDAO = appointmentDAO;
-        this.lastUpdatedBy = lastUpdatedBy;
-    }
-
+ // TODO fix update and delete
     public AppointmentController() {
     }
 
@@ -256,7 +251,7 @@ public class AppointmentController implements Initializable {
 @FXML
     private void updateAppointment() {
 
-    this.selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
+    selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
 
     // Get the values from the text fields
         int appointmentId = appointmentTable.getSelectionModel().getSelectedItem().getAppointment_ID();
@@ -284,14 +279,13 @@ public class AppointmentController implements Initializable {
 
     @FXML
     private void deleteAppointment() {
+        DatabaseConnection.establishConnection();
         // Get selected appointment
-        this.selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
+        selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
 
         // Delete from database
-        appointmentDAO.deleteAppointment(this.selectedAppointment.getAppointment_ID());
+        appointmentDAO.deleteAppointment(selectedAppointment.getAppointment_ID());
 
-        // Delete from table
-        appointmentTable.getItems().remove(this.selectedAppointment);
 
         // Show dialog
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -299,6 +293,10 @@ public class AppointmentController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText("Appointment " + this.selectedAppointment.getAppointment_ID() + " has been deleted.");
         alert.showAndWait();
+
+        //Refresh table
+        appointmentTable.setItems(AppointmentDAO.getAllAppointments());
+        appointmentTable.refresh();
 
     }
 
@@ -317,10 +315,16 @@ public class AppointmentController implements Initializable {
         stage.setScene(scene);
     }
 
+    public void setAppointmentDAO(AppointmentDAO appointmentDAO) {
+        this.appointmentDAO = appointmentDAO;
+    }
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         DatabaseConnection.getConnection();
         setAppointmentTable();
+        setAppointmentDAO(appointmentDAO);
     }
 }

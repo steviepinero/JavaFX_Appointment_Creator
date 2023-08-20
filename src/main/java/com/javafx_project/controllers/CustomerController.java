@@ -258,8 +258,8 @@ public class CustomerController implements Initializable {
             preparedStatement.setString(6, createdBy);
             preparedStatement.setTimestamp(7, Timestamp.valueOf(LocalDate.now().atStartOfDay()));
             preparedStatement.setString(8, lastUpdatedBy);
-            preparedStatement.setString(9, String.valueOf(countryBox.getValue()));
-            preparedStatement.setString(10, String.valueOf(divisionBox.getValue()));
+            preparedStatement.setInt(9, countryBox.getValue().getCountry_ID());
+            preparedStatement.setInt(10, divisionBox.getValue().getDivision_ID());
             preparedStatement.executeUpdate();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
