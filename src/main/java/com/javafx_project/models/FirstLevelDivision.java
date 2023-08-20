@@ -28,6 +28,11 @@ public class FirstLevelDivision {
         this.Country_ID = countryId;
     }
 
+    public FirstLevelDivision(int divisionId, String divisionName) {
+        this.Division_ID = divisionId;
+        this.Division_Name = divisionName;
+    }
+
     public int getDivision_ID() {
         return Division_ID;
     }
@@ -91,6 +96,11 @@ public class FirstLevelDivision {
 
     public void setDivision_Name(String division_Name) {
         Division_Name = division_Name;
+    }
+
+    @Override
+    public String toString() {
+        return Division_ID + " - " + Division_Name;
     }
 }
 

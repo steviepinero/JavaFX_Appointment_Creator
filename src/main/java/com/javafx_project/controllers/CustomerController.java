@@ -97,6 +97,9 @@ public class CustomerController implements Initializable {
     private FirstLevelDivisionDAO firstLevelDivisionDAO;
     private UserDAO userdao;
 
+    public CustomerController() {
+    }
+
 
     @FXML
     public void populateCountryBox() {
@@ -123,7 +126,25 @@ public class CustomerController implements Initializable {
 
     @FXML
     private void populateDivisionBox() {
-        divisionBox.setItems(FirstLevelDivisionDAO.getAllDivisions());
+        String query = "SELECT * FROM divisions";
+        try {
+            // Check if connection is open
+            if (connection == null || connection.isClosed()) {
+                // Open connection
+                DatabaseConnection.establishConnection();
+            }
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                int divisionId = resultSet.getInt("Division_ID");
+                String divisionName = resultSet.getString("Division_Name");
+                FirstLevelDivision division = new FirstLevelDivision(divisionId, divisionName);
+                divisionBox.getItems().add(division);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            Logger.getLogger(FirstLevelDivisionController.class.getName()).log(Level.SEVERE, null, e);
+        }
 
     }
 
@@ -237,8 +258,8 @@ public class CustomerController implements Initializable {
             preparedStatement.setString(6, createdBy);
             preparedStatement.setTimestamp(7, Timestamp.valueOf(LocalDate.now().atStartOfDay()));
             preparedStatement.setString(8, lastUpdatedBy);
-            preparedStatement.setString(9, countryBox.getValue().toString());
-            preparedStatement.setString(10, divisionBox.getValue().toString());
+            preparedStatement.setString(9, String.valueOf(countryBox.getValue()));
+            preparedStatement.setString(10, String.valueOf(divisionBox.getValue()));
             preparedStatement.executeUpdate();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -292,8 +313,8 @@ public class CustomerController implements Initializable {
         createdByColumn.setCellValueFactory(new PropertyValueFactory<>("Created_By"));
         lastUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Update"));
         lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<>("Last_Updated_By"));
-        countryIdColumn.setCellValueFactory(new PropertyValueFactory<>("Country_ID"));
         divisionIdColumn.setCellValueFactory(new PropertyValueFactory<>("Division_ID"));
+        countryIdColumn.setCellValueFactory(new PropertyValueFactory<>("Country_ID"));
 
         populateCountryBox();
         populateDivisionBox();

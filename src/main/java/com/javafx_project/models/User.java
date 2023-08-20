@@ -1,6 +1,8 @@
 package com.javafx_project.models;
 
-public class User {
+import com.javafx_project.dao.UserDAO;
+
+public class User extends UserDAO {
     private int User_ID;
     private String User_Name;
 

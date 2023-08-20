@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.javafx_project.dao.*;
 import com.javafx_project.models.Appointment;
@@ -63,7 +65,7 @@ public class AppointmentController implements Initializable {
     @FXML
     private TableColumn<Appointment, LocalDate> startDateColumn;
     @FXML
-    private TableColumn<Appointment, Integer> user_ID_Column;
+    private TableColumn <Appointment, Integer> user_ID_Column;
     @FXML
     private TableColumn <Appointment, String> locationColumn;
     @FXML
@@ -71,9 +73,9 @@ public class AppointmentController implements Initializable {
     @FXML
     private TableColumn <Appointment, String> lastUpdatedByColumn;
     @FXML
-    private TableColumn <Appointment, String> createDateColumn;
+    private TableColumn <Appointment, Timestamp> createDateColumn;
     @FXML
-    private TableColumn <Appointment, String> lastUpdateColumn;
+    private TableColumn <Appointment, Timestamp> lastUpdateColumn;
 
     @FXML
     private Button deleteAppointmentButton;
@@ -105,6 +107,7 @@ public class AppointmentController implements Initializable {
     private ComboBox<Customer> customerBox;
     private String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
     private  String createdBy = LoginController.loggedInUser.getUser_Name();
+    private int userId = LoginController.loggedInUser.getUser_ID();
 
     public AppointmentController(TableColumn appointmentIdColumn, AppointmentDAO appointmentDAO, String lastUpdatedBy) {
         this.appointment_ID_Column = appointmentIdColumn;
@@ -187,14 +190,15 @@ public class AppointmentController implements Initializable {
     }
 
     @FXML
-    private void addAppointment(ActionEvent actionEvent) {
+    private void addAppointment() {
+        DatabaseConnection.establishConnection();
         String createdBy, lastUpdatedBy;
+        int loggedInUserID;
 
-       createdBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
+       createdBy = String.valueOf(loggedInUser.getUser_Name());
        lastUpdatedBy = createdBy;
 
-        UserDAO userDAO = new UserDAO();
-        User loggedInUserID = userDAO.getUserByUserId(loggedInUser.getUser_ID());
+        loggedInUserID = valueOf(userId);
         System.out.print("~Add Appt method \n");
 
         //save logged in userID to a variable
@@ -218,8 +222,9 @@ public class AppointmentController implements Initializable {
            preparedStatement.setObject(9, LocalDate.now());
            preparedStatement.setString(10, lastUpdatedBy);
            preparedStatement.setInt(11, customerBox.getValue().getCustomer_ID());
-           preparedStatement.setInt(12, loggedInUserID.getUser_ID());
+           preparedStatement.setInt(12, loggedInUserID);
            preparedStatement.setInt(13, contactBox.getValue().getContact_ID());
+           System.out.print("Add Appt method \n" + loggedInUserID);
            preparedStatement.executeUpdate();
 
            // Show dialog
@@ -243,8 +248,8 @@ public class AppointmentController implements Initializable {
            customerBox.getSelectionModel().clearSelection();
            contactBox.getSelectionModel().clearSelection();
 
-       } catch (Exception e) {
-           throw new RuntimeException(e);
+       } catch (SQLException e) {
+           Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, e);
        }
 
     }

@@ -51,6 +51,7 @@ public class UserDAO {
             User user = new User();
             user.setUser_Name(rs.getString("User_Name"));
             user.setPassword(rs.getString("Password"));
+            user.setUser_ID(rs.getInt("User_ID"));
             // set other fields if it becomes necessary
             return user;
         } else {
@@ -58,31 +59,26 @@ public class UserDAO {
         }
     }
 
-    public User getUserByUserId(int userId) {
+    public User getUserByUserId(int userId) throws SQLException {
         String query = "SELECT * FROM Users WHERE User_ID = ?";
-        PreparedStatement ps = null;
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, userId);
+        PreparedStatement ps = connection.prepareStatement(query);
+         ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 User user = new User();
                 user.setUser_ID(rs.getInt("User_ID"));
-                user.setUser_Name(rs.getString("User_Name"));
-                user.setPassword(rs.getString("Password"));
-                user.setCreate_Date(rs.getString("Create_Date"));
-                user.setCreated_By(rs.getString("Created_By"));
-                user.setLast_Update(rs.getString("Last_Update"));
-                user.setLast_Updated_By(rs.getString("Last_Updated_By"));
-                return user;
+//                user.setUser_Name(rs.getString("User_Name"));
+//                user.setPassword(rs.getString("Password"));
+//                user.setCreate_Date(rs.getString("Create_Date"));
+//                user.setCreated_By(rs.getString("Created_By"));
+//                user.setLast_Update(rs.getString("Last_Update"));
+//                user.setLast_Updated_By(rs.getString("Last_Updated_By"));
+               return user;
             } else {
                 return null;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
         }
-    }
+
 
     public static void deleteUser(int userId) {
         String query = "DELETE FROM Users WHERE User_ID = ?";
@@ -97,7 +93,7 @@ public class UserDAO {
     }
 
 
-
-
-
+    public UserDAO getUserIDByUsername(String enteredUsername) throws SQLException {
+        return getUserByUserId(userId);
+    }
 }

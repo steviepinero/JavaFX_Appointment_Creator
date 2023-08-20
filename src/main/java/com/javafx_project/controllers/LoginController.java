@@ -56,9 +56,18 @@ public class LoginController extends Pane {
         User user = userDAO.getUserByUsername(enteredUsername);
         System.out.print("~login method \n");
 
+        User userId = userDAO.getUserByUserId(user.getUser_ID());
+        System.out.print(userId);
         //save logged in username to a variable
         loggedInUser = user;
         System.out.print(loggedInUser);
+
+        //save logged in user_ID to a variable
+        User loggedInUserID = userId;
+        int savedID = loggedInUserID.getUser_ID();
+        System.out.println("Fetched User: " + savedID);
+        System.out.println("Fetched User_ID: " + loggedInUserID.getUser_ID());
+
 
         if (user != null && user.getPassword().equals(enteredPassword)) {
             // login successful
