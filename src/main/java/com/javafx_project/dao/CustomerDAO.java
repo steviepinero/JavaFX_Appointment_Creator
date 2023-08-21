@@ -9,12 +9,11 @@ import java.sql.*;
 
 public class CustomerDAO {
     public static ObservableList<Customer> getAllCustomers() {
+        String sql = "SELECT * FROM customers ORDER BY customer_id";
         ObservableList<Customer> customerList = FXCollections.observableArrayList();
 
-        String sql = "SELECT * FROM customers ORDER BY customer_id";
-
-        try {
-            PreparedStatement getCustomers = DatabaseConnection.getConnection().prepareStatement(sql);
+        try {Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement getCustomers = conn.prepareStatement(sql);
             ResultSet rs = getCustomers.executeQuery();
             {
 
@@ -38,11 +37,11 @@ public class CustomerDAO {
                 }
 
             }
+            return customerList;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return null;
         }
-        return customerList;
     }
 
 
@@ -94,7 +93,7 @@ public class CustomerDAO {
 
     }
 
-    public void deleteCustomer(int customerId) {
+    public static void deleteCustomer(int customerId) {
         String sql = "DELETE FROM customers WHERE customer_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();

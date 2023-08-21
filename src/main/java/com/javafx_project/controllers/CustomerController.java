@@ -154,7 +154,7 @@ public class CustomerController implements Initializable {
         DatabaseConnection.establishConnection();
         selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
         // Delete customer from database
-        customerDAO.deleteCustomer(selectedCustomer.getCustomer_ID());
+        CustomerDAO.deleteCustomer(selectedCustomer.getCustomer_ID());
         //display success message
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
@@ -162,9 +162,38 @@ public class CustomerController implements Initializable {
         alert.setContentText("Customer deleted successfully");
         alert.showAndWait();
         // Refresh table
+        DatabaseConnection.establishConnection();
         customerTable.setItems(CustomerDAO.getAllCustomers());
         customerTable.refresh();
 
+    }
+
+    @FXML
+    public void handleDeleteCustomer() {
+        // Get the selected customer from the table
+        Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+
+        if (selectedCustomer != null) {
+            // Delete the customer from the database
+            CustomerDAO.deleteCustomer(selectedCustomer.getCustomer_ID());
+
+            // Refresh the table
+            refreshCustomerTable();
+        } else {
+            // Display an alert or message to inform the user to select a customer
+            System.out.println("Please select a customer to delete.");
+        }
+    }
+
+    public void refreshCustomerTable() {
+        // Clear the current items in the table
+        customerTable.getItems().clear();
+
+        // Fetch the updated list of customers from the database
+        ObservableList<Customer> updatedCustomerList = CustomerDAO.getAllCustomers();
+
+        // Update the table with the new list
+        customerTable.setItems(updatedCustomerList);
     }
 
     @FXML

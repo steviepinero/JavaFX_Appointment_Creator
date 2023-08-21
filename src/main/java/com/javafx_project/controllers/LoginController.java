@@ -21,10 +21,10 @@ import java.sql.SQLException;
 public class LoginController extends Pane {
     public static User loggedInUser;
     @FXML
-    private TextField usernameField;
+    public TextField usernameField;
 
     @FXML
-    private PasswordField passwordField;
+    public PasswordField passwordField;
 
     @FXML
     private Button loginButton;
@@ -45,7 +45,7 @@ public class LoginController extends Pane {
     }
 
     @FXML
-    private void login(ActionEvent event) throws SQLException {
+    public void login(ActionEvent event) throws SQLException {
         // Establish connection
         DatabaseConnection.establishConnection();
 
