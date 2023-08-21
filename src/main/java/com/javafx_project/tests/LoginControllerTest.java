@@ -12,6 +12,8 @@ import java.sql.SQLException;
 
 import static javafx.beans.binding.Bindings.when;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 public class LoginControllerTest {
 //TODO create tests for crud operations and fix login test
     private LoginController controller;
