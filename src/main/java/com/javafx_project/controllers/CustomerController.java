@@ -163,8 +163,6 @@ public class CustomerController implements Initializable {
             alert.setContentText("Customer deleted successfully");
             alert.showAndWait();
 
-            // Refresh the table
-            refreshCustomerTable();
         } else {
             // Display an alert or message to inform the user to select a customer
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -176,23 +174,13 @@ public class CustomerController implements Initializable {
         }
 
         // Refresh table
-        DatabaseConnection.establishConnection();
+        DatabaseConnection.getConnection();
         customerTable.setItems(CustomerDAO.getAllCustomers());
         customerTable.refresh();
 
     }
 
 
-    public void refreshCustomerTable() {
-        // Clear the current items in the table
-        customerTable.getItems().clear();
-
-        // Fetch the updated list of customers from the database
-        ObservableList<Customer> updatedCustomerList = CustomerDAO.getAllCustomers();
-
-        // Update the table with the new list
-        customerTable.setItems(updatedCustomerList);
-    }
 
     @FXML
     public void updateCustomer(ActionEvent actionEvent) {
@@ -205,26 +193,8 @@ public class CustomerController implements Initializable {
         String lastUpdatedBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
 
 
-        //Update fields with selectedCustomer data
-        customerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                //get selected customer from table
-                Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
-
-                // Update text fields
-                customerNameField.setText(selectedCustomer.getCustomer_Name());
-                addressField.setText(selectedCustomer.getAddress());
-                postalCodeField.setText(selectedCustomer.getPostal_Code());
-                phoneNumberField.setText(selectedCustomer.getPhone());
-
-                // Update combo boxes
-//                countryBox.setValue(selectedCustomer.getCountry_ID());
-//                divisionBox.setValue(selectedCustomer.getDivision_ID());
-            }
-        });
-
-        // Get customer id from database
-        int customerId = selectedCustomer.getCustomer_ID();
+        // Get customer id from selected customer
+        int customerId = customerTable.getSelectionModel().getSelectedItem().getCustomer_ID();
 
 
         try {

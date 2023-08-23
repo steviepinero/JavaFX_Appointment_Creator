@@ -248,56 +248,81 @@ public class AppointmentController implements Initializable {
        }
 
     }
-@FXML
-    private void updateAppointment() throws SQLException {
+    @FXML
+    public void updateAppointment(ActionEvent actionEvent) {
         DatabaseConnection.establishConnection();
-        // Get selected appointment
-    selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
 
-    if (connection == null || connection.isClosed()) {
-        // Open connection
-        DatabaseConnection.establishConnection();
-    }
-    // Get the values from the text fields
-        int appointmentId = appointmentTable.getSelectionModel().getSelectedItem().getAppointment_ID();
-        String title = titleField.getText();
-        String description = descriptionField.getText();
-        String location = locationField.getText();
-        String type = typeBox.getValue();
-        LocalDate startDate = startDatePicker.getValue();
-        LocalDate endDate = endDatePicker.getValue();
-        int customerId = customerBox.getValue().getCustomer_ID();
-        int contactId = contactBox.getValue().getContact_ID();
-        String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
+        String title, description, location, type, lastUpdatedBy;
+        LocalDate startDate, endDate;
+        int customerId, contactId, appointmentId;
 
-        if (selectedAppointment != null) {
-            // Create a new Appointment object
-            Appointment updatedAppointment = new Appointment(appointmentId, title, description, location, type, startDate, endDate, customerId, contactId, lastUpdatedBy);
+        title = titleField.getText();
+        description = descriptionField.getText();
+        location = locationField.getText();
+        type = typeBox.getValue();
+        startDate = startDatePicker.getValue();
+        endDate = endDatePicker.getValue();
+        customerId = customerBox.getValue().getCustomer_ID();
+        contactId = contactBox.getValue().getContact_ID();
+        lastUpdatedBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
 
-            // Update database
-            appointmentDAO.updateAppointment(updatedAppointment);
 
-            // Update table
-            appointmentTable.getItems().set(appointmentTable.getSelectionModel().getSelectedIndex(), updatedAppointment);
-        } else {
-        // Display an alert or message to inform the user to select a customer
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error");
-            alert.setContentText("Please select an item to update");
+        // Get appointment id from selected appointment
+        appointmentId = appointmentTable.getSelectionModel().getSelectedItem().getAppointment_ID();
+
+
+        try {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, Contact_ID = ?, Last_Update = NOW(), Last_Updated_By = ? WHERE Appointment_ID = ?");
+
+            preparedStatement.setString(1, title);
+            preparedStatement.setString(2, description);
+            preparedStatement.setString(3, location);
+            preparedStatement.setString(4, type);
+            preparedStatement.setDate(5, Date.valueOf(startDate));
+            preparedStatement.setDate(6, Date.valueOf(endDate));
+            preparedStatement.setInt(7, customerId);
+            preparedStatement.setInt(8, contactId);
+            preparedStatement.setString(9, lastUpdatedBy);
+            preparedStatement.setInt(10, appointmentId);
+            preparedStatement.executeUpdate();
+
+
+
+            //display success message
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Appointment updated");
+            alert.setContentText("Appointment updated successfully");
             alert.showAndWait();
-            System.out.println("Please select an item to update.");
 
+            setAppointmentTable();
+            appointmentTable.setItems(AppointmentDAO.getAllAppointments());
+            appointmentTable.refresh();
+
+            // Clear text fields
+            titleField.clear();
+            descriptionField.clear();
+            locationField.clear();
+            typeBox.getSelectionModel().clearSelection();
+            startDatePicker.setValue(null);
+            endDatePicker.setValue(null);
+            customerBox.getSelectionModel().clearSelection();
+            contactBox.getSelectionModel().clearSelection();
+
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
 
     @FXML
-    private void deleteAppointment() {
+    private void deleteAppointment(ActionEvent actionEvent) {
         DatabaseConnection.establishConnection();
         // Get selected appointment
         selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
+
     if (selectedAppointment != null) {
         // Delete from database
         appointmentDAO.deleteAppointment(selectedAppointment.getAppointment_ID());
