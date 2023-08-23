@@ -211,9 +211,28 @@ public class FirstLevelDivisionController implements Initializable {
         }
     }
 
+    @FXML
+    private void handleTableRowClick() {
+        // Get the selected appointment from the table
+        FirstLevelDivision selectedDivision = divisionTable.getSelectionModel().getSelectedItem();
+
+        if (selectedDivision != null) {
+            // Populate the fields with the selected Division's data
+            divisionNameField.setText(selectedDivision.getDivision_Name());
+            countryComboBox.setValue(new Country(selectedDivision.getCountry_ID(), ""));
+
+        }
+    }
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         DatabaseConnection.establishConnection();
         setDivisionTable();
+        divisionTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                handleTableRowClick();
+            }
+        });
     }
 }

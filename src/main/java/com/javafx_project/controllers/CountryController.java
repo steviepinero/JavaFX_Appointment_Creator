@@ -184,10 +184,30 @@ public class CountryController implements Initializable {
         stage.setScene(scene);
     }
 
+
+    @FXML
+    private void handleTableRowClick() {
+        // Get the selected appointment from the table
+        Country selectedCountry = countryTable.getSelectionModel().getSelectedItem();
+
+        if (selectedCountry != null) {
+            // Populate the fields with the selected Coutnry's data
+            countryNameField.setText(selectedCountry.getCountry_Name());
+
+
+        }
+    }
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         DatabaseConnection.establishConnection();
         setCountryTable();
+        countryTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                handleTableRowClick();
+            }
+        });
 
     }
 }

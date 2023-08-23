@@ -3,6 +3,8 @@ package com.javafx_project.controllers;
 import com.javafx_project.dao.AppointmentDAO;
 import com.javafx_project.dao.DatabaseConnection;
 import com.javafx_project.models.Appointment;
+import com.javafx_project.models.Country;
+import com.javafx_project.models.FirstLevelDivision;
 import com.javafx_project.models.User;
 import com.javafx_project.dao.UserDAO;
 import javafx.collections.ObservableList;
@@ -223,11 +225,30 @@ public class UserController implements Initializable {
         stage.setScene(scene);
     }
 
+    @FXML
+    private void handleTableRowClick() {
+        // Get the selected appointment from the table
+        User selectedUser = userTable.getSelectionModel().getSelectedItem();
+
+        if (selectedUser != null) {
+            // Populate the fields with the selected Uszer's data
+            userNameField.setText(selectedUser.getUser_Name());
+            passwordField.setText(selectedUser.getPassword());
+
+
+        }
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         DatabaseConnection.getConnection();
         setTable();
+        userTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                handleTableRowClick();
+            }
+        });
     }
 }

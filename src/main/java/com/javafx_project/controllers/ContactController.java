@@ -188,10 +188,29 @@ public class ContactController implements Initializable {
 
     }
 
+    @FXML
+    private void handleTableRowClick() {
+        // Get the selected appointment from the table
+        Contact selectedContact = contactTable.getSelectionModel().getSelectedItem();
+
+        if (selectedContact != null) {
+            // Populate the fields with the selected contact's data
+            contactNameField.setText(selectedContact.getContact_Name());
+            emailField.setText(selectedContact.getEmail());
+
+        }
+    }
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         DatabaseConnection.establishConnection();
         setContactTable();
+        contactTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                handleTableRowClick();
+            }
+        });
 
     }
 }

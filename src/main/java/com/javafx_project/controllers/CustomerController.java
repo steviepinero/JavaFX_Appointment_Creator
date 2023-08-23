@@ -347,13 +347,36 @@ public class CustomerController implements Initializable {
         populateDivisionBox();
     }
 
+    @FXML
+    private void handleTableRowClick() {
+        // Get the selected appointment from the table
+        Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+
+        if (selectedCustomer != null) {
+            // Populate the fields with the selected customer's's data
+            customerNameField.setText(selectedCustomer.getCustomer_Name());
+            addressField.setText(selectedCustomer.getAddress());
+            postalCodeField.setText(selectedCustomer.getPostal_Code());
+            phoneNumberField.setText(selectedCustomer.getPhone());
+            countryBox.setValue(new Country(selectedCustomer.getCountry_ID(), ""));
+            divisionBox.setValue(new FirstLevelDivision(selectedCustomer.getDivision_ID(), ""));
+
+
+        }
+    }
+
+
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         DatabaseConnection.getConnection();
         setCustomerTable();
-
+        // add listener for the table's selection model
+        customerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                handleTableRowClick();
+            }
+        });
     }
 }

@@ -249,10 +249,15 @@ public class AppointmentController implements Initializable {
 
     }
 @FXML
-    private void updateAppointment() {
-
+    private void updateAppointment() throws SQLException {
+        DatabaseConnection.establishConnection();
+        // Get selected appointment
     selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
 
+    if (connection == null || connection.isClosed()) {
+        // Open connection
+        DatabaseConnection.establishConnection();
+    }
     // Get the values from the text fields
         int appointmentId = appointmentTable.getSelectionModel().getSelectedItem().getAppointment_ID();
         String title = titleField.getText();
@@ -265,16 +270,27 @@ public class AppointmentController implements Initializable {
         int contactId = contactBox.getValue().getContact_ID();
         String lastUpdatedBy = LoginController.loggedInUser.getUser_Name();
 
-        // Create a new Appointment object
-        Appointment updatedAppointment = new Appointment(appointmentId, title, description, location, type, startDate, endDate, customerId, contactId, lastUpdatedBy);
+        if (selectedAppointment != null) {
+            // Create a new Appointment object
+            Appointment updatedAppointment = new Appointment(appointmentId, title, description, location, type, startDate, endDate, customerId, contactId, lastUpdatedBy);
 
-        // Update database
-        appointmentDAO.updateAppointment(updatedAppointment);
+            // Update database
+            appointmentDAO.updateAppointment(updatedAppointment);
 
-        // Update table
-        appointmentTable.getItems().set(appointmentTable.getSelectionModel().getSelectedIndex(), updatedAppointment);
+            // Update table
+            appointmentTable.getItems().set(appointmentTable.getSelectionModel().getSelectedIndex(), updatedAppointment);
+        } else {
+        // Display an alert or message to inform the user to select a customer
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Please select an item to update");
+            alert.showAndWait();
+            System.out.println("Please select an item to update.");
 
-            }
+        }
+
+    }
 
 
     @FXML
@@ -328,6 +344,25 @@ public class AppointmentController implements Initializable {
         this.appointmentDAO = appointmentDAO;
     }
 
+    @FXML
+    private void handleTableRowClick() {
+        // Get the selected appointment from the table
+        Appointment selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
+
+        if (selectedAppointment != null) {
+            // Populate the fields with the selected appointment's data
+            titleField.setText(selectedAppointment.getTitle());
+            descriptionField.setText(selectedAppointment.getDescription());
+            locationField.setText(selectedAppointment.getLocation());
+            typeBox.setValue(selectedAppointment.getType());
+            startDatePicker.setValue(selectedAppointment.getStart());
+            endDatePicker.setValue(selectedAppointment.getEnd());
+            customerBox.setValue(new Customer(selectedAppointment.getCustomer_ID(), ""));
+            contactBox.setValue(new Contact(selectedAppointment.getContact_ID(), ""));
+        }
+    }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -335,5 +370,11 @@ public class AppointmentController implements Initializable {
         DatabaseConnection.getConnection();
         setAppointmentTable();
         setAppointmentDAO(appointmentDAO);
+        // Add a listener to the table's selection model
+        appointmentTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                handleTableRowClick();
+            }
+        });
     }
 }
