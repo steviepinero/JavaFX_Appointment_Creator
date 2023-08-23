@@ -5,6 +5,7 @@ import com.javafx_project.dao.UserDAO;
 import com.javafx_project.models.User;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.event.ActionEvent;
+import org.mockito.Mockito;
 import org.testng.annotations.Test;
 import org.junit.Before;
 
@@ -45,7 +46,7 @@ public class LoginControllerTest {
     public void testFailedLogin() throws SQLException {
         User mockUser = new User(1, "test", "wrongpassword");
 
-        when(mockUserDAO.getUserByUsername("test")).thenReturn(mockUser);
+        when((ObservableBooleanValue) mockUserDAO.getUserByUsername("test")).then(mockUser);
 
         controller.usernameField.setText("test");
         controller.passwordField.setText("password");

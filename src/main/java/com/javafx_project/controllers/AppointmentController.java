@@ -282,7 +282,7 @@ public class AppointmentController implements Initializable {
         DatabaseConnection.establishConnection();
         // Get selected appointment
         selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
-
+    if (selectedAppointment != null) {
         // Delete from database
         appointmentDAO.deleteAppointment(selectedAppointment.getAppointment_ID());
 
@@ -297,6 +297,15 @@ public class AppointmentController implements Initializable {
         //Refresh table
         appointmentTable.setItems(AppointmentDAO.getAllAppointments());
         appointmentTable.refresh();
+    } else {
+            // Display an alert or message to inform the user to select a customer
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Please select an item to delete");
+            alert.showAndWait();
+            System.out.println("Please select an item to delete.");
+        }
 
     }
 

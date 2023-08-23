@@ -153,14 +153,28 @@ public class CustomerController implements Initializable {
         // Get selected customer from table
         DatabaseConnection.establishConnection();
         selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
-        // Delete customer from database
-        CustomerDAO.deleteCustomer(selectedCustomer.getCustomer_ID());
-        //display success message
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText("Customer deleted");
-        alert.setContentText("Customer deleted successfully");
-        alert.showAndWait();
+        if (selectedCustomer != null) {
+            // Delete the customer from the database
+            CustomerDAO.deleteCustomer(selectedCustomer.getCustomer_ID());
+            //display success message
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Customer deleted");
+            alert.setContentText("Customer deleted successfully");
+            alert.showAndWait();
+
+            // Refresh the table
+            refreshCustomerTable();
+        } else {
+            // Display an alert or message to inform the user to select a customer
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Please select a customer to delete");
+            alert.showAndWait();
+            System.out.println("Please select a customer to delete.");
+        }
+
         // Refresh table
         DatabaseConnection.establishConnection();
         customerTable.setItems(CustomerDAO.getAllCustomers());
@@ -168,22 +182,6 @@ public class CustomerController implements Initializable {
 
     }
 
-    @FXML
-    public void handleDeleteCustomer() {
-        // Get the selected customer from the table
-        Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
-
-        if (selectedCustomer != null) {
-            // Delete the customer from the database
-            CustomerDAO.deleteCustomer(selectedCustomer.getCustomer_ID());
-
-            // Refresh the table
-            refreshCustomerTable();
-        } else {
-            // Display an alert or message to inform the user to select a customer
-            System.out.println("Please select a customer to delete.");
-        }
-    }
 
     public void refreshCustomerTable() {
         // Clear the current items in the table

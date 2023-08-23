@@ -171,7 +171,6 @@ public class UserController implements Initializable {
             alert.setHeaderText("Error");
             alert.setContentText("Please select a user to delete");
             alert.showAndWait();
-            return;
         } else {
             /** Check if user has any upcoming appointments */
             for (Appointment appointment : appointmentList) {
@@ -192,6 +191,12 @@ public class UserController implements Initializable {
             if (alert.getResult() == ButtonType.OK) {
                 //user deleted from database
                 UserDAO.deleteUser(selectedUser.getUser_ID());
+
+                Alert alertSuccess = new Alert(Alert.AlertType.INFORMATION);
+                alertSuccess.setTitle("Success");
+                alertSuccess.setHeaderText("User deleted");
+                alertSuccess.setContentText("User" + selectedUser.getUser_Name() + "deleted successfully");
+                alertSuccess.showAndWait();
 
                 //console message verifying delete
                 System.out.println("User" + selectedUser.getUser_Name() + "deleted");

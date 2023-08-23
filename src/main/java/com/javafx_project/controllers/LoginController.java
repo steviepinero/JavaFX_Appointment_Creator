@@ -25,6 +25,7 @@ public class LoginController extends Pane {
 
     @FXML
     public PasswordField passwordField;
+    public UserDAO userDAO;
 
     @FXML
     private Button loginButton;

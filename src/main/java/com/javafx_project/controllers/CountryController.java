@@ -146,17 +146,28 @@ public class CountryController implements Initializable {
         int country_ID;
         selectedCountry = countryTable.getSelectionModel().getSelectedItem();
         country_ID = selectedCountry.getCountry_ID();
-        CountryDAO.deleteCountry(country_ID);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText("Country deleted");
-        alert.setContentText("Country deleted successfully");
-        alert.showAndWait();
+        if (selectedCountry != null) {
+            CountryDAO.deleteCountry(country_ID);
 
-        setCountryTable();
-        countryTable.setItems(CountryDAO.getAllCountries());
-        countryTable.refresh();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Country deleted");
+            alert.setContentText("Country deleted successfully");
+            alert.showAndWait();
+
+            setCountryTable();
+            countryTable.setItems(CountryDAO.getAllCountries());
+            countryTable.refresh();
+        } else {
+            // Display an alert or message to inform the user to select a customer
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Please select an item to delete");
+            alert.showAndWait();
+            System.out.println("Please select an item to delete.");
+        }
     }
 
     public void backButtonAction(ActionEvent actionEvent) throws IOException {

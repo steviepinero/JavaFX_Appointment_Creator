@@ -30,6 +30,10 @@ public class User extends UserDAO {
         this.Last_Updated_By = lastUpdatedBy;
     }
 
+    public User(int user_ID, String test, String password) {
+        super();
+    }
+
     // getters and setters
 
     public int getUser_ID() {
