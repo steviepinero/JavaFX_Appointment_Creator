@@ -110,6 +110,17 @@ public class Appointment {
 
     }
 
+    public Appointment(int appointmentId, String title, String type, String description, LocalDateTime start, LocalDateTime end, int customerId) {
+        this.appointment_ID = appointmentId;
+        this.title = title;
+        this.type = type;
+        this.description = description;
+        this.start = LocalDate.from(start);
+        this.end = LocalDate.from(end);
+        this.customer_ID = customerId;
+
+    }
+
 
     // getters and setters
 

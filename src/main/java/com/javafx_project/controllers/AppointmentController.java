@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -183,6 +186,17 @@ public class AppointmentController implements Initializable {
         // Add all types to the typeBox
         typeBox.getItems().addAll(allTypes);
     }
+    //Converts local time to UTC time
+    public LocalDateTime convertLocalToUTC(LocalDateTime localDateTime) {
+        return localDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+    }
+
+    //Converts UTC time to local time
+    public LocalDateTime convertUTCToLocal(LocalDateTime utcDateTime) {
+        return utcDateTime.atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+
 
     @FXML
     private void addAppointment() {
