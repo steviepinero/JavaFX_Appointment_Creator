@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,17 +84,23 @@ public class FirstLevelDivisionController implements Initializable {
 
     @FXML
     public void addDivision(ActionEvent actionEvent) {
-        String divisionName, country;
+        String divisionName, country, createdBy, lastUpdatedBy;
         Integer countryId;
         divisionName = divisionNameField.getText();
         countryId = countryComboBox.getValue().getCountry_ID();
         country = String.valueOf(valueOf(countryId.toString()));
+        createdBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
+        lastUpdatedBy = createdBy;
         DatabaseConnection.establishConnection();
 
         try {
-            PreparedStatement addDivision = DatabaseConnection.getConnection().prepareStatement("INSERT INTO divisions (Division_Name, Country_ID) VALUES (?, ?)");
+            PreparedStatement addDivision = DatabaseConnection.getConnection().prepareStatement("INSERT INTO divisions (Division_Name, Country_ID, Create_Date, Created_By, Last_Update, Last_Updated_By) VALUES (?, ?, ?, ?, ?, ?)");
             addDivision.setString(1, divisionName);
             addDivision.setInt(2, countryId);
+            addDivision.setDate(3, Date.valueOf(LocalDate.now()));
+            addDivision.setString(4, createdBy);
+            addDivision.setDate(5, Date.valueOf(LocalDate.now()));
+            addDivision.setString(6, lastUpdatedBy);
             addDivision.executeUpdate();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -124,10 +131,12 @@ public class FirstLevelDivisionController implements Initializable {
         Integer countryId = countryComboBox.getValue().getCountry_ID();
 
         try {
-            PreparedStatement updateDivision = DatabaseConnection.getConnection().prepareStatement("UPDATE divisions SET Division_Name = ?, Country_ID = ? WHERE Division_ID = ?");
+            PreparedStatement updateDivision = DatabaseConnection.getConnection().prepareStatement("UPDATE divisions SET Division_Name = ?, Country_ID = ?, Last_Update = ?, Last_Updated_By = ? WHERE Division_ID = ?");
             updateDivision.setString(1, divisionName);
             updateDivision.setInt(2, countryId);
-            updateDivision.setInt(3, divisionId);
+            updateDivision.setDate(3, Date.valueOf(LocalDate.now()));
+            updateDivision.setString(4, String.valueOf(LoginController.loggedInUser.getUser_Name()));
+            updateDivision.setInt(5, divisionId);
             updateDivision.executeUpdate();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

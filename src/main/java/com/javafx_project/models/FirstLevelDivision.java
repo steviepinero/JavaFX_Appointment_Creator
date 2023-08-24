@@ -1,5 +1,7 @@
 package com.javafx_project.models;
 
+import java.sql.Date;
+
 public class FirstLevelDivision {
     //This is like 'States' in the United States
     private int Division_ID;
@@ -8,11 +10,11 @@ public class FirstLevelDivision {
 
     private String division;
 
-    private String Create_Date;
+    private Date Create_Date;
 
     private String Created_By;
 
-    private String Last_Update;
+    private Date Last_Update;
 
     private String Last_Updated_By;
 
@@ -22,16 +24,22 @@ public class FirstLevelDivision {
 
     }
 
-    public FirstLevelDivision(Integer divisionId, String divisionName, Integer countryId) {
+    public FirstLevelDivision(Integer divisionId, String divisionName, Integer countryId, Date Create_Date, String Created_By, Date Last_Update, String Last_Updated_By) {
         this.Division_ID = divisionId;
         this.Division_Name = divisionName;
         this.Country_ID = countryId;
+        this.Create_Date = Create_Date;
+        this.Created_By = Created_By;
+        this.Last_Update = Last_Update;
+        this.Last_Updated_By = Last_Updated_By;
     }
 
     public FirstLevelDivision(int divisionId, String divisionName) {
         this.Division_ID = divisionId;
         this.Division_Name = divisionName;
     }
+
+
 
     public int getDivision_ID() {
         return Division_ID;
@@ -49,12 +57,12 @@ public class FirstLevelDivision {
         this.division = division;
     }
 
-    public String getCreate_Date() {
+    public Date getCreate_Date() {
         return Create_Date;
     }
 
     public void setCreate_Date(String create_Date) {
-        this.Create_Date = create_Date;
+        this.Create_Date = Date.valueOf(create_Date);
     }
 
     public String getCreated_By() {
@@ -65,12 +73,12 @@ public class FirstLevelDivision {
         this.Created_By = created_By;
     }
 
-    public String getLast_Update() {
+    public Date getLast_Update() {
         return Last_Update;
     }
 
     public void setLast_Update(String last_Update) {
-        this.Last_Update = last_Update;
+        this.Last_Update = Date.valueOf(last_Update);
     }
 
     public String getLast_Updated_By() {

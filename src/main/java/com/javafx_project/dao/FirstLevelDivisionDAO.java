@@ -3,6 +3,7 @@ package com.javafx_project.dao;
 import com.javafx_project.models.FirstLevelDivision;
 import javafx.collections.ObservableList;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +22,11 @@ public class FirstLevelDivisionDAO {
                      Integer division_ID = rs.getInt("Division_ID");
                      String division_Name = rs.getString("Division_Name");
                      Integer country_ID = rs.getInt("Country_ID");
-                     FirstLevelDivision division = new FirstLevelDivision(division_ID, division_Name, country_ID);
+                     Date create_Date = rs.getDate("Create_Date");
+                     String created_By = rs.getString("Created_By");
+                     Date last_Update = rs.getDate("Last_Update");
+                     String last_Updated_By = rs.getString("Last_Updated_By");
+                     FirstLevelDivision division = new FirstLevelDivision(division_ID, division_Name, country_ID, create_Date, created_By, last_Update, last_Updated_By);
 
                      divisionList.add(division);
                  }
