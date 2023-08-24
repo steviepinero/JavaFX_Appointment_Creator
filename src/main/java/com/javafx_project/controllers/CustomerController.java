@@ -342,6 +342,7 @@ public class CustomerController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         DatabaseConnection.getConnection();
         setCustomerTable();
+        this.customerDAO = new CustomerDAO();
         // add listener for the table's selection model
         customerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {

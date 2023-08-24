@@ -8,6 +8,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static com.javafx_project.dao.DatabaseConnection.connection;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 public class AppointmentDAO {
@@ -52,13 +53,13 @@ public class AppointmentDAO {
         //delete appointment from database
         String sql = "DELETE FROM appointments WHERE appointment_id = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, appointmentId);
-            pstmt.executeUpdate();
+        PreparedStatement ps = null;
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, appointmentId);
+            ps.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

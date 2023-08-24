@@ -394,7 +394,7 @@ public class AppointmentController implements Initializable {
 
         DatabaseConnection.getConnection();
         setAppointmentTable();
-        setAppointmentDAO(appointmentDAO);
+        this.appointmentDAO = new AppointmentDAO();
         // Add a listener to the table's selection model
         appointmentTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
