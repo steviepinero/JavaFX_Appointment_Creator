@@ -90,9 +90,17 @@ public class AppointmentController implements Initializable {
 
     @FXML
     private DatePicker startDatePicker;
+    @FXML
+    private ComboBox<String> startHourComboBox;
+    @FXML
+    private ComboBox<String> startMinuteComboBox;
 
     @FXML
     private DatePicker endDatePicker;
+    @FXML
+    private ComboBox<String> endHourComboBox;
+    @FXML
+    private ComboBox<String> endMinuteComboBox;
 
     @FXML
     private TextField titleField;
@@ -112,7 +120,9 @@ public class AppointmentController implements Initializable {
     private  String createdBy = LoginController.loggedInUser.getUser_Name();
     private int userId = LoginController.loggedInUser.getUser_ID();
 
- // TODO fix update and delete
+
+
+    // TODO fix update and delete
     public AppointmentController() {
     }
 
@@ -158,6 +168,95 @@ public class AppointmentController implements Initializable {
         }
     }
 
+    public void timePopulater() {
+        populateStartComboBoxes();
+        populateEndComboBoxes();
+    }
+
+    public void populateStartComboBoxes() {
+        // Populate the start hour combo box
+        for (int i = 0; i < 24; i++) {
+            if (i < 10) {//puts 0 in front of numbers less than 10
+                startHourComboBox.getItems().add("0" + i);
+            } else {
+                startHourComboBox.getItems().add(String.valueOf(i));
+            }
+        }
+
+        // Populate the start minute combo box
+        for (int i = 0; i < 60; i++) {
+            if (i < 10) {//puts 0 in front of numbers less than 10
+                startMinuteComboBox.getItems().add("0" + i);
+            } else {
+                startMinuteComboBox.getItems().add(String.valueOf(i));
+            }
+        }
+    }
+
+    public void populateEndComboBoxes() {
+        // Populate the end hour combo box
+        for (int i = 0; i < 24; i++) {
+            if (i < 10) {//puts 0 in front of numbers less than 10
+                endHourComboBox.getItems().add("0" + i);
+            } else {
+                endHourComboBox.getItems().add(String.valueOf(i));
+            }
+        }
+
+        // Populate the end minute combo box
+        for (int i = 0; i < 60; i++) {
+            if (i < 10) {//puts 0 in front of numbers less than 10
+                endMinuteComboBox.getItems().add("0" + i);
+            } else {
+                endMinuteComboBox.getItems().add(String.valueOf(i));
+            }
+        }
+
+    }
+
+    public void dateTimeSetter() {
+        setStartDateTime();
+        setEndDateTime();
+    }
+
+    public void setStartDateTime() {
+        // Get the selected date from the date picker
+        LocalDate selectedDate = startDatePicker.getValue();
+        // Get the selected hour from the combo box
+        String selectedHour = startHourComboBox.getValue();
+        // Get the selected minute from the combo box
+        String selectedMinute = startMinuteComboBox.getValue();
+        // Convert the selected hour and minute to an integer
+        int hour = parseInt(selectedHour);
+        int minute = parseInt(selectedMinute);
+        // Create a LocalDateTime object from the selected date, hour, and minute
+        LocalDateTime startDateTime = LocalDateTime.of(selectedDate.getYear(), selectedDate.getMonthValue(), selectedDate.getDayOfMonth(), hour, minute);
+        // Convert the LocalDateTime object to UTC
+        LocalDateTime startDateTimeUTC = convertLocalToUTC(startDateTime);
+        // Set the end date picker to the converted UTC date
+        startDatePicker.setValue(startDateTimeUTC.toLocalDate());
+    }
+
+    public void setEndDateTime() {
+        // Get the selected date from the date picker
+        LocalDate selectedDate = endDatePicker.getValue();
+        // Get the selected hour from the combo box
+        String selectedHour = endHourComboBox.getValue();
+        // Get the selected minute from the combo box
+        String selectedMinute = endMinuteComboBox.getValue();
+        // Convert the selected hour and minute to an integer
+        int hour = parseInt(selectedHour);
+        int minute = parseInt(selectedMinute);
+        // Create a LocalDateTime object from the selected date, hour, and minute
+        LocalDateTime endDateTime = LocalDateTime.of(selectedDate.getYear(), selectedDate.getMonthValue(), selectedDate.getDayOfMonth(), hour, minute);
+        // Convert the LocalDateTime object to UTC
+        LocalDateTime endDateTimeUTC = convertLocalToUTC(endDateTime);
+        // Set the end date picker to the converted UTC date
+        endDatePicker.setValue(endDateTimeUTC.toLocalDate());
+    }
+
+    //TODO properly insert time value into the sql db, display timestamps instead of dates.
+    // TODO display alert on login if user has an appointment that occurs within 15 minutes of the current time
 
     private void setAppointmentTable() {
         // Set up the columns in the table
@@ -177,15 +276,18 @@ public class AppointmentController implements Initializable {
         user_ID_Column.setCellValueFactory(new PropertyValueFactory<>("User_ID"));
         contactColumn.setCellValueFactory(new PropertyValueFactory<>("Contact_ID"));
 
-
+        //populate combo boxes
         populateContactBox();
         populateCustomerBox();
+        timePopulater();
 
         // List of all types
          List<String> allTypes = Arrays.asList("Planning Session", "De-Briefing", "Scrum", "Presentation", "Consultation", "Interview", "Training", "Other");
         // Add all types to the typeBox
         typeBox.getItems().addAll(allTypes);
     }
+
+
     //Converts local time to UTC time
     public LocalDateTime convertLocalToUTC(LocalDateTime localDateTime) {
         return localDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
@@ -218,6 +320,7 @@ public class AppointmentController implements Initializable {
                // Open connection
                DatabaseConnection.establishConnection();
            }
+
            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
            preparedStatement.setString(1, titleField.getText());
