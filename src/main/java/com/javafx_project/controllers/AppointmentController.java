@@ -312,6 +312,22 @@ public class AppointmentController implements Initializable {
         loggedInUserID = valueOf(userId);
         System.out.print("~Add Appt method \n");
 
+        Timestamp sqlEndTimestamp = null;
+        Timestamp sqlStartTimestamp = null;
+        // Convert the date and time from the UI controls into a LocalDateTime object
+        LocalDate startDate = startDatePicker.getValue();
+        int startHour = Integer.parseInt(startHourComboBox.getValue());
+        int startMinute = Integer.parseInt(startMinuteComboBox.getValue());
+        LocalDateTime startDateTime = startDate.atTime(startHour, startMinute);
+
+        LocalDate endDate = endDatePicker.getValue();
+        int endHour = Integer.parseInt(endHourComboBox.getValue());
+        int endMinute = Integer.parseInt(endMinuteComboBox.getValue());
+        LocalDateTime endDateTime = endDate.atTime(endHour, endMinute);
+
+        sqlStartTimestamp = Timestamp.valueOf(startDateTime);
+        sqlEndTimestamp = Timestamp.valueOf(endDateTime);
+
         //save logged in userID to a variable
 
         System.out.print(loggedInUserID);
@@ -327,8 +343,8 @@ public class AppointmentController implements Initializable {
            preparedStatement.setString(2, descriptionField.getText());
            preparedStatement.setString(3, locationField.getText());
            preparedStatement.setString(4, typeBox.getValue());
-           preparedStatement.setDate(5, Date.valueOf(startDatePicker.getValue()));
-           preparedStatement.setObject(6, Date.valueOf(endDatePicker.getValue()));
+           preparedStatement.setTimestamp(5, sqlStartTimestamp);
+           preparedStatement.setTimestamp(6, sqlEndTimestamp);
            preparedStatement.setObject(7, LocalDate.now());
            preparedStatement.setString(8, createdBy);
            preparedStatement.setObject(9, LocalDate.now());
@@ -338,6 +354,9 @@ public class AppointmentController implements Initializable {
            preparedStatement.setInt(13, contactBox.getValue().getContact_ID());
            System.out.print("Add Appt method \n" + loggedInUserID);
            preparedStatement.executeUpdate();
+
+
+
 
            // Show dialog
            Alert alert = new Alert(Alert.AlertType.INFORMATION);

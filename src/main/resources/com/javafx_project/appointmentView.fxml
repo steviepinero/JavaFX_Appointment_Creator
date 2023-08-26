@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -11,9 +12,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-<?import javafx.scene.control.Label?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javafx_project.controllers.AppointmentController">
 
 <!--// Appointment_ID
@@ -61,7 +59,7 @@
          <children>
             <DatePicker fx:id="startDatePicker" promptText="Start Date" />
              <HBox spacing="10">
-                 <Label text="Start Time:" />
+                 <Label prefHeight="22.0" prefWidth="64.0" text="Start Time:" />
                  <ComboBox fx:id="startHourComboBox" prefWidth="60">
                         <items>
                      </items>
@@ -76,7 +74,7 @@
             <Separator orientation="VERTICAL" prefHeight="40.0" prefWidth="86.0" />
             <DatePicker fx:id="endDatePicker" layoutX="10.0" layoutY="10.0" promptText="End Date" />
              <HBox spacing="10">
-                 <Label text="End Time:" />
+                 <Label prefHeight="17.0" prefWidth="56.0" text="End Time:" />
                  <ComboBox fx:id="endHourComboBox" prefWidth="60">
                      <items>
 
@@ -89,7 +87,6 @@
                      </items>
                  </ComboBox>
              </HBox>
-            <Separator prefWidth="200.0" />
             <Separator layoutX="184.0" layoutY="10.0" orientation="VERTICAL" prefHeight="40.0" prefWidth="0.0" />
             <TextField fx:id="locationField" promptText="Location" />
          </children>
