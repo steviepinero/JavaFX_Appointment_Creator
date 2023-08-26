@@ -312,8 +312,8 @@ public class AppointmentController implements Initializable {
         loggedInUserID = valueOf(userId);
         System.out.print("~Add Appt method \n");
 
-        Timestamp sqlEndTimestamp = null;
-        Timestamp sqlStartTimestamp = null;
+        Timestamp sqlEndTimestamp;
+        Timestamp sqlStartTimestamp;
         // Convert the date and time from the UI controls into a LocalDateTime object
         LocalDate startDate = startDatePicker.getValue();
         int startHour = Integer.parseInt(startHourComboBox.getValue());
@@ -336,7 +336,7 @@ public class AppointmentController implements Initializable {
                // Open connection
                DatabaseConnection.establishConnection();
            }
-
+                //prepares the sql statement and inserts the values into the database
            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
            preparedStatement.setString(1, titleField.getText());
@@ -389,15 +389,14 @@ public class AppointmentController implements Initializable {
         DatabaseConnection.establishConnection();
 
         String title, description, location, type, lastUpdatedBy;
-        LocalDate startDate, endDate;
         int customerId, contactId, appointmentId;
 
         title = titleField.getText();
         description = descriptionField.getText();
         location = locationField.getText();
         type = typeBox.getValue();
-        startDate = startDatePicker.getValue();
-        endDate = endDatePicker.getValue();
+//        startDate = startDatePicker.getValue();
+//        endDate = endDatePicker.getValue();
         customerId = customerBox.getValue().getCustomer_ID();
         contactId = contactBox.getValue().getContact_ID();
         lastUpdatedBy = String.valueOf(LoginController.loggedInUser.getUser_Name());
@@ -405,6 +404,22 @@ public class AppointmentController implements Initializable {
 
         // Get appointment id from selected appointment
         appointmentId = appointmentTable.getSelectionModel().getSelectedItem().getAppointment_ID();
+
+        Timestamp sqlEndTimestamp;
+        Timestamp sqlStartTimestamp;
+        // Convert the date and time from the UI controls into a LocalDateTime object
+        LocalDate startDate = startDatePicker.getValue();
+        int startHour = Integer.parseInt(startHourComboBox.getValue());
+        int startMinute = Integer.parseInt(startMinuteComboBox.getValue());
+        LocalDateTime startDateTime = startDate.atTime(startHour, startMinute);
+
+        LocalDate endDate = endDatePicker.getValue();
+        int endHour = Integer.parseInt(endHourComboBox.getValue());
+        int endMinute = Integer.parseInt(endMinuteComboBox.getValue());
+        LocalDateTime endDateTime = endDate.atTime(endHour, endMinute);
+
+        sqlStartTimestamp = Timestamp.valueOf(startDateTime);
+        sqlEndTimestamp = Timestamp.valueOf(endDateTime);
 
 
         try {
@@ -415,8 +430,8 @@ public class AppointmentController implements Initializable {
             preparedStatement.setString(2, description);
             preparedStatement.setString(3, location);
             preparedStatement.setString(4, type);
-            preparedStatement.setDate(5, Date.valueOf(startDate));
-            preparedStatement.setDate(6, Date.valueOf(endDate));
+            preparedStatement.setTimestamp(5, sqlStartTimestamp);
+            preparedStatement.setTimestamp(6, sqlEndTimestamp);
             preparedStatement.setInt(7, customerId);
             preparedStatement.setInt(8, contactId);
             preparedStatement.setString(9, lastUpdatedBy);
