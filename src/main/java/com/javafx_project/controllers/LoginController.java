@@ -84,6 +84,9 @@ public class LoginController extends Pane {
                 // Create new scene and set it on the stage
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
+
+                //check for upcoming appointments
+                AppointmentController.checkUpcomingAppointments();
             } catch (IOException e) {
                 e.printStackTrace();
             }

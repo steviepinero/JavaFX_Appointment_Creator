@@ -501,6 +501,37 @@ public class AppointmentController implements Initializable {
 
     }
 
+    public static void checkUpcomingAppointments() {
+        try {
+            System.out.println("Checking for upcoming appointments...");
+            // Get the current time
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime nowPlus15Minutes = now.plusMinutes(15);
+
+            // Query to fetch upcoming appointments for the logged-in user within the next 15 minutes
+            String query = "SELECT * FROM appointments WHERE User_ID = ? AND Start BETWEEN ? AND ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, loggedInUser.getUser_ID());
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(now));
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(nowPlus15Minutes));
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            // If there's a result, it means there's an appointment within the next 15 minutes
+            if (rs.next()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Upcoming Appointment Alert");
+                alert.setHeaderText("Upcoming Appointment Soon!");
+                alert.setContentText("You have an appointment scheduled within the next 15 minutes. Please check your schedule.");
+                alert.showAndWait();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));

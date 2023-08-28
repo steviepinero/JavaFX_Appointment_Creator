@@ -112,7 +112,7 @@ public class ReportController {
     }
 
     //displays the report that tracks the total number of customer appointments by type and month
-    public void displayReport1() {
+    public void customerAppointmentReport() {
         Map<String, Map<String, Integer>> data = getAppointmentsByTypeAndMonth();
 
         monthColumn.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getKey()));
@@ -124,7 +124,7 @@ public class ReportController {
     }
 
     //displays the report that tracks the total number of appointments by contact
-    public void displayReport2(Contact contact) {
+    public void contactAppointmentReport(Contact contact) {
         Map<Contact, List<Appointment>> data = getScheduleForContacts();
 
         appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointment_ID"));
