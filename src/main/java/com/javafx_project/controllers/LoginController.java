@@ -63,6 +63,7 @@ public class LoginController extends Pane {
         loggedInUser = user;
         System.out.print(loggedInUser);
 
+
         //save logged in user_ID to a variable
         User loggedInUserID = userId;
         int savedID = loggedInUserID.getUser_ID();
@@ -70,9 +71,12 @@ public class LoginController extends Pane {
         System.out.println("Fetched User_ID: " + loggedInUserID.getUser_ID());
 
 
+        //check if username and password match
         if (user != null && user.getPassword().equals(enteredPassword)) {
             // login successful
             loggedInUser = user;
+            // Log the user activity as successful
+            UserActivityLogger.logUserActivity(enteredUsername, true);
             // navigate to the next scene.
             try {
                 FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
@@ -92,6 +96,8 @@ public class LoginController extends Pane {
             }
         } else {
             // login failed
+            // Log the user activity as failed
+            UserActivityLogger.logUserActivity(enteredUsername, false);
             // show an error message.
             showLoginError();
         }
