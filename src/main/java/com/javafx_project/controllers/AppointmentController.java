@@ -328,6 +328,27 @@ public class AppointmentController implements Initializable {
         sqlStartTimestamp = Timestamp.valueOf(startDateTime);
         sqlEndTimestamp = Timestamp.valueOf(endDateTime);
 
+        // Check if the appointment is within business hours
+        if (!isWithinBusinessHours(startDateTime) || !isWithinBusinessHours(endDateTime)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid Appointment Time");
+            alert.setContentText("Appointments can only be scheduled between 8:00 a.m. to 10:00 p.m. ET.");
+            alert.showAndWait();
+            return;
+        }
+
+        // Check for overlapping appointments
+        if (hasOverlappingAppointments(startDateTime, endDateTime, customerBox.getValue().getCustomer_ID(), -1)) {  // -1 because it's a new appointment
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Overlapping Appointments");
+            alert.setContentText("This appointment overlaps with another appointment for the selected customer.");
+            alert.showAndWait();
+            return;
+        }
+
+
         //save logged in userID to a variable
 
         System.out.print(loggedInUserID);
@@ -421,6 +442,26 @@ public class AppointmentController implements Initializable {
         sqlStartTimestamp = Timestamp.valueOf(startDateTime);
         sqlEndTimestamp = Timestamp.valueOf(endDateTime);
 
+        // Check if the appointment is within business hours
+        if (!isWithinBusinessHours(startDateTime) || !isWithinBusinessHours(endDateTime)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid Appointment Time");
+            alert.setContentText("Appointments can only be scheduled between 8:00 a.m. to 10:00 p.m. ET.");
+            alert.showAndWait();
+            return;
+        }
+
+        // Check for overlapping appointments
+        if (hasOverlappingAppointments(startDateTime, endDateTime, customerBox.getValue().getCustomer_ID(), appointmentId)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Overlapping Appointments");
+            alert.setContentText("This appointment overlaps with another appointment for the selected customer.");
+            alert.showAndWait();
+            return;
+        }
+
 
         try {
 
@@ -490,7 +531,7 @@ public class AppointmentController implements Initializable {
         appointmentTable.setItems(AppointmentDAO.getAllAppointments());
         appointmentTable.refresh();
     } else {
-            // Display an alert or message to inform the user to select a customer
+            // Display an alert or message to inform the user to select an appointment
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Error");
@@ -569,6 +610,45 @@ public class AppointmentController implements Initializable {
         }
     }
 
+
+    private boolean isWithinBusinessHours(LocalDateTime dateTime) {
+        // Convert the provided LocalDateTime to Eastern Time (ET)
+        LocalDateTime dateTimeInET = dateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("America/New_York")).toLocalDateTime();
+
+        // Define business hours
+        int businessStartHour = 8;  // 8:00 a.m.
+        int businessEndHour = 22;   // 10:00 p.m.
+
+        // Check if the time is within business hours
+        if (dateTimeInET.getHour() < businessStartHour || dateTimeInET.getHour() >= businessEndHour) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean hasOverlappingAppointments(LocalDateTime start, LocalDateTime end, int customerId, int appointmentId) {
+        try {
+            String query = "SELECT * FROM appointments WHERE Customer_ID = ? AND Appointment_ID != ? AND ((Start BETWEEN ? AND ?) OR (End BETWEEN ? AND ?) OR (Start <= ? AND End >= ?))";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, customerId);
+            preparedStatement.setInt(2, appointmentId);  // Exclude the current appointment being updated
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(start));
+            preparedStatement.setTimestamp(4, Timestamp.valueOf(end));
+            preparedStatement.setTimestamp(5, Timestamp.valueOf(start));
+            preparedStatement.setTimestamp(6, Timestamp.valueOf(end));
+            preparedStatement.setTimestamp(7, Timestamp.valueOf(start));
+            preparedStatement.setTimestamp(8, Timestamp.valueOf(end));
+
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return true;  // There's an overlapping appointment
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 
     @Override
