@@ -31,6 +31,8 @@ public class LoginController extends Pane {
 
     @FXML
     private Button loginButton;
+    @FXML
+    private Label loginLabel;
 
     public LoginController(TextField usernameField, PasswordField passwordField, Button loginButton) {
         this.usernameField = usernameField;
@@ -47,6 +49,7 @@ public class LoginController extends Pane {
         Locale currentLocale = Locale.getDefault();
         if (currentLocale.getLanguage().equals("fr")) {
             // Set text to French
+            loginLabel.setText("Page de Connexion");
             loginButton.setText("Connexion");
             usernameField.setPromptText("Nom d'utilisateur");
             passwordField.setPromptText("Mot de passe");
@@ -75,9 +78,18 @@ public class LoginController extends Pane {
         String enteredUsername = usernameField.getText();
         String enteredPassword = passwordField.getText();
 
+        // Log the entered username immediately
+        UserActivityLogger.logUserActivity(enteredUsername, false); // Assume unsuccessful login initially
+
         UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserByUsername(enteredUsername);
         System.out.print("~login method \n");
+
+        if (user == null) {
+            // User doesn't exist in the database
+            showLoginError();
+            return;
+        }
 
         User userId = userDAO.getUserByUserId(user.getUser_ID());
         System.out.print(userId);
@@ -85,20 +97,17 @@ public class LoginController extends Pane {
         loggedInUser = user;
         System.out.print(loggedInUser);
 
-
         //save logged in user_ID to a variable
         User loggedInUserID = userId;
         int savedID = loggedInUserID.getUser_ID();
         System.out.println("Fetched User: " + savedID);
         System.out.println("Fetched User_ID: " + loggedInUserID.getUser_ID());
 
-        // Log the user activity regardless of whether the user exists or not
-        UserActivityLogger.logUserActivity(enteredUsername, user != null && user.getPassword().equals(enteredPassword));
         //check if username and password match
-        if (user != null && user.getPassword().equals(enteredPassword)) {
+        if (user.getPassword().equals(enteredPassword)) {
             // login successful
             loggedInUser = user;
-            // Log the user activity as successful
+            // Update the log to indicate successful login
             UserActivityLogger.logUserActivity(enteredUsername, true);
             // navigate to the next scene.
             try {
@@ -115,30 +124,32 @@ public class LoginController extends Pane {
                 //check for upcoming appointments
                 AppointmentController.checkUpcomingAppointments();
             } catch (IOException e) {
-                // login failed
-                // Log the user activity as failed
-                UserActivityLogger.logUserActivity(enteredUsername, false);
-                // show an error message.
-                showLoginError();
-                return;
+                e.printStackTrace();
             }
         } else {
             // login failed
-            // Log the user activity as failed
-            UserActivityLogger.logUserActivity(enteredUsername, false);
-            // show an error message.
             showLoginError();
-            return;
         }
     }
 
-    public void showLoginError() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Login Error");
-        alert.setHeaderText(null);
-        alert.setContentText("Incorrect username or password.");
 
-        alert.showAndWait();
+    public void showLoginError() {
+        Locale currentLocale = Locale.getDefault();
+        if (currentLocale.getLanguage().equals("fr")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de Connexion");
+            alert.setHeaderText(null);
+            alert.setContentText("Nom d'utilisateur ou mot de passe incorrect.");
+
+            alert.showAndWait();
+        } else {//default to english
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Incorrect username or password.");
+
+            alert.showAndWait();
+        }
     }
 
 }
