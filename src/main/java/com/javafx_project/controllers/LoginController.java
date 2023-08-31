@@ -70,7 +70,8 @@ public class LoginController extends Pane {
         System.out.println("Fetched User: " + savedID);
         System.out.println("Fetched User_ID: " + loggedInUserID.getUser_ID());
 
-
+        // Log the user activity regardless of whether the user exists or not
+        UserActivityLogger.logUserActivity(enteredUsername, user != null && user.getPassword().equals(enteredPassword));
         //check if username and password match
         if (user != null && user.getPassword().equals(enteredPassword)) {
             // login successful
@@ -92,7 +93,12 @@ public class LoginController extends Pane {
                 //check for upcoming appointments
                 AppointmentController.checkUpcomingAppointments();
             } catch (IOException e) {
-                e.printStackTrace();
+                // login failed
+                // Log the user activity as failed
+                UserActivityLogger.logUserActivity(enteredUsername, false);
+                // show an error message.
+                showLoginError();
+                return;
             }
         } else {
             // login failed
@@ -100,6 +106,7 @@ public class LoginController extends Pane {
             UserActivityLogger.logUserActivity(enteredUsername, false);
             // show an error message.
             showLoginError();
+            return;
         }
     }
 

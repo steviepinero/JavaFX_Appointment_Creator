@@ -76,7 +76,7 @@ public class ReportController {
         return resultMap;
     }
 
-    //report that tracks the total number of appointments by contact
+    //report/schedule that tracks the total number of appointments by contact
     public Map<Contact, List<Appointment>> getScheduleForContacts() {
         String query = "SELECT * FROM appointments ORDER BY Contact_ID";
         Map<Contact, List<Appointment>> resultMap = new HashMap<>();
