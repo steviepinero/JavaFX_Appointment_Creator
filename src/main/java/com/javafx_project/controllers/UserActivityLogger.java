@@ -6,6 +6,12 @@ import java.time.LocalDateTime;
 public class UserActivityLogger {
     private static final String FILE_NAME = "login_activity.txt";
 
+    /**
+     * Logs the user activity.
+     *
+     * @param  username         the username of the user
+     * @param  loginSuccessful  true if the login was successful, false otherwise
+     */
     public static void logUserActivity(String username, boolean loginSuccessful) {
         try (FileWriter writer = new FileWriter(FILE_NAME, true)) {  // true means append to file
             String status = loginSuccessful ? "SUCCESSFUL" : "FAILED";

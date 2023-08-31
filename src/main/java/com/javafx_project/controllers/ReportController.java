@@ -43,7 +43,7 @@ public class ReportController {
     @FXML
     private TableColumn<Map.Entry<String, Map<String, Integer>>, String> typeColumn;
     @FXML
-    private TableColumn<Map.Entry<String, Map<String, Integer>>, Integer> countColumn;
+    private TableColumn<Map.Entry<String, Map<String, Integer>>, Integer> appointmentCountColumn;
 
     @FXML
     private TableView<Appointment> reportTable2;
@@ -108,6 +108,10 @@ public class ReportController {
     // report that tracks the total number of updates made by user
     public void userUpdateReport() {
         // report that tracks the number of updates made by each user
+
+
+
+
         // TODO implement this method
     }
 
@@ -117,7 +121,7 @@ public class ReportController {
 
         monthColumn.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getKey()));
         typeColumn.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getValue().keySet().toString()));
-        countColumn.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getValue().values().stream().mapToInt(Integer::intValue).sum()).asObject());
+        appointmentCountColumn.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getValue().values().stream().mapToInt(Integer::intValue).sum()).asObject());
 
         ObservableList<Map.Entry<String, Map<String, Integer>>> items = FXCollections.observableArrayList(data.entrySet());
         reportTable1.setItems(items);

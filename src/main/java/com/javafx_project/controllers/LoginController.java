@@ -8,15 +8,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.ZoneId;
+import java.util.Locale;
 
 public class LoginController extends Pane {
     public static User loggedInUser;
@@ -25,6 +24,9 @@ public class LoginController extends Pane {
 
     @FXML
     public PasswordField passwordField;
+
+    @FXML
+    public Label zoneIdLabel;
     public UserDAO userDAO;
 
     @FXML
@@ -42,6 +44,26 @@ public class LoginController extends Pane {
 
     @FXML
     public void initialize() {
+        Locale currentLocale = Locale.getDefault();
+        if (currentLocale.getLanguage().equals("fr")) {
+            // Set text to French
+            loginButton.setText("Connexion");
+            usernameField.setPromptText("Nom d'utilisateur");
+            passwordField.setPromptText("Mot de passe");
+            zoneIdLabel.setText("Zone ID: " + ZoneId.systemDefault());
+            ZoneId zoneId = ZoneId.of("Europe/Paris");
+            zoneId.getRules();
+        } else {
+            // Default to English
+            loginButton.setText("Login");
+            usernameField.setPromptText("Username");
+            passwordField.setPromptText("Password");
+            zoneIdLabel.setText("Zone ID: " + ZoneId.systemDefault());
+            ZoneId zoneId = ZoneId.of("America/New_York");
+            zoneId.getRules();
+            System.out.println("Defaulting to English");
+        }
+
 
     }
 

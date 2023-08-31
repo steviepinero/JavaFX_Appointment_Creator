@@ -23,6 +23,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" /> <!-- for ZoneId label -->
          </rowConstraints>
          <children>
             <TextField fx:id="usernameField" prefHeight="39.0" prefWidth="226.0" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -33,6 +34,7 @@
                   <Font name="Javanese Text" size="23.0" />
                </font>
             </Label>
+            <Label fx:id="zoneIdLabel" text="ZoneId: " GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" /> <!-- Added for the ZoneId label -->
          </children>
       </GridPane>
    </children>
