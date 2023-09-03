@@ -16,6 +16,9 @@ public class User extends UserDAO {
 
     private String Last_Updated_By;
 
+    private int updateCount;
+
+
     public User() {
 
     }
@@ -90,5 +93,13 @@ public class User extends UserDAO {
 
     public void setLast_Updated_By(String lastUpdatedBy) {
         this.Last_Updated_By = lastUpdatedBy;
+    }
+
+    public int getUpdate_Count() {
+        return updateCount;
+    }
+
+    public void setUpdate_Count(int updateCount) {
+        this.updateCount = updateCount;
     }
 }

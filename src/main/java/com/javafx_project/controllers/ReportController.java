@@ -1,6 +1,9 @@
 package com.javafx_project.controllers;
 
+import com.javafx_project.dao.AppointmentDAO;
+import com.javafx_project.dao.ContactDAO;
 import com.javafx_project.dao.DatabaseConnection;
+import com.javafx_project.dao.UserDAO;
 import com.javafx_project.models.Appointment;
 import com.javafx_project.models.Contact;
 import com.javafx_project.models.User;
@@ -73,6 +76,12 @@ public class ReportController implements Initializable {
     private Tab userReportTab;
     private TableColumn<Object, Object> customerNameColumn;
 
+    static ObservableList<User> userList = UserDAO.getAllUsers();
+    private static com.javafx_project.dao.AppointmentDAO AppointmentDAO;
+    static ObservableList<Appointment> appointmentList = AppointmentDAO.getAllAppointments();
+    static ObservableList<Contact> contactList = ContactDAO.getAllContacts();
+
+
     //report that tracks the total number of customer appointments by type and month
     public Map<String, Map<String, Integer>> getAppointmentsByTypeAndMonth() {
         DatabaseConnection.establishConnection();
@@ -131,15 +140,39 @@ public class ReportController implements Initializable {
     public void userUpdateReport() {
         DatabaseConnection.establishConnection();
 
-        // report that tracks the number of updates made by each user
-
+        // Set cell value factories for the table columns
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("User_Name"));
         updateCountColumn.setCellValueFactory(new PropertyValueFactory<>("Update_Count"));
 
+        // SQL query to get the number of updates made by each user
+        String query = "SELECT User_Name, COUNT(*) as Update_Count FROM users JOIN appointments ON users.User_ID = appointments.User_ID GROUP BY User_Name";
 
+        Map<String, Integer> resultMap = new HashMap<>();
+        try {
+            Statement stmt = DatabaseConnection.getConnection().createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String username = rs.getString("User_Name");
+                int updateCount = rs.getInt("Update_Count");
+                resultMap.put(username, updateCount);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        // TODO implement this method
+        // Convert resultMap to an observable list
+        ObservableList<User> userList = FXCollections.observableArrayList();
+        for (Map.Entry<String, Integer> entry : resultMap.entrySet()) {
+            User user = new User();
+            user.setUser_Name(entry.getKey());
+            user.setUpdate_Count(entry.getValue());
+            userList.add(user);
+        }
+
+        // Set the observable list to the userReportTable
+        userReportTable.setItems(userList);
     }
+
 
     //displays the report that tracks the total number of customer appointments by type and month
     public void customerAppointmentReport() {
