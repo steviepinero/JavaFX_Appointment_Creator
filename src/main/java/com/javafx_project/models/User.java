@@ -1,6 +1,8 @@
 package com.javafx_project.models;
 
 import com.javafx_project.dao.UserDAO;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class User extends UserDAO {
     private int User_ID;
@@ -16,11 +18,11 @@ public class User extends UserDAO {
 
     private String Last_Updated_By;
 
-    private int updateCount;
+    private IntegerProperty updateCount = new SimpleIntegerProperty();
 
 
     public User() {
-
+        this.updateCount = new SimpleIntegerProperty();
     }
 
     public User(int userId, String userName, String password, String createDate, String createdBy, String lasUpdate, String lastUpdatedBy) {
@@ -31,6 +33,7 @@ public class User extends UserDAO {
         this.Created_By = createdBy;
         this.Last_Update = lasUpdate;
         this.Last_Updated_By = lastUpdatedBy;
+        this.updateCount = new SimpleIntegerProperty();
     }
 
     public User(int user_ID, String test, String password) {
@@ -96,10 +99,14 @@ public class User extends UserDAO {
     }
 
     public int getUpdate_Count() {
-        return updateCount;
+        return updateCount.get();
     }
 
     public void setUpdate_Count(int updateCount) {
-        this.updateCount = updateCount;
+        this.updateCount.set(updateCount);
+    }
+
+    public IntegerProperty updateCountProperty() {
+        return updateCount;
     }
 }

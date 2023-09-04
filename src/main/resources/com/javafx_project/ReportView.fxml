@@ -19,13 +19,15 @@
                      <children>
                         <VBox alignment="CENTER" layoutX="8.0" layoutY="3.0">
                            <children>
-                              <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="316.0" prefWidth="822.0">
+                              <TableView fx:id="customerReportTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="316.0" prefWidth="822.0">
                                 <columns>
                                     <!-- Columns for total number of customer appointments by typer and month   -->
-                                    <TableColumn fx:id="customerNameColumn" prefWidth="122.0" text="Customer Name" />
-                                      <TableColumn fx:id="appointmentTypeColumn" prefWidth="77.0" text="Type" />
-                                      <TableColumn fx:id="appointmentMonthColumn" prefWidth="77.0" text="Month" />
-                                      <TableColumn fx:id="appointmentCountColumn" prefWidth="71.0" text="Count" />
+
+                                    <TableColumn fx:id="appointmentMonthColumn" prefWidth="77.0" text="Month" />
+                                    <TableColumn fx:id="appointmentCountColumn" prefWidth="71.0" text="Count" />
+                                    <TableColumn fx:id="typeColumn" prefWidth="77.0" text="Type" />
+                                    <TableColumn fx:id="typeCountColumn" prefWidth="71.0" text="Count" />
+
                                 </columns>
                               </TableView>
                            </children>
@@ -43,7 +45,7 @@
                                 <columns>
                                     <TableColumn fx:id="appointmentIDColumn" prefWidth="98.0" text="Appointment ID" />
                                     <TableColumn fx:id="titleColumn" prefWidth="125.0" text="Title" />
-                                    <TableColumn fx:id="typeColumn" prefWidth="86.0" text="Type" />
+                                    <TableColumn fx:id="appointmentTypeColumn" prefWidth="86.0" text="Type" />
                                     <TableColumn fx:id="descriptionColumn" prefWidth="187.0" text="Description" />
                                     <TableColumn fx:id="startDateColumn" prefWidth="110.0" text="Start Date Time" />
                                     <TableColumn fx:id="endDateColumn" prefWidth="105.0" text="End Date Time" />
