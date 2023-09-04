@@ -7,8 +7,6 @@ import com.javafx_project.models.Appointment;
 import com.javafx_project.models.Contact;
 import com.javafx_project.models.Customer;
 import com.javafx_project.models.User;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,11 +36,11 @@ public class ReportController implements Initializable {
      */
 
     @FXML
-    public TableColumn customerAppointmentTypeColumn;
+    public TableColumn<AppointmentReportEntry, String> customerAppointmentTypeColumn;
     @FXML
-    public TableColumn typeColumn;
+    public TableColumn<AppointmentReportEntry, String> typeColumn;
     @FXML
-    public TableColumn typeCountColumn;
+    public TableColumn<AppointmentReportEntry, String> typeCountColumn;
 
     @FXML
     public TableView<AppointmentReportEntry> customerReportTable;
@@ -58,7 +56,7 @@ public class ReportController implements Initializable {
     @FXML
     public TableView<Appointment> contactReportTable;
     @FXML
-    public TableColumn<Appointment, Integer> appointmentIdColumn;
+    public TableColumn<Appointment, Integer> appointmentIDColumn;
 
     @FXML
     public TableColumn<Appointment, String> titleColumn;
@@ -101,6 +99,10 @@ public class ReportController implements Initializable {
 
     @FXML
     public TableColumn<AppointmentReportEntry, String> reportMonthColumn;
+
+    @FXML
+    public TableColumn<AppointmentReportEntry, Integer> totalCountColumn;
+
 
 
     public static ObservableList<User> userList = UserDAO.getAllUsers();
@@ -169,8 +171,8 @@ public class ReportController implements Initializable {
             }
             combinedMap.put(month, typeMap);
         }
-        // TODO: Fetch the combined data from the database (appointments by type and month)
 
+        // Fetch the combined data from the database (appointments by type and month)
         Map<String, Map<String, Integer>> fetchedData = fetchAppointmentsByTypeAndMonthFromDB();
 
         // Update the combined map with the fetched data
@@ -183,6 +185,9 @@ public class ReportController implements Initializable {
                 combinedMap.get(month).put(type, count);
             }
         }
+
+        // Add logging statements
+        System.out.println("Appointments by type and month: " + combinedMap);
         return combinedMap;
     }
 
@@ -257,25 +262,28 @@ public class ReportController implements Initializable {
 
 
 
-    // report that tracks the total number of updates made by user
-    public void userUpdateReport() {
+    /**
+     * Generates a report that tracks the total number of updates made by each user in the database.
+     */
+    public void generateUserUpdateReport() {
+        // Establish database connection
         DatabaseConnection.establishConnection();
 
-        // Set cell value factories
+        // Set cell values for the username and update count columns
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("User_Name"));
         updateCountColumn.setCellValueFactory(new PropertyValueFactory<>("Update_Count"));
 
         // Fetch data and convert to list of User objects
         Map<String, Integer> userUpdates = fetchUserUpdates();
         List<User> userList = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : userUpdates.entrySet()) {
+        userUpdates.forEach((username, updateCount) -> {
             User user = new User();
-            user.setUser_Name(entry.getKey());
-            user.setUpdate_Count(entry.getValue());
+            user.setUser_Name(username);
+            user.setUpdate_Count(updateCount);
             userList.add(user);
-        }
+        });
 
-        // Populate the TableView
+        // Populate the TableView with the user list
         ObservableList<User> items = FXCollections.observableArrayList(userList);
         userReportTable.setItems(items);
     }
@@ -309,47 +317,22 @@ public class ReportController implements Initializable {
         DatabaseConnection.establishConnection();
 
         appointmentMonthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
-        appointmentCountColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
+        totalCountColumn.setCellValueFactory(new PropertyValueFactory<>("totalCount")); // New column binding
         appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        typeCountColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
-
+        typeCountColumn.setCellValueFactory(new PropertyValueFactory<>("typeCount"));
 
         Map<String, Map<String, Integer>> data = getAppointmentsByTypeAndMonth();
 
         List<AppointmentReportEntry> reportEntries = new ArrayList<>();
         for (Map.Entry<String, Map<String, Integer>> monthEntry : data.entrySet()) {
+            int totalForMonth = monthEntry.getValue().values().stream().mapToInt(Integer::intValue).sum();
             for (Map.Entry<String, Integer> typeEntry : monthEntry.getValue().entrySet()) {
-                reportEntries.add(new AppointmentReportEntry(monthEntry.getKey(), typeEntry.getKey(), typeEntry.getValue()));
+                reportEntries.add(new AppointmentReportEntry(monthEntry.getKey(), totalForMonth, typeEntry.getKey(), typeEntry.getValue()));
             }
         }
 
         ObservableList<AppointmentReportEntry> items = FXCollections.observableArrayList(reportEntries);
         customerReportTable.setItems(items);
-    }
-
-    // Create a new class to represent each row in the report
-    public static class AppointmentReportEntry {
-        private final SimpleStringProperty month;
-        private final SimpleStringProperty type;
-        private final SimpleIntegerProperty count;
-
-        public AppointmentReportEntry(String month, String type, int count) {
-            this.month = new SimpleStringProperty(month);
-            this.type = new SimpleStringProperty(type);
-            this.count = new SimpleIntegerProperty(count);
-        }
-
-        public String getMonth() {
-            return month.get();
-        }
-
-        public String getType() {
-            return type.get();
-        }
-
-        public int getCount() {
-            return count.get();
-        }
     }
 
     //displays the report that tracks the total number of appointments by contact
@@ -358,7 +341,7 @@ public class ReportController implements Initializable {
 
         Map<Contact, List<Appointment>> data = getScheduleForContacts();
 
-        appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointment_ID"));
+        appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointment_ID"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         monthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -408,7 +391,7 @@ public class ReportController implements Initializable {
 
         userReportTab.setOnSelectionChanged(event -> {
             if (userReportTab.isSelected()) {
-                userUpdateReport();
+                generateUserUpdateReport();
             }
         });
     }

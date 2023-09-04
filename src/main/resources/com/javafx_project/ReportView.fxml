@@ -24,7 +24,7 @@
                                     <!-- Columns for total number of customer appointments by typer and month   -->
 
                                     <TableColumn fx:id="appointmentMonthColumn" prefWidth="77.0" text="Month" />
-                                    <TableColumn fx:id="appointmentCountColumn" prefWidth="71.0" text="Count" />
+                                    <TableColumn fx:id="totalCountColumn" prefWidth="71.0" text="Count" />
                                     <TableColumn fx:id="typeColumn" prefWidth="77.0" text="Type" />
                                     <TableColumn fx:id="typeCountColumn" prefWidth="71.0" text="Count" />
 
