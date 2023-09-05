@@ -238,5 +238,7 @@ public class Appointment {
     }
 
 
-
+    public String getMonth() {
+        return start.getMonth().toString();
+    }
 }

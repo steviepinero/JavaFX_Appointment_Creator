@@ -13,28 +13,19 @@ public class AppointmentReportEntry {
     private final SimpleIntegerProperty typeCount;
 
 
-    public AppointmentReportEntry(String month, SimpleIntegerProperty totalCount, String type, SimpleIntegerProperty typeCount) {
-        this.month = new SimpleStringProperty(month);
-        this.totalCount = totalCount;
-        this.type = new SimpleStringProperty(type);
-        this.typeCount = typeCount;
-    }
 
-    public AppointmentReportEntry(String key, Map<String, Integer> value, String key1, Integer value1) {
+    public AppointmentReportEntry(String key, String key1, Integer value) {
         this.month = new SimpleStringProperty(key);
-
-        Integer monthValue = value.get(key);
-        this.totalCount = (monthValue != null) ? new SimpleIntegerProperty(monthValue) : new SimpleIntegerProperty(0);
-
-        this.type = new SimpleStringProperty(key1);
-        this.typeCount = (value1 != null) ? new SimpleIntegerProperty(value1) : new SimpleIntegerProperty(0);
-    }
-
-    public AppointmentReportEntry(String key, int totalForMonth, String key1, Integer value) {
-        this.month = new SimpleStringProperty(key);
-        this.totalCount = new SimpleIntegerProperty(totalForMonth);
+        this.totalCount = new SimpleIntegerProperty(0);
         this.type = new SimpleStringProperty(key1);
         this.typeCount = (value != null) ? new SimpleIntegerProperty(value) : new SimpleIntegerProperty(0);
+    }
+
+    public AppointmentReportEntry(String key, Integer value) {
+        this.month = new SimpleStringProperty(key);
+        this.totalCount = (value != null) ? new SimpleIntegerProperty(value) : new SimpleIntegerProperty(0);
+        this.type = new SimpleStringProperty("");
+        this.typeCount = new SimpleIntegerProperty(0);
     }
 
 
