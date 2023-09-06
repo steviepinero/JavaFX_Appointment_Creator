@@ -330,10 +330,12 @@ public class ReportController implements Initializable {
     public void customerAppointmentReport() {
         DatabaseConnection.establishConnection();
 
-        populateMonthlyTotalTable();
+       /* populateMonthlyTotalTable();
         populateTypeTotalTable();
+*/
 
-       /* appointmentMonthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
+        //TODO fix issue where months and types are repeating in the table
+        appointmentMonthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
         totalCountColumn.setCellValueFactory(new PropertyValueFactory<>("totalCount"));
         apptTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         typeTotalColumn.setCellValueFactory(new PropertyValueFactory<>("typeCount"));
@@ -351,7 +353,8 @@ public class ReportController implements Initializable {
         }
 
         ObservableList<AppointmentReportEntry> items = FXCollections.observableArrayList(reportEntries);
-        monthlyTotalTable.setItems(items);*/
+        monthlyTotalTable.setItems(items);
+        typeTotalTable.setItems(items);
     }
 
     public void populateMonthlyTotalTable() {
