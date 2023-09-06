@@ -1,9 +1,12 @@
 package com.javafx_project.models;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class Contact {
     private int Contact_ID;
+    int contactID = Contact_ID;
+
     private String Contact_Name;
     private String Email;
 
@@ -11,6 +14,19 @@ public class Contact {
     public Contact() {
 
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return contactID == contact.contactID;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(contactID);
+    }
+
 
     public Contact(int contact_ID, String Contact_Name, String email) {
         this.Contact_ID = contact_ID;
@@ -54,4 +70,6 @@ public class Contact {
     public void setEmail(String email) {
         this.Email = email;
     }
+
+
 }

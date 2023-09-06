@@ -68,9 +68,10 @@ public class ReportController implements Initializable {
     @FXML
     public TableColumn<Appointment, String> descriptionColumn;
     @FXML
-    public TableColumn<Appointment, String> startColumn;
+    public TableColumn<Appointment, String> startDateColumn;
+
     @FXML
-    public TableColumn<Appointment, String> endColumn;
+    public TableColumn<Appointment, String> endDateColumn;
     @FXML
     public TableColumn<Appointment, Integer> customerIDColumn;
 
@@ -262,10 +263,8 @@ public class ReportController implements Initializable {
                 );
 
                 resultMap.get(contact).add(appointment);
-                //populate the table view
-                ObservableList<Appointment> items = FXCollections.observableArrayList(resultMap.get(contact));
-                contactReportTable.setItems(items);
-
+                System.out.println("Contact: " + contact);
+                System.out.println("Appointment: " + appointment);
             }
         } catch (SQLException e) {
             // TODO Handle the exception in a more user-friendly way
@@ -394,18 +393,24 @@ public class ReportController implements Initializable {
 
         appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointment_ID"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        monthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        apptTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-        startColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
-        endColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+        startDateColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+        endDateColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
         customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customer_ID"));
 
-        contactList.forEach(contact -> {
-            ObservableList<Appointment> items = FXCollections.observableArrayList(data.get(contact));
-            contactReportTable.setItems(items);
-        });
+        ObservableList<Appointment> allItems = FXCollections.observableArrayList();
+        System.out.println("Contact list: " + contactList);
+        for (Contact contact : contactList) {
+            List<Appointment> appointments = data.get(contact);
+            if (appointments != null) {
+                allItems.addAll(appointments);
+            }
+        }
+        System.out.println("All items: " + allItems);
+        contactReportTable.setItems(allItems);
     }
+
 
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
