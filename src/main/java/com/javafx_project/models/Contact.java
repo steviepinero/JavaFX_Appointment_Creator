@@ -10,6 +10,9 @@ public class Contact {
     private String Contact_Name;
     private String Email;
 
+    private String contactName;
+
+
 
     public Contact() {
 
@@ -71,5 +74,12 @@ public class Contact {
         this.Email = email;
     }
 
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
 
 }

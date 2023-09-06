@@ -124,6 +124,7 @@ public class ReportController implements Initializable {
     public static com.javafx_project.dao.AppointmentDAO AppointmentDAO;
     static ObservableList<Appointment> appointmentList = AppointmentDAO.getAllAppointments();
     static ObservableList<Contact> contactList = ContactDAO.getAllContacts();
+    public TableColumn<Appointment, String> contactNameColumn;
 
     public ReportController() {
     }
@@ -247,6 +248,7 @@ public class ReportController implements Initializable {
             Statement stmt = DatabaseConnection.getConnection().createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
+                String contactName = rs.getString("Contact_Name");
                 Contact contact = new Contact(rs.getInt("Contact_ID"), rs.getString("Contact_Name"));
 
                 // Check if the contact is already in the map
@@ -261,7 +263,7 @@ public class ReportController implements Initializable {
                         rs.getTimestamp("end").toLocalDateTime(),
                         rs.getInt("customer_ID")
                 );
-
+                appointment.setContactName(contactName);
                 resultMap.get(contact).add(appointment);
                 System.out.println("Contact: " + contact);
                 System.out.println("Appointment: " + appointment);
@@ -391,6 +393,7 @@ public class ReportController implements Initializable {
 
         Map<Contact, List<Appointment>> data = getScheduleForContacts();
 
+        contactNameColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointment_ID"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         apptTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -401,7 +404,7 @@ public class ReportController implements Initializable {
 
         ObservableList<Appointment> allItems = FXCollections.observableArrayList();
         System.out.println("Contact list: " + contactList);
-        for (Contact contact : contactList) {
+        for (Contact contact : data.keySet()) {
             List<Appointment> appointments = data.get(contact);
             if (appointments != null) {
                 allItems.addAll(appointments);

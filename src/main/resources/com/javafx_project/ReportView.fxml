@@ -43,6 +43,7 @@
                         <children>
                             <TableView fx:id="contactReportTable" layoutX="9.0" layoutY="3.0" prefHeight="314.0" prefWidth="821.0">
                                 <columns>
+                                    <TableColumn fx:id="contactNameColumn" prefWidth="125.0" text="Contact Name" />
                                     <TableColumn fx:id="appointmentIDColumn" prefWidth="98.0" text="Appointment ID" />
                                     <TableColumn fx:id="titleColumn" prefWidth="125.0" text="Title" />
                                     <TableColumn fx:id="appointmentTypeColumn" prefWidth="86.0" text="Type" />

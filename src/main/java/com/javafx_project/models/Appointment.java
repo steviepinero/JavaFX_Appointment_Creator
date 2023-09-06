@@ -21,6 +21,7 @@ public class Appointment {
     private int User_ID;
     private int Contact_ID;
     private Contact contact;
+    private String contactName;
 
     public Appointment(int appointment_ID, String title, String description, String type, String location, LocalDate start, LocalDate end, LocalDate create_date, String created_By, LocalDate last_Update, String last_Updated_By, int customer_ID, int User_ID, int Contact_ID) {
         this.appointment_ID = appointment_ID;
@@ -232,6 +233,10 @@ public class Appointment {
     public int getContact_ID() {
         return Contact_ID;
     }
+
+    public String getContactName() { return contactName;}
+
+    public void setContactName(String contactName) { this.contactName = contactName; }
 
     public void setContact_ID(int contact_ID) {
         this.Contact_ID = contact_ID;
