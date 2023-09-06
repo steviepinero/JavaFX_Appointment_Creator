@@ -39,7 +39,7 @@ public class ReportController implements Initializable {
      */
 
     @FXML
-    public TableColumn<AppointmentReportEntry, String> customerAppointmentTypeColumn;
+    public TableColumn<AppointmentReportEntry, String> appointmentTypeColumn;
     @FXML
     public TableColumn<AppointmentReportEntry, String> typeColumn;
     @FXML
@@ -65,6 +65,8 @@ public class ReportController implements Initializable {
     public TableColumn<Appointment, String> titleColumn;
     @FXML
     public TableColumn<Appointment, String> monthColumn;
+
+
     @FXML
     public TableColumn<Appointment, String> descriptionColumn;
     @FXML
@@ -115,7 +117,7 @@ public class ReportController implements Initializable {
     private TableView<AppointmentReportEntry> typeTotalTable;
 
     @FXML
-    private TableColumn<Map.Entry<String, Integer>, Integer> typeTotalColumn;
+    private TableColumn<AppointmentReportEntry, Integer> typeTotalColumn;
 
 
 
@@ -396,7 +398,7 @@ public class ReportController implements Initializable {
         contactNameColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointment_ID"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        apptTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         startDateColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
         endDateColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
