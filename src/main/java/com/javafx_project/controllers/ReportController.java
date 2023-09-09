@@ -146,11 +146,14 @@ public class ReportController implements Initializable {
                 String month = rs.getString("Month");
                 int count = rs.getInt("Count");
                 resultMap.put(month, count);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Appointments by Month: " + resultMap);
         return resultMap;
+
     }
 
     public Map<String, Integer> getAppointmentsByType() {
@@ -170,6 +173,7 @@ public class ReportController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Appointments by Type: " + resultMap);
         return resultMap;
     }
 
@@ -335,22 +339,23 @@ public class ReportController implements Initializable {
     public void customerAppointmentReport() {
         DatabaseConnection.establishConnection();
 
-        // For Monthly Appointments Table
+        // For Appointments by Month Table
         appointmentMonthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
         totalCountColumn.setCellValueFactory(new PropertyValueFactory<>("totalCount"));
 
-        Map<String, Integer> monthlyData = getAppointmentsByMonth();
-        List<AppointmentReportEntry> monthlyReportEntries = new ArrayList<>();
-        monthlyData.forEach((month, count) -> {
+        Map<String, Integer> monthData = getAppointmentsByMonth();
+        List<AppointmentReportEntry> monthReportEntries = new ArrayList<>();
+        monthData.forEach((month, count) -> {
             AppointmentReportEntry entry = new AppointmentReportEntry(month, count);
-            monthlyReportEntries.add(entry);
+            monthReportEntries.add(entry);
         });
-        ObservableList<AppointmentReportEntry> monthlyItems = FXCollections.observableArrayList(monthlyReportEntries);
-        monthlyTotalTable.setItems(monthlyItems);
+        ObservableList<AppointmentReportEntry> monthItems = FXCollections.observableArrayList(monthReportEntries);
+        monthlyTotalTable.setItems(monthItems);
 
-        // For Appointments by Type Table
+// For Appointments by Type Table
         apptTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         typeTotalColumn.setCellValueFactory(new PropertyValueFactory<>("typeCount"));
+
 
         Map<String, Integer> typeData = getAppointmentsByType();
         List<AppointmentReportEntry> typeReportEntries = new ArrayList<>();
@@ -360,6 +365,7 @@ public class ReportController implements Initializable {
         });
         ObservableList<AppointmentReportEntry> typeItems = FXCollections.observableArrayList(typeReportEntries);
         typeTotalTable.setItems(typeItems);
+
 
     }
 
