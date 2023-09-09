@@ -94,6 +94,8 @@ public class AppointmentController implements Initializable {
     private ComboBox<String> startHourComboBox;
     @FXML
     private ComboBox<String> startMinuteComboBox;
+    @FXML
+    private ComboBox<String> startAmPmComboBox;
 
     @FXML
     private DatePicker endDatePicker;
@@ -101,6 +103,8 @@ public class AppointmentController implements Initializable {
     private ComboBox<String> endHourComboBox;
     @FXML
     private ComboBox<String> endMinuteComboBox;
+    @FXML
+    private ComboBox<String> endAmPmComboBox;
 
     @FXML
     private TextField titleField;
@@ -120,9 +124,6 @@ public class AppointmentController implements Initializable {
     private  String createdBy = LoginController.loggedInUser.getUser_Name();
     private int userId = LoginController.loggedInUser.getUser_ID();
 
-
-
-    // TODO fix update and delete
     public AppointmentController() {
     }
 
@@ -175,13 +176,15 @@ public class AppointmentController implements Initializable {
 
     public void populateStartComboBoxes() {
         // Populate the start hour combo box
-        for (int i = 0; i < 24; i++) {
-            if (i < 10) {//puts 0 in front of numbers less than 10
+        for (int i = 1; i <= 12; i++) {
+            if (i < 10) {
                 startHourComboBox.getItems().add("0" + i);
             } else {
                 startHourComboBox.getItems().add(String.valueOf(i));
             }
         }
+        startAmPmComboBox.getItems().add("AM");
+        startAmPmComboBox.getItems().add("PM");
 
         // Populate the start minute combo box
         for (int i = 0; i < 60; i++) {
@@ -194,14 +197,15 @@ public class AppointmentController implements Initializable {
     }
 
     public void populateEndComboBoxes() {
-        // Populate the end hour combo box
-        for (int i = 0; i < 24; i++) {
-            if (i < 10) {//puts 0 in front of numbers less than 10
+        for (int i = 1; i <= 12; i++) {
+            if (i < 10) {
                 endHourComboBox.getItems().add("0" + i);
             } else {
                 endHourComboBox.getItems().add(String.valueOf(i));
             }
         }
+        endAmPmComboBox.getItems().add("AM");
+        endAmPmComboBox.getItems().add("PM");
 
         // Populate the end minute combo box
         for (int i = 0; i < 60; i++) {
@@ -229,6 +233,15 @@ public class AppointmentController implements Initializable {
         // Convert the selected hour and minute to an integer
         int hour = parseInt(selectedHour);
         int minute = parseInt(selectedMinute);
+
+        // Adjust the hour based on AM/PM selection
+        String amOrPm = startAmPmComboBox.getValue(); // Assuming you have a separate ComboBox for AM/PM
+        if ("PM".equals(amOrPm) && hour != 12) {
+            hour += 12;
+        } else if ("AM".equals(amOrPm) && hour == 12) {
+            hour = 0;
+        }
+
         // Create a LocalDateTime object from the selected date, hour, and minute
         LocalDateTime startDateTime = LocalDateTime.of(selectedDate.getYear(), selectedDate.getMonthValue(), selectedDate.getDayOfMonth(), hour, minute);
         // Convert the LocalDateTime object to UTC
@@ -247,6 +260,14 @@ public class AppointmentController implements Initializable {
         // Convert the selected hour and minute to an integer
         int hour = parseInt(selectedHour);
         int minute = parseInt(selectedMinute);
+
+        // Adjust the hour based on AM/PM selection
+        String amOrPm = endAmPmComboBox.getValue();
+        if ("PM".equals(amOrPm) && hour != 12) {
+            hour += 12;
+        } else if ("AM".equals(amOrPm) && hour == 12) {
+            hour = 0;
+        }
         // Create a LocalDateTime object from the selected date, hour, and minute
         LocalDateTime endDateTime = LocalDateTime.of(selectedDate.getYear(), selectedDate.getMonthValue(), selectedDate.getDayOfMonth(), hour, minute);
         // Convert the LocalDateTime object to UTC
@@ -255,8 +276,7 @@ public class AppointmentController implements Initializable {
         endDatePicker.setValue(endDateTimeUTC.toLocalDate());
     }
 
-    //TODO properly insert time value into the sql db, display timestamps instead of dates.
-    // TODO display alert on login if user has an appointment that occurs within 15 minutes of the current time
+
 
     private void setAppointmentTable() {
         // Set up the columns in the table

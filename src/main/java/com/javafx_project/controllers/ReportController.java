@@ -177,10 +177,10 @@ public class ReportController implements Initializable {
 
     //report that tracks the total number of customer appointments by type and month
     public Map<String, Map<String, Integer>> getAppointmentsByTypeAndMonth() {
+        // Construct the initial combined map
         Map<String, Integer> appointmentsByMonth = getAppointmentsByMonth();
         Map<String, Integer> appointmentsByType = getAppointmentsByType();
 
-        // Initialize the combined map with months and set all appointment types to zero
         Map<String, Map<String, Integer>> combinedMap = new HashMap<>();
         for (String month : appointmentsByMonth.keySet()) {
             Map<String, Integer> typeMap = new HashMap<>();
@@ -189,9 +189,11 @@ public class ReportController implements Initializable {
             }
             combinedMap.put(month, typeMap);
         }
+        System.out.println("Initial combined map: " + combinedMap);
 
-        // Fetch the combined data from the database (appointments by type and month)
+        // Fetch the data from the database
         Map<String, Map<String, Integer>> fetchedData = fetchAppointmentsByTypeAndMonthFromDB();
+        System.out.println("Fetched data from DB: " + fetchedData);
 
         // Update the combined map with the fetched data
         for (Map.Entry<String, Map<String, Integer>> monthEntry : fetchedData.entrySet()) {
@@ -203,11 +205,11 @@ public class ReportController implements Initializable {
                 combinedMap.get(month).put(type, count);
             }
         }
+        System.out.println("Final combined map: " + combinedMap);
 
-        // Add logging statements
-        System.out.println("Appointments by type and month: " + combinedMap);
         return combinedMap;
     }
+
 
     private Map<String, Map<String, Integer>> fetchAppointmentsByTypeAndMonthFromDB() {
         DatabaseConnection.establishConnection();
@@ -333,57 +335,32 @@ public class ReportController implements Initializable {
     public void customerAppointmentReport() {
         DatabaseConnection.establishConnection();
 
-       /* populateMonthlyTotalTable();
-        populateTypeTotalTable();
-*/
-
-        //TODO fix issue where months and types are repeating in the table
+        // For Monthly Appointments Table
         appointmentMonthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
         totalCountColumn.setCellValueFactory(new PropertyValueFactory<>("totalCount"));
+
+        Map<String, Integer> monthlyData = getAppointmentsByMonth();
+        List<AppointmentReportEntry> monthlyReportEntries = new ArrayList<>();
+        monthlyData.forEach((month, count) -> {
+            AppointmentReportEntry entry = new AppointmentReportEntry(month, count);
+            monthlyReportEntries.add(entry);
+        });
+        ObservableList<AppointmentReportEntry> monthlyItems = FXCollections.observableArrayList(monthlyReportEntries);
+        monthlyTotalTable.setItems(monthlyItems);
+
+        // For Appointments by Type Table
         apptTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         typeTotalColumn.setCellValueFactory(new PropertyValueFactory<>("typeCount"));
 
-        Map<String, Map<String, Integer>> data = getAppointmentsByTypeAndMonth();
+        Map<String, Integer> typeData = getAppointmentsByType();
+        List<AppointmentReportEntry> typeReportEntries = new ArrayList<>();
+        typeData.forEach((type, count) -> {
+            AppointmentReportEntry entry = new AppointmentReportEntry(type, count);
+            typeReportEntries.add(entry);
+        });
+        ObservableList<AppointmentReportEntry> typeItems = FXCollections.observableArrayList(typeReportEntries);
+        typeTotalTable.setItems(typeItems);
 
-        List<AppointmentReportEntry> reportEntries = new ArrayList<>();
-        for (Map.Entry<String, Map<String, Integer>> monthEntry : data.entrySet()) {
-            int totalForMonth = monthEntry.getValue().values().stream().mapToInt(Integer::intValue).sum();
-            for (Map.Entry<String, Integer> typeEntry : monthEntry.getValue().entrySet()) {
-                AppointmentReportEntry entry = new AppointmentReportEntry(monthEntry.getKey(), typeEntry.getKey(), typeEntry.getValue());
-                entry.setTotalCount(totalForMonth); // Set the totalCount here
-                reportEntries.add(entry);
-            }
-        }
-
-        ObservableList<AppointmentReportEntry> items = FXCollections.observableArrayList(reportEntries);
-        monthlyTotalTable.setItems(items);
-        typeTotalTable.setItems(items);
-    }
-
-    public void populateMonthlyTotalTable() {
-        Map<String, Integer> monthlyTotals = getAppointmentsByMonth();
-
-        appointmentMonthColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getKey()));
-        totalCountColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getTotalCount()).asObject());
-
-        ObservableList<AppointmentReportEntry> items = FXCollections.observableArrayList();
-        for (Map.Entry<String, Integer> entry : monthlyTotals.entrySet()) {
-            items.add(new AppointmentReportEntry(entry.getKey(), entry.getValue()));
-        }
-        monthlyTotalTable.setItems(items);
-    }
-
-    private void populateTypeTotalTable() {
-        Map<String, Integer> typeTotals = getAppointmentsByType();
-
-        apptTypeColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getKey()));
-        typeTotalColumn.setCellValueFactory(data -> new SimpleIntegerProperty().asObject());
-
-        ObservableList<AppointmentReportEntry> items = FXCollections.observableArrayList();
-        for (Map.Entry<String, Integer> entry : typeTotals.entrySet()) {
-            items.add(new AppointmentReportEntry(entry.getKey(), entry.getValue()));
-        }
-        typeTotalTable.setItems(items);
     }
 
 

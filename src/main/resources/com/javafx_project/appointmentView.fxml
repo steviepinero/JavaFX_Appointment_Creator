@@ -70,6 +70,12 @@
 
                      </items>
                  </ComboBox>
+                 <ComboBox fx:id="startAmPmComboBox">
+                     <items>
+
+                     </items>
+
+                 </ComboBox>
              </HBox>
             <Separator orientation="VERTICAL" prefHeight="40.0" prefWidth="86.0" />
             <DatePicker fx:id="endDatePicker" layoutX="10.0" layoutY="10.0" promptText="End Date" />
@@ -85,6 +91,12 @@
                      <items>
 
                      </items>
+                 </ComboBox>
+                 <ComboBox fx:id="endAmPmComboBox">
+                     <items>
+
+                     </items>
+
                  </ComboBox>
              </HBox>
             <Separator layoutX="184.0" layoutY="10.0" orientation="VERTICAL" prefHeight="40.0" prefWidth="0.0" />
