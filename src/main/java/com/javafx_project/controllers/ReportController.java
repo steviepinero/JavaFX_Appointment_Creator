@@ -344,29 +344,24 @@ public class ReportController implements Initializable {
         totalCountColumn.setCellValueFactory(new PropertyValueFactory<>("totalCount"));
 
         Map<String, Integer> monthData = getAppointmentsByMonth();
-        List<AppointmentReportEntry> monthReportEntries = new ArrayList<>();
+        ObservableList<AppointmentReportEntry> monthItems = FXCollections.observableArrayList();
         monthData.forEach((month, count) -> {
-            AppointmentReportEntry entry = new AppointmentReportEntry(month, count);
-            monthReportEntries.add(entry);
+            monthItems.add(new AppointmentReportEntry(month, count));
+            System.out.println("Added report entry for month: " + month);
         });
-        ObservableList<AppointmentReportEntry> monthItems = FXCollections.observableArrayList(monthReportEntries);
         monthlyTotalTable.setItems(monthItems);
 
-// For Appointments by Type Table
+        // For Appointments by Type Table
         apptTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         typeTotalColumn.setCellValueFactory(new PropertyValueFactory<>("typeCount"));
 
-
         Map<String, Integer> typeData = getAppointmentsByType();
-        List<AppointmentReportEntry> typeReportEntries = new ArrayList<>();
+        ObservableList<AppointmentReportEntry> typeItems = FXCollections.observableArrayList();
         typeData.forEach((type, count) -> {
-            AppointmentReportEntry entry = new AppointmentReportEntry(type, count);
-            typeReportEntries.add(entry);
+            typeItems.add(new AppointmentReportEntry(type, count));
+            System.out.println("Added report entry for type: " + type);
         });
-        ObservableList<AppointmentReportEntry> typeItems = FXCollections.observableArrayList(typeReportEntries);
         typeTotalTable.setItems(typeItems);
-
-
     }
 
 
@@ -424,6 +419,7 @@ public class ReportController implements Initializable {
         customerReportTab.setOnSelectionChanged(event -> {
             if (customerReportTab.isSelected()) {
                 customerAppointmentReport();
+                typeTotalTable.refresh();
             }
         });
 

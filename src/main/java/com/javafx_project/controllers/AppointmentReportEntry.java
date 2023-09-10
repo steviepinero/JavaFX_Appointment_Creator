@@ -24,8 +24,8 @@ public class AppointmentReportEntry {
     public AppointmentReportEntry(String key, Integer value) {
         this.month = new SimpleStringProperty(key);
         this.totalCount = (value != null) ? new SimpleIntegerProperty(value) : new SimpleIntegerProperty(0);
-        this.type = new SimpleStringProperty("");
-        this.typeCount = new SimpleIntegerProperty(0);
+        this.type = new SimpleStringProperty(key);
+        this.typeCount = (value != null) ? new SimpleIntegerProperty(value) : new SimpleIntegerProperty(0);
     }
 
 
