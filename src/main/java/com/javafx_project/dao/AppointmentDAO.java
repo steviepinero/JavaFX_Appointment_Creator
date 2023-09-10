@@ -11,7 +11,15 @@ import java.time.LocalDateTime;
 import static com.javafx_project.dao.DatabaseConnection.connection;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
+/**
+ * The type Appointment dao.
+ */
 public class AppointmentDAO {
+    /**
+     * Gets all appointments.
+     *
+     * @return the all appointments
+     */
     public static ObservableList<Appointment> getAllAppointments() {
 
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
@@ -49,6 +57,11 @@ public class AppointmentDAO {
     }
 
 
+    /**
+     * Delete appointment.
+     *
+     * @param appointmentId the appointment id
+     */
     public void deleteAppointment(int appointmentId) {
         //delete appointment from database
         String sql = "DELETE FROM appointments WHERE appointment_id = ?";
@@ -63,6 +76,11 @@ public class AppointmentDAO {
         }
     }
 
+    /**
+     * Update appointment.
+     *
+     * @param appointment the appointment
+     */
     public void updateAppointment(Appointment appointment) {
         //update appointment table in database
         String sql = "UPDATE appointments SET title = ?, description = ?, location = ?, contact_id = ?, type = ?, start = ?, end = ?, customer_id = ?, user_id = ?, create_date = ?, created_by = ?, last_update = ?, last_updated_by = ? WHERE appointment_id = ?";
@@ -114,9 +132,23 @@ public class AppointmentDAO {
     }
 
 
-
-
-
+    /**
+     * Add appointment.
+     *
+     * @param title           the title
+     * @param description     the description
+     * @param location        the location
+     * @param type            the type
+     * @param start           the start
+     * @param end             the end
+     * @param create_date     the create date
+     * @param created_by      the created by
+     * @param last_update     the last update
+     * @param last_updated_by the last updated by
+     * @param customerId      the customer id
+     * @param userId          the user id
+     * @param contactId       the contact id
+     */
     public static void addAppointment(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, Timestamp create_date, String created_by, Timestamp last_update, String last_updated_by, int customerId, int userId, int contactId) {
         //add appointment to database
 

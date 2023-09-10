@@ -7,7 +7,15 @@ import javafx.collections.ObservableList;
 import java.sql.*;
 
 
+/**
+ * The type Customer dao.
+ */
 public class CustomerDAO {
+    /**
+     * Gets all customers.
+     *
+     * @return the all customers
+     */
     public static ObservableList<Customer> getAllCustomers() {
         String sql = "SELECT * FROM customers ORDER BY customer_id";
         ObservableList<Customer> customerList = FXCollections.observableArrayList();
@@ -45,8 +53,12 @@ public class CustomerDAO {
     }
 
 
-
-        public void addCustomer(Customer customer) {
+    /**
+     * Add customer.
+     *
+     * @param customer the customer
+     */
+    public void addCustomer(Customer customer) {
         String sql = "INSERT INTO customers (customer_name, address, postal_code, phone, create_date, created_by, last_update, last_updated_by, country_id, division_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -76,6 +88,11 @@ public class CustomerDAO {
         pstmt.setInt(10, customer.getDivision_ID());
     }
 
+    /**
+     * Update customer.
+     *
+     * @param customer the customer
+     */
     public void updateCustomer(Customer customer) {
 
         String sql = "UPDATE customers SET customer_name = ?, address = ?, postal_code = ?, phone = ?, create_date = ?, created_by = ?, last_update = ?, last_updated_by = ?, division_id = ? WHERE customer_id = ?";
@@ -93,6 +110,11 @@ public class CustomerDAO {
 
     }
 
+    /**
+     * Delete customer.
+     *
+     * @param customerId the customer id
+     */
     public static void deleteCustomer(int customerId) {
         String sql = "DELETE FROM customers WHERE customer_id = ?";
 

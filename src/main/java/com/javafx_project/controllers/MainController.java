@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * The type Main controller.
+ */
 public class MainController {
     @FXML
     private Label welcomeText;
@@ -31,6 +34,9 @@ public class MainController {
     @FXML
     private Button firstLevelDivisionButton;
 
+    /**
+     * On hello button click.
+     */
     @FXML
     protected void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
@@ -50,6 +56,11 @@ public class MainController {
 
     }
 
+    /**
+     * Customer button click.
+     *
+     * @throws IOException the io exception
+     */
     @FXML
     protected void customerButtonClick() throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/customerView.fxml"));
@@ -64,6 +75,11 @@ public class MainController {
 
     }
 
+    /**
+     * User button click.
+     *
+     * @throws IOException the io exception
+     */
     @FXML
     protected void userButtonClick() throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/userView.fxml"));
@@ -78,6 +94,11 @@ public class MainController {
 
     }
 
+    /**
+     * Report button click.
+     *
+     * @throws IOException the io exception
+     */
     @FXML
     protected void reportButtonClick() throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/reportView.fxml"));
@@ -92,6 +113,11 @@ public class MainController {
 
     }
 
+    /**
+     * Contact button click.
+     *
+     * @throws IOException the io exception
+     */
     @FXML
     protected void contactButtonClick() throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/contactView.fxml"));
@@ -105,6 +131,11 @@ public class MainController {
         stage.setScene(scene);
     }
 
+    /**
+     * Country button click.
+     *
+     * @throws IOException the io exception
+     */
     public void countryButtonClick() throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/countryView.fxml"));
         Parent root = loader.load();
@@ -117,6 +148,11 @@ public class MainController {
         stage.setScene(scene);
     }
 
+    /**
+     * First level division button click.
+     *
+     * @throws IOException the io exception
+     */
     public void firstLevelDivisionButtonClick() throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/firstLevelDivisionView.fxml"));
         Parent root = loader.load();

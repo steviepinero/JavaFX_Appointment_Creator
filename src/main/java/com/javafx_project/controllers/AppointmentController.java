@@ -34,6 +34,9 @@ import static com.javafx_project.controllers.LoginController.loggedInUser;
 import static java.lang.Integer.parseInt;
 import static java.lang.Integer.valueOf;
 
+/**
+ * The type Appointment controller.
+ */
 public class AppointmentController implements Initializable {
 
     @FXML
@@ -124,9 +127,15 @@ public class AppointmentController implements Initializable {
     private  String createdBy = LoginController.loggedInUser.getUser_Name();
     private int userId = LoginController.loggedInUser.getUser_ID();
 
+    /**
+     * Instantiates a new Appointment controller.
+     */
     public AppointmentController() {
     }
 
+    /**
+     * Populate contact box.
+     */
     public void populateContactBox() {
         String query = "SELECT * FROM contacts";
         try {
@@ -148,6 +157,9 @@ public class AppointmentController implements Initializable {
         }
     }
 
+    /**
+     * Populate customer box.
+     */
     public void populateCustomerBox() {
         String query = "SELECT * FROM customers";
         try {
@@ -169,11 +181,17 @@ public class AppointmentController implements Initializable {
         }
     }
 
+    /**
+     * Time populater.
+     */
     public void timePopulater() {
         populateStartComboBoxes();
         populateEndComboBoxes();
     }
 
+    /**
+     * Populate start combo boxes.
+     */
     public void populateStartComboBoxes() {
         // Populate the start hour combo box
         for (int i = 1; i <= 12; i++) {
@@ -196,6 +214,9 @@ public class AppointmentController implements Initializable {
         }
     }
 
+    /**
+     * Populate end combo boxes.
+     */
     public void populateEndComboBoxes() {
         for (int i = 1; i <= 12; i++) {
             if (i < 10) {
@@ -218,11 +239,17 @@ public class AppointmentController implements Initializable {
 
     }
 
+    /**
+     * Date time setter.
+     */
     public void dateTimeSetter() {
         setStartDateTime();
         setEndDateTime();
     }
 
+    /**
+     * Sets start date time.
+     */
     public void setStartDateTime() {
         // Get the selected date from the date picker
         LocalDate selectedDate = startDatePicker.getValue();
@@ -250,6 +277,9 @@ public class AppointmentController implements Initializable {
         startDatePicker.setValue(startDateTimeUTC.toLocalDate());
     }
 
+    /**
+     * Sets end date time.
+     */
     public void setEndDateTime() {
         // Get the selected date from the date picker
         LocalDate selectedDate = endDatePicker.getValue();
@@ -308,12 +338,24 @@ public class AppointmentController implements Initializable {
     }
 
 
-    //Converts local time to UTC time
+    /**
+     * Convert local to utc local date time.
+     *
+     * @param localDateTime the local date time
+     * @return the local date time
+     */
+//Converts local time to UTC time
     public LocalDateTime convertLocalToUTC(LocalDateTime localDateTime) {
         return localDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
     }
 
-    //Converts UTC time to local time
+    /**
+     * Convert utc to local local date time.
+     *
+     * @param utcDateTime the utc date time
+     * @return the local date time
+     */
+//Converts UTC time to local time
     public LocalDateTime convertUTCToLocal(LocalDateTime utcDateTime) {
         return utcDateTime.atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
     }
@@ -425,6 +467,12 @@ public class AppointmentController implements Initializable {
        }
 
     }
+
+    /**
+     * Update appointment.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void updateAppointment(ActionEvent actionEvent) {
         DatabaseConnection.establishConnection();
@@ -562,6 +610,9 @@ public class AppointmentController implements Initializable {
 
     }
 
+    /**
+     * Check upcoming appointments.
+     */
     public static void checkUpcomingAppointments() {
         try {
             System.out.println("Checking for upcoming appointments...");
@@ -594,6 +645,12 @@ public class AppointmentController implements Initializable {
     }
 
 
+    /**
+     * Back button action.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
         Parent root = loader.load();
@@ -608,6 +665,11 @@ public class AppointmentController implements Initializable {
         stage.setScene(scene);
     }
 
+    /**
+     * Sets appointment dao.
+     *
+     * @param appointmentDAO the appointment dao
+     */
     public void setAppointmentDAO(AppointmentDAO appointmentDAO) {
         this.appointmentDAO = appointmentDAO;
     }
@@ -627,6 +689,7 @@ public class AppointmentController implements Initializable {
             endDatePicker.setValue(selectedAppointment.getEnd());
             customerBox.setValue(new Customer(selectedAppointment.getCustomer_ID(), ""));
             contactBox.setValue(new Contact(selectedAppointment.getContact_ID(), ""));
+
         }
     }
 

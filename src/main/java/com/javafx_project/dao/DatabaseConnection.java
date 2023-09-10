@@ -5,10 +5,24 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * The type Database connection.
+ */
 public class DatabaseConnection {
+    /**
+     * The constant connection.
+     */
     public static Connection connection;
+    /**
+     * The constant preparedStatement.
+     */
     public static PreparedStatement preparedStatement;
 
+    /**
+     * Establish connection connection.
+     *
+     * @return the connection
+     */
     public static Connection establishConnection() {
 
         if (connection == null) {
@@ -25,6 +39,11 @@ public class DatabaseConnection {
         return connection;
     }
 
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     */
     public static Connection getConnection() {
 //        establishConnection();
         return connection;

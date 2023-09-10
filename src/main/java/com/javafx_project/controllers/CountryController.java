@@ -30,8 +30,14 @@ import static com.javafx_project.controllers.LoginController.loggedInUser;
 import static com.javafx_project.dao.DatabaseConnection.connection;
 
 
+/**
+ * The type Country controller.
+ */
 public class CountryController implements Initializable {
 
+    /**
+     * The Country list.
+     */
     static ObservableList<Country> countryList = CountryDAO.getAllCountries();
     private static Country selectedCountry;
 
@@ -55,9 +61,17 @@ public class CountryController implements Initializable {
     @FXML
     private TextField countryNameField;
 
+    /**
+     * Instantiates a new Country controller.
+     */
     public CountryController() {
     }
 
+    /**
+     * Add country.
+     *
+     * @param actionEvent the action event
+     */
     public void addCountry(ActionEvent actionEvent) {
         String countryName, createdBy, lastUpdatedBy;
         countryName = countryNameField.getText();
@@ -95,6 +109,9 @@ public class CountryController implements Initializable {
 
     }
 
+    /**
+     * Sets country table.
+     */
     public void setCountryTable() {
         countryTable.setItems(countryList);
         countryIdColumn.setCellValueFactory(new PropertyValueFactory<>("Country_ID"));
@@ -107,6 +124,11 @@ public class CountryController implements Initializable {
     }
 
 
+    /**
+     * Update country.
+     *
+     * @param actionEvent the action event
+     */
     public void updateCountry(ActionEvent actionEvent) {
         String countryName, lastUpdatedBy;
         int country_ID;
@@ -142,6 +164,11 @@ public class CountryController implements Initializable {
         }
     }
 
+    /**
+     * Delete country.
+     *
+     * @param actionEvent the action event
+     */
     public void deleteCountry(ActionEvent actionEvent) {
         int country_ID;
         selectedCountry = countryTable.getSelectionModel().getSelectedItem();
@@ -170,6 +197,12 @@ public class CountryController implements Initializable {
         }
     }
 
+    /**
+     * Back button action.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
         Parent root = loader.load();

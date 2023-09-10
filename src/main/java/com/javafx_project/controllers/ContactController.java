@@ -27,7 +27,13 @@ import java.util.logging.Logger;
 import static com.javafx_project.dao.DatabaseConnection.connection;
 
 
+/**
+ * The type Contact controller.
+ */
 public class ContactController implements Initializable {
+    /**
+     * The Contact list.
+     */
     static ObservableList<Contact> contactList = ContactDAO.getAllContacts();
 
     private static Contact selectedContact;
@@ -49,10 +55,19 @@ public class ContactController implements Initializable {
     @FXML
     private TextField emailField;
 
-    //constructor
+    /**
+     * Instantiates a new Contact controller.
+     */
+//constructor
     public ContactController() {
 
     }
+
+    /**
+     * Add contact.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void addContact(ActionEvent actionEvent) {
         String contactName, email;
@@ -86,7 +101,10 @@ public class ContactController implements Initializable {
         }
     }
 
-    //TODO populate fields with selected contact
+    /**
+     * Populate fields.
+     */
+//TODO populate fields with selected contact
     @FXML
     public void populateFields() {
         selectedContact = contactTable.getSelectionModel().getSelectedItem();
@@ -94,6 +112,11 @@ public class ContactController implements Initializable {
         emailField.setText(selectedContact.getEmail());
     }
 
+    /**
+     * Update contact.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void updateContact(ActionEvent actionEvent) {
         String contactName, email;
@@ -129,6 +152,12 @@ public class ContactController implements Initializable {
             System.out.println(e.getMessage());
         }
     }
+
+    /**
+     * Delete contact.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void deleteContact(ActionEvent actionEvent) {
         int contact_ID;
@@ -165,6 +194,12 @@ public class ContactController implements Initializable {
         }
     }
 
+    /**
+     * Back button action.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
         Parent root = loader.load();
@@ -179,6 +214,9 @@ public class ContactController implements Initializable {
         stage.setScene(scene);
     }
 
+    /**
+     * Set contact table.
+     */
     public void setContactTable(){
         contactTable.setItems(contactList);
          contactIdColumn.setCellValueFactory(new PropertyValueFactory<>("Contact_ID"));

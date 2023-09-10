@@ -25,8 +25,14 @@ import javafx.stage.Stage;
 
 import static com.javafx_project.dao.DatabaseConnection.connection;
 
+/**
+ * The type Customer controller.
+ */
 public class CustomerController implements Initializable {
 
+    /**
+     * The Customer list.
+     */
     static ObservableList<Customer> customerList = CustomerDAO.getAllCustomers();
     private static Customer selectedCustomer;
 
@@ -97,10 +103,16 @@ public class CustomerController implements Initializable {
     private FirstLevelDivisionDAO firstLevelDivisionDAO;
     private UserDAO userdao;
 
+    /**
+     * Instantiates a new Customer controller.
+     */
     public CustomerController() {
     }
 
 
+    /**
+     * Populate country box.
+     */
     @FXML
     public void populateCountryBox() {
         String query = "SELECT * FROM countries";
@@ -181,7 +193,11 @@ public class CustomerController implements Initializable {
     }
 
 
-
+    /**
+     * Update customer.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void updateCustomer(ActionEvent actionEvent) {
         DatabaseConnection.establishConnection();
@@ -285,6 +301,12 @@ public class CustomerController implements Initializable {
 
     }
 
+    /**
+     * Back button action.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
         Parent root = loader.load();
@@ -299,6 +321,9 @@ public class CustomerController implements Initializable {
         stage.setScene(scene);
     }
 
+    /**
+     * Sets customer table.
+     */
     public void setCustomerTable() {
         customerTable.setItems(customerList);
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("Customer_ID"));

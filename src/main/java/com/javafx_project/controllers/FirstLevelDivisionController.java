@@ -26,8 +26,14 @@ import java.util.logging.Logger;
 import static com.javafx_project.dao.DatabaseConnection.connection;
 import static java.lang.Integer.valueOf;
 
+/**
+ * The type First level division controller.
+ */
 public class FirstLevelDivisionController implements Initializable {
 
+    /**
+     * The Division list.
+     */
     ObservableList<FirstLevelDivision> divisionList = FirstLevelDivisionDAO.getAllDivisions();
     private FirstLevelDivision selectedDivision;
     /** Division table */
@@ -54,6 +60,17 @@ public class FirstLevelDivisionController implements Initializable {
     @FXML
     private ComboBox<Country> countryComboBox;
 
+    /**
+     * Instantiates a new First level division controller.
+     *
+     * @param selectedDivision   the selected division
+     * @param divisionTable      the division table
+     * @param divisionIdColumn   the division id column
+     * @param divisionNameColumn the division name column
+     * @param countryIdColumn    the country id column
+     * @param divisionNameField  the division name field
+     * @param countryComboBox    the country combo box
+     */
     public FirstLevelDivisionController(FirstLevelDivision selectedDivision, TableView<FirstLevelDivision> divisionTable, TableColumn<FirstLevelDivision, Integer> divisionIdColumn, TableColumn<FirstLevelDivision, String> divisionNameColumn, TableColumn<FirstLevelDivision, Integer> countryIdColumn, TextField divisionNameField, ComboBox<Country> countryComboBox) {
         this.selectedDivision = selectedDivision;
         this.divisionTable = divisionTable;
@@ -64,10 +81,19 @@ public class FirstLevelDivisionController implements Initializable {
         this.countryComboBox = countryComboBox;
     }
 
+    /**
+     * Instantiates a new First level division controller.
+     */
     public FirstLevelDivisionController() {
 
     }
 
+    /**
+     * Back button action.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
         Parent root = loader.load();
@@ -82,6 +108,11 @@ public class FirstLevelDivisionController implements Initializable {
         stage.setScene(scene);
     }
 
+    /**
+     * Add division.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void addDivision(ActionEvent actionEvent) {
         String divisionName, country, createdBy, lastUpdatedBy;
@@ -121,6 +152,11 @@ public class FirstLevelDivisionController implements Initializable {
         }
     }
 
+    /**
+     * Update division.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void updateDivision(ActionEvent actionEvent) {
         DatabaseConnection.establishConnection();
@@ -157,6 +193,11 @@ public class FirstLevelDivisionController implements Initializable {
         }
     }
 
+    /**
+     * Delete division.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void deleteDivision(ActionEvent actionEvent) {
         DatabaseConnection.establishConnection();
@@ -184,7 +225,9 @@ public class FirstLevelDivisionController implements Initializable {
     }
 
 
-
+    /**
+     * Sets division table.
+     */
     public void setDivisionTable() {
         divisionTable.setItems(divisionList);
         divisionIdColumn.setCellValueFactory(new PropertyValueFactory<>("Division_ID"));
@@ -198,6 +241,9 @@ public class FirstLevelDivisionController implements Initializable {
 
     }
 
+    /**
+     * Populate country box.
+     */
     public void populateCountryBox() {
         String query = "SELECT * FROM countries";
         try {

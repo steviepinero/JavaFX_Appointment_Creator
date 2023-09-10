@@ -29,8 +29,17 @@ import java.util.logging.Logger;
 
 import static com.javafx_project.dao.DatabaseConnection.connection;
 
+/**
+ * The type User controller.
+ */
 public class UserController implements Initializable {
+    /**
+     * The User list.
+     */
     static ObservableList<User> userList = UserDAO.getAllUsers();
+    /**
+     * The Appointment list.
+     */
     static ObservableList<Appointment> appointmentList = AppointmentDAO.getAllAppointments();
     private static User selectedUser;
 
@@ -59,12 +68,18 @@ public class UserController implements Initializable {
     private TextField userNameField;
 
 
-
-
-    //constructor
+    /**
+     * Instantiates a new User controller.
+     */
+//constructor
     public UserController() {
     }
 
+    /**
+     * Add user.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void addUser(ActionEvent actionEvent) {
         String userName, password, createdBy, lastUpdatedBy;
@@ -101,7 +116,10 @@ public class UserController implements Initializable {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, e);
      }
     }
-    
+
+    /**
+     * Sets table.
+     */
     public void setTable() {
         // Set the user table
         userTable.setItems(userList);
@@ -115,6 +133,11 @@ public class UserController implements Initializable {
 
     }
 
+    /**
+     * Update user.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void updateUser(ActionEvent actionEvent) {
         DatabaseConnection.establishConnection();
@@ -152,6 +175,11 @@ public class UserController implements Initializable {
         }
     }
 
+    /**
+     * Delete user.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void deleteUser(ActionEvent actionEvent) {
         DatabaseConnection.establishConnection();
@@ -211,6 +239,12 @@ public class UserController implements Initializable {
 
     }
 
+    /**
+     * Back button action.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
         Parent root = loader.load();

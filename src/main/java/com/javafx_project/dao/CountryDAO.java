@@ -9,7 +9,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/**
+ * The type Country dao.
+ */
 public class CountryDAO {
+    /**
+     * Gets all countries.
+     *
+     * @return the all countries
+     */
     public static ObservableList<Country> getAllCountries() {
         String sql = "SELECT * FROM countries ORDER BY Country_ID";
         ObservableList<Country> countryList = javafx.collections.FXCollections.observableArrayList();
@@ -39,6 +47,11 @@ public class CountryDAO {
 
     }
 
+    /**
+     * Delete country.
+     *
+     * @param country_ID the country id
+     */
     public static void deleteCountry(int country_ID) {
         String sql = "DELETE FROM countries WHERE Country_ID = ?";
         System.out.println(country_ID + " deleted");

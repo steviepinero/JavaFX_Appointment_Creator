@@ -5,7 +5,15 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 
+/**
+ * The type Contact dao.
+ */
 public class ContactDAO {
+    /**
+     * Gets all contacts.
+     *
+     * @return the all contacts
+     */
     public static ObservableList<Contact> getAllContacts() {
         String sql = "SELECT * FROM contacts ORDER BY Contact_ID";
         ObservableList<Contact> contactList = javafx.collections.FXCollections.observableArrayList();
@@ -31,6 +39,11 @@ public class ContactDAO {
         return null;
     }
 
+    /**
+     * Delete contact.
+     *
+     * @param contact_ID the contact id
+     */
     public static void deleteContact(int contact_ID) {
         String sql = "DELETE FROM contacts WHERE Contact_ID = ?";
         try {

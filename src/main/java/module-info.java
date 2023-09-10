@@ -7,7 +7,6 @@ module com.javafx_project {
     requires java.security.jgss;
     requires org.testng;
     requires junit;
-    requires mockito.all;
 
     opens com.javafx_project to javafx.fxml;
     exports com.javafx_project;

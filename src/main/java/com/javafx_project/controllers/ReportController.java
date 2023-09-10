@@ -29,83 +29,157 @@ import java.sql.Statement;
 import java.util.*;
 
 
+/**
+ * The type Report controller.
+ */
 public class ReportController implements Initializable {
 
-    /**  the total number of customer appointments by type and month
-
-     •  a schedule for each contact in your organization that includes appointment ID, title, type and description, start date and time, end date and time, and customer ID
-
-     •  an additional report of your choice that is different from the two other required reports in this prompt and from the user log-in date and time stamp that will be tracked in part C
+    /**
+     * the total number of customer appointments by type and month
+     * •  a schedule for each contact in your organization that includes appointment ID, title, type and description, start date and time, end date and time, and customer ID
+     * •  an additional report of your choice that is different from the two other required reports in this prompt and from the user log-in date and time stamp that will be tracked in part C
      */
-
     @FXML
     public TableColumn<AppointmentReportEntry, String> appointmentTypeColumn;
+    /**
+     * The Type column.
+     */
     @FXML
     public TableColumn<AppointmentReportEntry, String> typeColumn;
+    /**
+     * The Type count column.
+     */
     @FXML
     public TableColumn<AppointmentReportEntry, Integer> typeCountColumn;
 
+    /**
+     * The Monthly total table.
+     */
     @FXML
     public TableView<AppointmentReportEntry> monthlyTotalTable;
+    /**
+     * The Appointment month column.
+     */
     @FXML
     public TableColumn<Map.Entry<String, Map<String, Integer>>, String> appointmentMonthColumn;
+    /**
+     * The Appt type column.
+     */
     @FXML
     public TableColumn<Map.Entry<String, Map<String, Integer>>, String> apptTypeColumn;
+    /**
+     * The Appointment count column.
+     */
     @FXML
     public TableColumn<Map.Entry<String, Map<String, Integer>>, Integer> appointmentCountColumn;
 
 
-
+    /**
+     * The Contact report table.
+     */
     @FXML
     public TableView<Appointment> contactReportTable;
+    /**
+     * The Appointment id column.
+     */
     @FXML
     public TableColumn<Appointment, Integer> appointmentIDColumn;
 
+    /**
+     * The Title column.
+     */
     @FXML
     public TableColumn<Appointment, String> titleColumn;
+    /**
+     * The Month column.
+     */
     @FXML
     public TableColumn<Appointment, String> monthColumn;
 
 
+    /**
+     * The Description column.
+     */
     @FXML
     public TableColumn<Appointment, String> descriptionColumn;
+    /**
+     * The Start date column.
+     */
     @FXML
     public TableColumn<Appointment, String> startDateColumn;
 
+    /**
+     * The End date column.
+     */
     @FXML
     public TableColumn<Appointment, String> endDateColumn;
+    /**
+     * The Customer id column.
+     */
     @FXML
     public TableColumn<Appointment, Integer> customerIDColumn;
 
 
-
+    /**
+     * The User report table.
+     */
     @FXML
     public TableView<User> userReportTable;
+    /**
+     * The Username column.
+     */
     @FXML
     public TableColumn<User, String> usernameColumn;
+    /**
+     * The Update count column.
+     */
     @FXML
     public TableColumn<User, Integer> updateCountColumn;
 
+    /**
+     * The Back button.
+     */
     @FXML
     public Button backButton;
 
+    /**
+     * The Report tab pane.
+     */
     @FXML
     public TabPane reportTabPane;
 
+    /**
+     * The Customer report tab.
+     */
     @FXML
     public Tab customerReportTab;
 
+    /**
+     * The Contact report tab.
+     */
     @FXML
     public Tab contactReportTab;
 
+    /**
+     * The User report tab.
+     */
     @FXML
     public Tab userReportTab;
+    /**
+     * The Customer name column.
+     */
     @FXML
     public TableColumn<Customer, String> customerNameColumn;
 
+    /**
+     * The Report month column.
+     */
     @FXML
     public TableColumn<AppointmentReportEntry, String> reportMonthColumn;
 
+    /**
+     * The Total count column.
+     */
     @FXML
     public TableColumn<AppointmentReportEntry, Integer> totalCountColumn;
 
@@ -120,18 +194,39 @@ public class ReportController implements Initializable {
     private TableColumn<AppointmentReportEntry, Integer> typeTotalColumn;
 
 
-
-
+    /**
+     * The User list.
+     */
     public static ObservableList<User> userList = UserDAO.getAllUsers();
+    /**
+     * The constant AppointmentDAO.
+     */
     public static com.javafx_project.dao.AppointmentDAO AppointmentDAO;
+    /**
+     * The Appointment list.
+     */
     static ObservableList<Appointment> appointmentList = AppointmentDAO.getAllAppointments();
+    /**
+     * The Contact list.
+     */
     static ObservableList<Contact> contactList = ContactDAO.getAllContacts();
+    /**
+     * The Contact name column.
+     */
     public TableColumn<Appointment, String> contactNameColumn;
 
+    /**
+     * Instantiates a new Report controller.
+     */
     public ReportController() {
     }
 
-    //report that displays the total number of customer appointments by month
+    /**
+     * Gets appointments by month.
+     *
+     * @return the appointments by month
+     */
+//report that displays the total number of customer appointments by month
     public Map<String, Integer> getAppointmentsByMonth() {
         DatabaseConnection.establishConnection();
 
@@ -156,6 +251,11 @@ public class ReportController implements Initializable {
 
     }
 
+    /**
+     * Gets appointments by type.
+     *
+     * @return the appointments by type
+     */
     public Map<String, Integer> getAppointmentsByType() {
         DatabaseConnection.establishConnection();
 
@@ -178,8 +278,12 @@ public class ReportController implements Initializable {
     }
 
 
-
-    //report that tracks the total number of customer appointments by type and month
+    /**
+     * Gets appointments by type and month.
+     *
+     * @return the appointments by type and month
+     */
+//report that tracks the total number of customer appointments by type and month
     public Map<String, Map<String, Integer>> getAppointmentsByTypeAndMonth() {
         // Construct the initial combined map
         Map<String, Integer> appointmentsByMonth = getAppointmentsByMonth();
@@ -244,8 +348,12 @@ public class ReportController implements Initializable {
     }
 
 
-
-    //report/schedule that tracks the total number of appointments by contact
+    /**
+     * Gets schedule for contacts.
+     *
+     * @return the schedule for contacts
+     */
+//report/schedule that tracks the total number of appointments by contact
     public Map<Contact, List<Appointment>> getScheduleForContacts() {
         DatabaseConnection.establishConnection();
 
@@ -284,7 +392,6 @@ public class ReportController implements Initializable {
     }
 
 
-
     /**
      * Generates a report that tracks the total number of updates made by each user in the database.
      */
@@ -312,11 +419,18 @@ public class ReportController implements Initializable {
     }
 
 
-    //fetches the number of updates made by each user
+    /**
+     * Fetch user updates map.
+     *
+     * @return the map
+     */
+//fetches the number of updates made by each user
     public Map<String, Integer> fetchUserUpdates() {
         DatabaseConnection.establishConnection();
 
-        String query = "SELECT User_Name, COUNT(*) as Update_Count FROM users JOIN appointments ON users.User_ID = appointments.User_ID GROUP BY User_Name";
+        // Use LEFT JOIN to ensure all users are included
+        // COALESCE is used to avoid NullPointerException
+        String query = "SELECT User_Name, COALESCE(COUNT(appointments.User_ID), 0) as Update_Count FROM users LEFT JOIN appointments ON users.User_ID = appointments.User_ID GROUP BY User_Name";
         Map<String, Integer> resultMap = new HashMap<>();
 
         try {
@@ -326,6 +440,7 @@ public class ReportController implements Initializable {
                 String username = rs.getString("User_Name");
                 int count = rs.getInt("Update_Count");
                 resultMap.put(username, count);
+                System.out.println("Username: " + username + " Count: " + count);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -334,8 +449,10 @@ public class ReportController implements Initializable {
     }
 
 
-
-    //displays the report that tracks the total number of customer appointments by type and month
+    /**
+     * Customer appointment report.
+     */
+//displays the report that tracks the total number of customer appointments by type and month
     public void customerAppointmentReport() {
         DatabaseConnection.establishConnection();
 
@@ -365,9 +482,10 @@ public class ReportController implements Initializable {
     }
 
 
-
-
-    //displays the report that tracks the total number of appointments by contact
+    /**
+     * Contact appointment report.
+     */
+//displays the report that tracks the total number of appointments by contact
     public void contactAppointmentReport() {
         DatabaseConnection.establishConnection();
 
@@ -395,6 +513,12 @@ public class ReportController implements Initializable {
     }
 
 
+    /**
+     * Back button action.
+     *
+     * @param actionEvent the action event
+     * @throws IOException the io exception
+     */
     public void backButtonAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/com/javafx_project/homeView.fxml"));
         Parent root = loader.load();

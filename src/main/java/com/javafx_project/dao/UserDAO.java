@@ -9,12 +9,26 @@ import java.sql.SQLException;
 
 import static com.javafx_project.dao.DatabaseConnection.connection;
 
+/**
+ * The type User dao.
+ */
 public class UserDAO {
+    /**
+     * The constant getUserByUsername.
+     */
     public static User getUserByUsername;
+    /**
+     * The constant getUserByUserId.
+     */
     public static User getUserByUserId;
     private int userId;
     private String userName;
 
+    /**
+     * Gets all users.
+     *
+     * @return the all users
+     */
     public static ObservableList<User> getAllUsers() {
         ObservableList<User> userList = javafx.collections.FXCollections.observableArrayList();
 
@@ -41,6 +55,13 @@ public class UserDAO {
         }
     }
 
+    /**
+     * Gets user by username.
+     *
+     * @param username the username
+     * @return the user by username
+     * @throws SQLException the sql exception
+     */
     public User getUserByUsername(String username) throws SQLException {
         String query = "SELECT * FROM Users WHERE User_Name = ?";
         PreparedStatement ps = connection.prepareStatement(query);
@@ -59,6 +80,13 @@ public class UserDAO {
         }
     }
 
+    /**
+     * Gets user by user id.
+     *
+     * @param userId the user id
+     * @return the user by user id
+     * @throws SQLException the sql exception
+     */
     public User getUserByUserId(int userId) throws SQLException {
         String query = "SELECT * FROM Users WHERE User_ID = ?";
         PreparedStatement ps = connection.prepareStatement(query);
@@ -80,6 +108,11 @@ public class UserDAO {
         }
 
 
+    /**
+     * Delete user.
+     *
+     * @param userId the user id
+     */
     public static void deleteUser(int userId) {
         String query = "DELETE FROM Users WHERE User_ID = ?";
         PreparedStatement ps = null;
@@ -93,6 +126,13 @@ public class UserDAO {
     }
 
 
+    /**
+     * Gets user id by username.
+     *
+     * @param enteredUsername the entered username
+     * @return the user id by username
+     * @throws SQLException the sql exception
+     */
     public UserDAO getUserIDByUsername(String enteredUsername) throws SQLException {
         return getUserByUserId(userId);
     }

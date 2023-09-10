@@ -17,16 +17,34 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Locale;
 
+/**
+ * The type Login controller.
+ */
 public class LoginController extends Pane {
+    /**
+     * The constant loggedInUser.
+     */
     public static User loggedInUser;
+    /**
+     * The Username field.
+     */
     @FXML
     public TextField usernameField;
 
+    /**
+     * The Password field.
+     */
     @FXML
     public PasswordField passwordField;
 
+    /**
+     * The Zone id label.
+     */
     @FXML
     public Label zoneIdLabel;
+    /**
+     * The User dao.
+     */
     public UserDAO userDAO;
 
     @FXML
@@ -34,16 +52,29 @@ public class LoginController extends Pane {
     @FXML
     private Label loginLabel;
 
+    /**
+     * Instantiates a new Login controller.
+     *
+     * @param usernameField the username field
+     * @param passwordField the password field
+     * @param loginButton   the login button
+     */
     public LoginController(TextField usernameField, PasswordField passwordField, Button loginButton) {
         this.usernameField = usernameField;
         this.passwordField = passwordField;
         this.loginButton = loginButton;
     }
 
+    /**
+     * Instantiates a new Login controller.
+     */
     public LoginController() {
         // No-argument constructor
     }
 
+    /**
+     * Initialize.
+     */
     @FXML
     public void initialize() {
         Locale currentLocale = Locale.getDefault();
@@ -70,6 +101,12 @@ public class LoginController extends Pane {
 
     }
 
+    /**
+     * Login.
+     *
+     * @param event the event
+     * @throws SQLException the sql exception
+     */
     @FXML
     public void login(ActionEvent event) throws SQLException {
         // Establish connection
@@ -133,6 +170,9 @@ public class LoginController extends Pane {
     }
 
 
+    /**
+     * Show login error.
+     */
     public void showLoginError() {
         Locale currentLocale = Locale.getDefault();
         if (currentLocale.getLanguage().equals("fr")) {

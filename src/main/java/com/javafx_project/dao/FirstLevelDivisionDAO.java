@@ -8,7 +8,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The type First level division dao.
+ */
 public class FirstLevelDivisionDAO {
+    /**
+     * Gets all divisions.
+     *
+     * @return the all divisions
+     */
     public static ObservableList<FirstLevelDivision> getAllDivisions() {
          String sql = "SELECT * FROM divisions ORDER BY Division_ID";
          ObservableList<FirstLevelDivision> divisionList = javafx.collections.FXCollections.observableArrayList();
