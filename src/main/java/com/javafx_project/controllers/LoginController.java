@@ -78,7 +78,7 @@ public class LoginController extends Pane {
     @FXML
     public void initialize() {
         Locale currentLocale = Locale.getDefault();
-        if (currentLocale.getLanguage().equals("fr")) {
+        if ("fr".equals(currentLocale.getLanguage())) {
             // Set text to French
             loginLabel.setText("Page de Connexion");
             loginButton.setText("Connexion");
@@ -175,7 +175,7 @@ public class LoginController extends Pane {
      */
     public void showLoginError() {
         Locale currentLocale = Locale.getDefault();
-        if (currentLocale.getLanguage().equals("fr")) {
+        if ("fr".equals(currentLocale.getLanguage())) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur de Connexion");
             alert.setHeaderText(null);
